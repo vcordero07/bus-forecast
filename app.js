@@ -1,7 +1,7 @@
 //06-01-2017
 //make it responsible design
 
-let MBTAEndPoint = 'http://realtime.mbta.com/developer/api/v2/routes?';
+let MBTAEndPoint = 'http://realtime.mbta.com/developer/api/v2/routes';
 let WUEndPoint = '';
 
 // let MBTAApiKey = '1VI-9UmYpE64qhHFmhr1ew';//wX9NwuHnZU2ToO7GmGR9uw
@@ -27,6 +27,7 @@ let getDataFromApi = (searchTerm, callback) => {
 let displayData = data => {
 
   console.log(data);
+  console.log(data.mode[3])
 
 }
 
