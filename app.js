@@ -35,11 +35,6 @@ let MBTABusStopQuery = {
   format: 'json'
 };
 
-// let WUConditionsQuery = {
-//
-//   format: 'json',
-// };
-
 let getDataFromApi = (searchTerm, query, callback) => {
   // console.log(searchTerm);
   // console.log(query);
@@ -53,14 +48,31 @@ let getWUDataFromApi = (searchTerm, lat, lon, callback) => {
       method: 'GET'
     })
     .done(function(data) {
-      console.log(data);
+      //console.log(data.current_observation);
+      let resultElement;
+
+      resultElement = `<p
+      data-forecasturl='${data.current_observation.forecast_url}'
+      data-icon='${data.current_observation.icon}'
+      data-iconurl='${data.current_observation.icon_url}'
+      data-tempf='${data.current_observation.temp_f}'
+      data-weather='${data.current_observation.weather}'>
+      Current Weather: ${data.current_observation.weather} <br/>
+      Current Temp:${data.current_observation.temp_f} <br/>
+      </p>`;
+      //data.current_observation.forecast_url
+      //data.current_observation.icon
+      //data.current_observation.icon_url
+      //data.current_observation.temp_f
+      //data.current_observation.weather
+
+      $('.weather-info').html(resultElement)
     });
 };
 
 let displayRoutesData = data => {
-
-  console.log(data);
-  console.log(data.mode[3]);
+  // console.log(data);
+  // console.log(data.mode[3]);
   let resultElement;
 
   data.mode[3].route.forEach(item => {
@@ -73,9 +85,7 @@ let displayRoutesData = data => {
 }
 
 let displayBusStopData = data => {
-  console.log(data);
-  //console.log('test');
-
+  //console.log(data);
   let resultElement;
   //add the stop id for the other mbta query
   data.direction[0].stop.forEach(item => {
@@ -98,9 +108,7 @@ $('.bus-stop-list').on('click', 'li', (event) => {
 
 
 $('.bus-list').on('change', (event) => {
-  //busRoute = event.currentTarget.value;
   MBTABusStopQuery.route = event.currentTarget.value;
-  //console.log(busRoute);
   getDataFromApi(MBTABusStopEndPoint, MBTABusStopQuery, displayBusStopData);
 })
 
