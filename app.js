@@ -26,7 +26,7 @@ let MBTARoutesQuery = {
 
 let MBTABusStop1000Query = {
   api_key: MBTAApiKey,
-  route: busRoute,
+  route: '69',
   format: 'jsonp'
 };
 
@@ -57,8 +57,19 @@ let displayRoutesData = data => {
 }
 
 let displayBusStopData = data => {
-  console.log('test');
+  console.log(data);
+  //console.log('test');
+
+  let resultElement;
+  //console.log(data.direction[0].stop);
+  data.direction[0].stop.forEach(item => {
+    resultElement += ``;
+  });
+  $('.bus-stop-list').append(resultElement);
 };
+
+
+
 
 $('.bus-list').on('change', (event) => {
   busRoute = event.currentTarget.value;
