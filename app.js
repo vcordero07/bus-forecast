@@ -14,15 +14,17 @@
 
 let MBTARoutesEndPoint = 'http://realtime.mbta.com/developer/api/v2/routes';
 let MBTABusStopEndPoint = 'http://realtime.mbta.com/developer/api/v2/stopsbyroute'; //?api_key=wX9NwuHnZU2ToO7GmGR9uw&route=69&format=json
+let MBTAScheduleByStopEndPoint = 'http://realtime.mbta.com/developer/api/v2/schedulebystop'; //?api_key=wX9NwuHnZU2ToO7GmGR9uw&stop=1425&format=json
 let WUEndPoint = 'http://api.wunderground.com/api/281d8cd199da64f2/conditions/q/'; //q/42.370772,-71.076536.json
+//
 
-// let MBTAApiKey = '1VI-9UmYpE64qhHFmhr1ew';//wX9NwuHnZU2ToO7GmGR9uw
-let MBTAApiKey = 'wX9NwuHnZU2ToO7GmGR9uw';
+let MBTAApiKey = '1VI-9UmYpE64qhHFmhr1ew';
 let WUApiKey = '682f91fd7c03e86f';
 
 let busRoute;
 let strLat;
 let strLon;
+let strStopID;
 
 let MBTARoutesQuery = {
   api_key: MBTAApiKey,
@@ -32,6 +34,13 @@ let MBTARoutesQuery = {
 let MBTABusStopQuery = {
   api_key: MBTAApiKey,
   route: busRoute,
+  format: 'json'
+};
+
+let MBTAScheduleByStopQuery = {
+  api_key: MBTAApiKey,
+  stop: strStopID,
+  direction: 0,
   format: 'json'
 };
 
@@ -85,11 +94,15 @@ let displayRoutesData = data => {
 }
 
 let displayBusStopData = data => {
-  //console.log(data);
+  console.log(data);
   let resultElement;
   //add the stop id for the other mbta query
   data.direction[0].stop.forEach(item => {
-    resultElement += `<li data-lat='${item.stop_lat}' data-lon='${item.stop_lon}'>${item.stop_name}</li>`;
+    resultElement += `<li
+    data-lat='${item.stop_lat}'
+    data-lon='${item.stop_lon}'
+    data-stopid='${item.stop_id}'
+    >${item.stop_name}</li>`;
   });
   $('.bus-stop-list').html(resultElement);
 };
@@ -98,11 +111,20 @@ let displayWUData = data => {
   console.log(data);
 };
 
+let displayScheduleByStopData = data => {
+  console.log(data);
+};
+
+
 $('.bus-stop-list').on('click', 'li', (event) => {
   console.log(event.currentTarget);
   strLat = event.currentTarget.getAttribute('data-lat');
   strLon = event.currentTarget.getAttribute('data-lon');
+  strStopID = event.currentTarget.getAttribute('data-stopid');
+  MBTAScheduleByStopQuery.stop = event.currentTarget.getAttribute('data-stopid');
+
   getWUDataFromApi(WUEndPoint, strLat, strLon, displayWUData);
+  getDataFromApi(MBTAScheduleByStopEndPoint, MBTAScheduleByStopQuery, displayScheduleByStopData);
 });
 
 
