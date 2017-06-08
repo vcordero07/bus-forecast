@@ -21,7 +21,7 @@ let WUEndPoint = 'http://api.wunderground.com/api/281d8cd199da64f2/conditions/q/
 let MBTAApiKey = '1VI-9UmYpE64qhHFmhr1ew';
 let WUApiKey = '682f91fd7c03e86f';
 
-let busRoute;
+let busRouteID;
 let strLat;
 let strLon;
 let strStopID;
@@ -33,7 +33,7 @@ let MBTARoutesQuery = {
 
 let MBTABusStopQuery = {
   api_key: MBTAApiKey,
-  route: busRoute,
+  route: busRouteID,
   format: 'json'
 };
 
@@ -112,7 +112,20 @@ let displayWUData = data => {
 };
 
 let displayScheduleByStopData = data => {
-  console.log(data);
+  console.log(data.mode[0].route);
+  console.log("RouteID", busRouteID);
+  data.mode[0].route.forEach(item => {
+    if (item.direction[0].route_id === busRouteID) {
+      console.log(item.direction[0].trip_id);
+    }
+
+
+
+  });
+
+  //http://realtime.mbta.com/developer/api/v2/predictionsbystop?api_key=wX9NwuHnZU2ToO7GmGR9uw&stop=1425&format=json
+
+
 };
 
 
@@ -131,6 +144,7 @@ $('.bus-stop-list').on('click', 'li', (event) => {
 
 $('.bus-list').on('change', (event) => {
   MBTABusStopQuery.route = event.currentTarget.value;
+  busRouteID = event.currentTarget.value;
   getDataFromApi(MBTABusStopEndPoint, MBTABusStopQuery, displayBusStopData);
 })
 
