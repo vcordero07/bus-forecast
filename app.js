@@ -120,8 +120,11 @@ let displayPreditionsByStopData = data => {
   console.log(data.mode[0].route);
   console.log("RouteID", busRouteID);
   data.mode[0].route.forEach(item => {
+    console.log("route_id", item.direction);
+    console.log("busrounteid", busRouteID);
     if (item.direction[0].route_id === busRouteID) {
-      console.log(item.direction[0].trip_id);
+      console.log("item.directionp[0].trip_id: ", item.direction[0].trip_id);
+
     }
 
 
