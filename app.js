@@ -117,23 +117,30 @@ let displayWUData = data => {
 };
 
 let displayPreditionsByStopData = data => {
-  console.log(data.mode[0].route);
-  console.log("RouteID", busRouteID);
-  data.mode[0].route.forEach(item => {
-    console.log("route_id", item.direction);
-    console.log("busrounteid", busRouteID);
-    if (item.direction[0].route_id === busRouteID) {
-      console.log("item.directionp[0].trip_id: ", item.direction[0].trip_id);
-
-    }
-
-
-
-  });
-
-
-
+  // console.log(data.mode[0].route);
+  // console.log("RouteID", busRouteID);
+  console.log(data);
+  //
+  recursiveIteration(data)
 };
+
+
+
+function recursiveIteration(object) {
+  for (var property in object) {
+    if (object.hasOwnProperty(property)) {
+      if (typeof object[property] == "object") {
+        recursiveIteration(object[property]);
+      } else {
+        //found a property which is not an object, check for your conditions here
+        if (property === 'route_id') {
+          console.log("Object-Property: ", object[property]);
+        }
+
+      }
+    }
+  }
+}
 
 
 $('.bus-stop-list').on('click', 'li', (event) => {
