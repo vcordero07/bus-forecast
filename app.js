@@ -133,8 +133,8 @@ function recursiveIteration(object) {
         recursiveIteration(object[property]);
       } else {
         //found a property which is not an object, check for your conditions here
-        if (property === 'route_id') {
-          console.log("Object-Property: ", object[property]);
+        if (property === 'pre_away') {
+          console.log("Next Bus in: ", (object[property] / 60));
         }
 
       }
