@@ -16,12 +16,10 @@
 //&stop=1425
 //&format=json
 
-
 let MBTARoutesEndPoint = 'http://realtime.mbta.com/developer/api/v2/routes';
 let MBTABusStopEndPoint = 'http://realtime.mbta.com/developer/api/v2/stopsbyroute'; //?api_key=wX9NwuHnZU2ToO7GmGR9uw&route=69&format=json
 let MBTAPredictionsByStopEndPoint = 'http://realtime.mbta.com/developer/api/v2/predictionsbystop'; //?api_key=wX9NwuHnZU2ToO7GmGR9uw&stop=1425&format=json
 let WUEndPoint = 'http://api.wunderground.com/api/281d8cd199da64f2/conditions/q/'; //q/42.370772,-71.076536.json
-//
 
 let MBTAApiKey = '1VI-9UmYpE64qhHFmhr1ew';
 let WUApiKey = '682f91fd7c03e86f';
@@ -123,10 +121,9 @@ let displayPreditionsByStopData = data => {
   //
   recursiveIteration(data)
 };
-
-
-
-function recursiveIteration(object) {
+//this is caling the wrong bus prediction but it is close
+let recursiveIteration = (object) => {
+  let resultElement;
   for (var property in object) {
     if (object.hasOwnProperty(property)) {
       if (typeof object[property] == "object") {
@@ -135,6 +132,9 @@ function recursiveIteration(object) {
         //found a property which is not an object, check for your conditions here
         if (property === 'pre_away') {
           console.log("Next Bus in: ", (object[property] / 60));
+          resultElement = `Next Bus in: ${Math.round(object[property] / 60)} min`;
+
+          $('.next-bus-predictions').html(resultElement)
         }
 
       }
@@ -153,8 +153,6 @@ $('.bus-stop-list').on('click', 'li', (event) => {
   getWUDataFromApi(WUEndPoint, strLat, strLon, displayWUData);
   getDataFromApi(MBTAPredictionsByStopEndPoint, MBtAPreditionsByStopQuery, displayPreditionsByStopData);
 });
-
-
 
 $('.bus-list').on('change', (event) => {
   MBTABusStopQuery.route = event.currentTarget.value;
