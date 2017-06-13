@@ -29,6 +29,8 @@ let strLat;
 let strLon;
 let strStopID;
 
+let minTime = 0;
+
 let MBTARoutesQuery = {
   api_key: MBTAApiKey,
   format: 'json'
@@ -44,6 +46,7 @@ let MBtAPreditionsByStopQuery = {
   api_key: MBTAApiKey,
   stop: strStopID,
   direction: 0,
+
   format: 'json'
 };
 
@@ -117,12 +120,28 @@ let displayWUData = data => {
 let displayPreditionsByStopData = data => {
   // console.log(data.mode[0].route);
   // console.log("RouteID", busRouteID);
-  console.log(data);
-  //
+  console.log('data: ', data);
+  //console.log("dirction: ", data.mode[0].route[0]);
+  //console.log('busRouteID: ', busRouteID);
+
+  if (!data.hasOwnProperty('mode')) {
+    console.log('no prediction available for this bus at this time.');
+    return;
+  }
+
+  if (data.mode[0].route[0].route_id === busRouteID) {
+    console.log('pass');
+
+  } else {
+    console.log('failed: no prediction available for this bus stop at this time.');
+
+  }
   recursiveIteration(data)
 };
+
+
 //this is caling the wrong bus prediction but it is close
-let recursiveIteration = (object) => {
+let recursiveIteration = (object, routeid = -1, stopid = -1) => {
   let resultElement;
   for (var property in object) {
     if (object.hasOwnProperty(property)) {
@@ -131,8 +150,12 @@ let recursiveIteration = (object) => {
       } else {
         //found a property which is not an object, check for your conditions here
         if (property === 'pre_away') {
+
           console.log("Next Bus in: ", (object[property] / 60));
-          resultElement = `Next Bus in: ${Math.round(object[property] / 60)} min`;
+          minTime = (minTime === 0) ? object[property] : Math.min(object[property], minTime);
+
+          //resultElement = `Next Bus in: ${Math.round(object[property] / 60)} min`;
+          resultElement = `Next Bus in: ${Math.round(minTime / 60)} min`;
 
           $('.next-bus-predictions').html(resultElement)
         }
