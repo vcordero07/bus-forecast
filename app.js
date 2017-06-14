@@ -120,19 +120,29 @@ let displayPreditionsByStopData = data => {
   console.log('data: ', data);
   //console.log("dirction: ", data.mode[0].route[0]);
   //console.log('busRouteID: ', busRouteID);
-
+  let resultElement;
   //if there is not mode available for this route then display this message
   if (!data.hasOwnProperty('mode')) {
-    console.log('no prediction available for this bus at this time.');
+    console.log('no predictions available for this bus stop at this time.');
+    resultElement = 'No predictions available for this bus stop at this time.';
+    $('.bus-message').html(resultElement);
     return;
   }
   //if there is data display pass
   if (data.mode[0].route[0].route_id === busRouteID) {
-    console.log(`pass: valid as of ${Date()}`);
+    let currentTime = new Date();
+    console.log(`Valid as of ${currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds()}`);
+
+    resultElement = `Valid as of ${currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds()}`;
+    recursiveIteration(data)
+
+    $('.bus-message').html(resultElement);
   } else {
-    console.log('failed: no prediction available for this bus stop at this time.');
+    console.log('No predictions available for this bus stop at this time.');
+    resultElement = 'No predictions available for this bus stop at this time.'
+    $('.bus-message').html(resultElement);
   }
-  recursiveIteration(data)
+
 };
 
 let recursiveIteration = (object, routeid = -1, stopid = -1) => {
