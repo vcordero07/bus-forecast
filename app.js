@@ -1,4 +1,4 @@
-//06-02-2017
+//06-13-2017
 //make it responsible design
 //get all routes
 //`http://realtime.mbta.com/developer/api/v2/routes?api_key=${MBTAApiKey}&format=json`
@@ -19,7 +19,7 @@
 let MBTARoutesEndPoint = 'http://realtime.mbta.com/developer/api/v2/routes';
 let MBTABusStopEndPoint = 'http://realtime.mbta.com/developer/api/v2/stopsbyroute'; //?api_key=wX9NwuHnZU2ToO7GmGR9uw&route=69&format=json
 let MBTAPredictionsByStopEndPoint = 'http://realtime.mbta.com/developer/api/v2/predictionsbystop'; //?api_key=wX9NwuHnZU2ToO7GmGR9uw&stop=1425&format=json
-let WUEndPoint = 'http://api.wunderground.com/api/281d8cd199da64f2/conditions/q/'; //q/42.370772,-71.076536.json
+let WUEndPoint = 'http://api.wunderground.com/api/682f91fd7c03e86f/conditions/q/'; //q/42.370772,-71.076536.json
 
 let MBTAApiKey = '1VI-9UmYpE64qhHFmhr1ew';
 let WUApiKey = '682f91fd7c03e86f';
@@ -51,9 +51,6 @@ let MBtAPreditionsByStopQuery = {
 };
 
 let getDataFromApi = (searchTerm, query, callback) => {
-  // console.log(searchTerm);
-  // console.log(query);
-  // console.log(callback);
   $.getJSON(searchTerm, query, callback);
 }
 
@@ -124,23 +121,20 @@ let displayPreditionsByStopData = data => {
   //console.log("dirction: ", data.mode[0].route[0]);
   //console.log('busRouteID: ', busRouteID);
 
+  //if there is not mode available for this route then display this message
   if (!data.hasOwnProperty('mode')) {
     console.log('no prediction available for this bus at this time.');
     return;
   }
-
+  //if there is data display pass
   if (data.mode[0].route[0].route_id === busRouteID) {
-    console.log('pass');
-
+    console.log(`pass: valid as of ${Date()}`);
   } else {
     console.log('failed: no prediction available for this bus stop at this time.');
-
   }
   recursiveIteration(data)
 };
 
-
-//this is caling the wrong bus prediction but it is close
 let recursiveIteration = (object, routeid = -1, stopid = -1) => {
   let resultElement;
   for (var property in object) {
@@ -152,6 +146,7 @@ let recursiveIteration = (object, routeid = -1, stopid = -1) => {
         if (property === 'pre_away') {
 
           console.log("Next Bus in: ", (object[property] / 60));
+          //math min is not working because is selecting the mintime but for all the buses available
           minTime = (minTime === 0) ? object[property] : Math.min(object[property], minTime);
 
           //resultElement = `Next Bus in: ${Math.round(object[property] / 60)} min`;
