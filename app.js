@@ -28,6 +28,7 @@ let busRouteID;
 let strLat;
 let strLon;
 let strStopID;
+let busDirection = 0;
 
 let minTime = 0;
 
@@ -45,7 +46,7 @@ let MBTABusStopQuery = {
 let MBtAPreditionsByStopQuery = {
   api_key: MBTAApiKey,
   stop: strStopID,
-  direction: 0,
+  direction: busDirection,
 
   format: 'json'
 };
@@ -86,7 +87,8 @@ let displayRoutesData = data => {
   // console.log(data);
   // console.log(data.mode[3]);
   let resultElement;
-
+  console.log("data.mode:", data.mode);
+  //data.mode = 3 is bus
   data.mode[3].route.forEach(item => {
     if (!item.hasOwnProperty('route_hide')) {
       resultElement += `<option value = "${item.route_id}"> ${item.route_name} </option>`;
@@ -98,9 +100,11 @@ let displayRoutesData = data => {
 
 let displayBusStopData = data => {
   console.log(data);
-  let resultElement;
+  let resultElement = '';
   //add the stop id for the other mbta query
-  data.direction[0].stop.forEach(item => {
+  console.log(busDirection);
+  console.log(data.direction);
+  data.direction[busDirection].stop.forEach(item => {
     resultElement += `<li
     data-lat='${item.stop_lat}'
     data-lon='${item.stop_lon}'
@@ -123,25 +127,31 @@ let displayPreditionsByStopData = data => {
   let resultElement;
   //if there is not mode available for this route then display this message
   if (!data.hasOwnProperty('mode')) {
-    console.log('no predictions available for this bus stop at this time.');
-    resultElement = 'No predictions available for this bus stop at this time.';
+    console.log('no predictions available for this bus stop at this time 1.');
+    resultElement = 'No predictions available for this bus stop at this time 1.';
     $('.bus-message').html(resultElement);
     return;
   }
   //if there is data display pass
-  if (data.mode[0].route[0].route_id === busRouteID) {
-    let currentTime = new Date();
-    console.log(`Valid as of ${currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds()}`);
 
-    resultElement = `Valid as of ${currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds()}`;
-    recursiveIteration(data)
+  for (let i = 0; i < data.mode[busDirection].route.length; i++) {
+    if (data.mode[busDirection].route[i].route_id === busRouteID) {
 
-    $('.bus-message').html(resultElement);
-  } else {
-    console.log('No predictions available for this bus stop at this time.');
-    resultElement = 'No predictions available for this bus stop at this time.'
-    $('.bus-message').html(resultElement);
+      let currentTime = new Date();
+      console.log(`Valid as of ${currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds()}`);
+
+      resultElement = `Valid as of ${currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds()}`;
+      recursiveIteration(data.mode[busDirection].route[i])
+
+      $('.bus-message').html(resultElement);
+      break;
+    } else {
+      console.log('No predictions available for this bus stop at this time 2.');
+      resultElement = 'No predictions available for this bus stop at this time 2.'
+      $('.bus-message').html(resultElement);
+    }
   }
+
 
 };
 
@@ -182,9 +192,16 @@ $('.bus-stop-list').on('click', 'li', (event) => {
   getDataFromApi(MBTAPredictionsByStopEndPoint, MBtAPreditionsByStopQuery, displayPreditionsByStopData);
 });
 
-$('.bus-list').on('change', (event) => {
-  MBTABusStopQuery.route = event.currentTarget.value;
-  busRouteID = event.currentTarget.value;
+$('.bus-list, input[type="radio"]').on('change', (event) => {
+  console.log(event);
+
+
+  // MBTABusStopQuery.route = event.currentTarget.value;
+  MBTABusStopQuery.route = $('select').val();
+  busRouteID = $('select').val();
+  busDirection = $('input:checked').val();
+
+
   getDataFromApi(MBTABusStopEndPoint, MBTABusStopQuery, displayBusStopData);
 })
 
