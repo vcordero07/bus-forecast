@@ -10,17 +10,31 @@
 </head>
 
 <body>
-  <select class="bus-list" name="MBTA-Bus-Line">
-    <option value="">Select bus</option>
-  </select>
+  <header>
+    <!-- LOGO -->
+  </header>
 
-  <label for="bus-outbound"><input type="radio" name="bus-direction" checked value="0">Outbound</label>
-  <label for="bus-inbound"><input type="radio" name="bus-direction" value="1">Inbound</label>
+  <nav>
+    <select class="bus-list" name="MBTA-Bus-Line">
+      <option value="">Select bus</option>
+    </select>
 
-  <ul class="bus-stop-list"></ul>
-  <div class="bus-message"></div>
-  <div class="next-bus-predictions"></div>
-  <div class="weather-info"></div>
+    <label for="bus-outbound"><input type="radio" name="bus-direction" checked value="0">Outbound</label>
+    <label for="bus-inbound"><input type="radio" name="bus-direction" value="1">Inbound</label>
+  </nav>
+
+  <section id="bus-info">
+    <ul class="bus-stop-list"></ul>
+    <div class="bus-message"></div>
+    <div class="next-bus-predictions"></div>
+  </section>
+
+  <section id="weather-info">
+    <div class="weather-message"></div>
+  </section>
+  <footer>
+    &copy; Bus Forecast 2017
+  </footer>
 
   <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
   <script src="app.js" charset="utf-8"></script>
