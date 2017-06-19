@@ -1,25 +1,10 @@
 //06-15-2017
 //make it responsible design
-//get all routes
-//`http://realtime.mbta.com/developer/api/v2/routes?api_key=${MBTAApiKey}&format=json`
 
-//get google maps location of that specific bus by changing the lat and loc of the link below;
-//http://maps.googleapis.com/maps/api/staticmap?center=42.370772,-71.076536&markers=42.370772,-71.076536&zoom=15&size=320x320&sensor=false
-
-//http://realtime.mbta.com/developer/api/v2/stopsbyroute?api_key=wX9NwuHnZU2ToO7GmGR9uw&route=69&format=json
-
-//wunderground
-//http://api.wunderground.com/api/281d8cd199da64f2/conditions/q/42.370772,-71.076536.json
-
-//http://realtime.mbta.com/developer/api/v2/predictionsbystop
-//?api_key=wX9NwuHnZU2ToO7GmGR9uw
-//&stop=1425
-//&format=json
-
-const MBTARoutesEndPoint = 'http://realtime.mbta.com/developer/api/v2/routes';
-const MBTABusStopEndPoint = 'http://realtime.mbta.com/developer/api/v2/stopsbyroute';
-const MBTAPredictionsByStopEndPoint = 'http://realtime.mbta.com/developer/api/v2/predictionsbystop';
-const WUEndPoint = 'http://api.wunderground.com/api/682f91fd7c03e86f/conditions/q/';
+const MBTARoutesEndPoint = 'https://realtime.mbta.com/developer/api/v2/routes';
+const MBTABusStopEndPoint = 'https://realtime.mbta.com/developer/api/v2/stopsbyroute';
+const MBTAPredictionsByStopEndPoint = 'https://realtime.mbta.com/developer/api/v2/predictionsbystop';
+const WUEndPoint = 'https://api.wunderground.com/api/682f91fd7c03e86f/conditions/q/';
 
 const MBTAApiKey = '1VI-9UmYpE64qhHFmhr1ew';
 const WUApiKey = '682f91fd7c03e86f';
@@ -145,6 +130,13 @@ let displayPreditionsByStopData = data => {
 
 };
 
+
+let displayData = (data, display) => {
+
+};
+
+
+
 let recursiveIteration = (object, routeid = -1, stopid = -1) => {
   let resultElement;
   for (var property in object) {
@@ -168,10 +160,40 @@ let recursiveIteration = (object, routeid = -1, stopid = -1) => {
       }
     }
   }
-}
+};
 
 
-$('.bus-stop-list').on('click', 'li', (event) => {
+// $('.bus-stop-list').on('click', 'li', (event) => {
+//   //  console.log(event.currentTarget);
+//   strLat = event.currentTarget.getAttribute('data-lat');
+//   strLon = event.currentTarget.getAttribute('data-lon');
+//   strStopID = event.currentTarget.getAttribute('data-stopid');
+//   MBtAPreditionsByStopQuery.stop = event.currentTarget.getAttribute('data-stopid');
+//
+//   getWUDataFromApi(WUEndPoint, strLat, strLon, displayWUData);
+//   MBtAPreditionsByStopQuery.direction = busDirection;
+//   getDataFromApi(MBTAPredictionsByStopEndPoint, MBtAPreditionsByStopQuery, displayPreditionsByStopData);
+// });
+
+// $('.bus-list, input[type="radio"]').on('change', (event) => {
+//   //console.log(event);
+//
+//   // MBTABusStopQuery.route = event.currentTarget.value;
+//   MBTABusStopQuery.route = $('select').val();
+//   busRouteID = $('select').val();
+//   busDirection = $('input:checked').val();
+//
+//
+//   getDataFromApi(MBTABusStopEndPoint, MBTABusStopQuery, displayBusStopData);
+// })
+
+// function watchSubmit() {
+//   getDataFromApi(MBTARoutesEndPoint, MBTARoutesQuery, displayRoutesData);
+// }
+
+
+
+let getBusStopID = event => {
   //  console.log(event.currentTarget);
   strLat = event.currentTarget.getAttribute('data-lat');
   strLon = event.currentTarget.getAttribute('data-lon');
@@ -181,22 +203,29 @@ $('.bus-stop-list').on('click', 'li', (event) => {
   getWUDataFromApi(WUEndPoint, strLat, strLon, displayWUData);
   MBtAPreditionsByStopQuery.direction = busDirection;
   getDataFromApi(MBTAPredictionsByStopEndPoint, MBtAPreditionsByStopQuery, displayPreditionsByStopData);
-});
+};
 
-$('.bus-list, input[type="radio"]').on('change', (event) => {
+let getBusDirection = event => {
   //console.log(event);
-
-  // MBTABusStopQuery.route = event.currentTarget.value;
   MBTABusStopQuery.route = $('select').val();
   busRouteID = $('select').val();
   busDirection = $('input:checked').val();
 
-
   getDataFromApi(MBTABusStopEndPoint, MBTABusStopQuery, displayBusStopData);
-})
+};
 
-function watchSubmit() {
+let createEventListeners = () => {
+  $('.bus-stop-list').on('click', 'li', (event) => {
+    getBusStopID(event);
+  });
+  $('.bus-list, input[type="radio"]').on('change', (event) => {
+    getBusDirection(event);
+  });
+};
+
+const renderApp = () => {
   getDataFromApi(MBTARoutesEndPoint, MBTARoutesQuery, displayRoutesData);
-}
+  createEventListeners();
+};
 
-$(watchSubmit());
+$(renderApp());
