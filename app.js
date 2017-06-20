@@ -1,13 +1,17 @@
-//06-15-2017
+//06-19-2017
 //make it responsible design
 
-const MBTARoutesEndPoint = 'https://realtime.mbta.com/developer/api/v2/routes';
-const MBTABusStopEndPoint = 'https://realtime.mbta.com/developer/api/v2/stopsbyroute';
-const MBTAPredictionsByStopEndPoint = 'https://realtime.mbta.com/developer/api/v2/predictionsbystop';
-const WUEndPoint = 'https://api.wunderground.com/api/682f91fd7c03e86f/conditions/q/';
+const apiKeys = {
+  MBTA: '1VI-9UmYpE64qhHFmhr1ew',
+  WeatherUnderground: '682f91fd7c03e86f',
+};
 
-const MBTAApiKey = '1VI-9UmYpE64qhHFmhr1ew';
-const WUApiKey = '682f91fd7c03e86f';
+const endPoints = {
+  MBTARoutes: 'https://realtime.mbta.com/developer/api/v2/routes',
+  MBTABusStop: 'https://realtime.mbta.com/developer/api/v2/stopsbyroute',
+  MBTAPredictionsByStop: 'https://realtime.mbta.com/developer/api/v2/predictionsbystop',
+  WeatherUnderground: `https://api.wunderground.com/api/${apiKeys.WeatherUnderground}/conditions/q/`,
+};
 
 let busRouteID;
 let strLat;
@@ -17,27 +21,25 @@ let busDirection = 0;
 
 let minTime = 0;
 
-let MBTARoutesQuery = {
-  api_key: MBTAApiKey,
-  format: 'json'
-};
+let MBTARoutesQuery = {};
 
 let MBTABusStopQuery = {
-  api_key: MBTAApiKey,
   route: busRouteID,
-  format: 'json'
 };
 
 let MBtAPreditionsByStopQuery = {
-  api_key: MBTAApiKey,
   stop: strStopID,
   direction: busDirection,
-
-  format: 'json'
 };
 
 let getDataFromApi = (searchTerm, query, callback) => {
-  $.getJSON(searchTerm, query, callback);
+  query.api_key = apiKeys.MBTA;
+  query.format = 'json';
+  console.log(query);
+  $.getJSON(searchTerm, query, function(data) {
+    console.log(data);
+    displayData(data, callback);
+  });
 }
 
 let getWUDataFromApi = (searchTerm, lat, lon, callback) => {
@@ -67,77 +69,79 @@ let getWUDataFromApi = (searchTerm, lat, lon, callback) => {
     });
 };
 
-let displayRoutesData = data => {
-  console.log("displayRoutesData: ", data);
-  let resultElement;
-  //data.mode = 3 is bus
-  data.mode[3].route.forEach(item => {
-    if (!item.hasOwnProperty('route_hide')) {
-      resultElement += `<option value = "${item.route_id}"> ${item.route_name} </option>`;
-    }
-  });
-
-  $('.bus-list').append(resultElement);
-}
-
-let displayBusStopData = data => {
-  console.log('displayBusStopData :', data);
-  let resultElement = '';
-  //add the stop id for the other mbta query
-  data.direction[busDirection].stop.forEach(item => {
-    resultElement += `<li
-    data-lat='${item.stop_lat}'
-    data-lon='${item.stop_lon}'
-    data-stopid='${item.stop_id}'
-    >${item.stop_name}</li>`;
-  });
-  $('.bus-stop-list').html(resultElement);
-};
-
-let displayWUData = data => {
-  console.log("displayWUData: ", data);
-};
-
-let displayPreditionsByStopData = data => {
-  console.log('displayPreditionsByStopData data: ', data);
-
-  let resultElement;
-  //if there is not mode available for this route then display this message
-  if (!data.hasOwnProperty('mode')) {
-
-    resultElement = 'No predictions available for this bus stop at this time 1.';
-    $('.bus-message').html(resultElement);
-    return;
-  }
-  //if there is data display pass
-
-  for (let i = 0; i < data.mode[0].route.length; i++) {
-    if (data.mode[0].route[i].route_id === busRouteID) {
-
-      let currentTime = new Date();
-
-      resultElement = `Valid as of ${currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds()}`;
-      recursiveIteration(data.mode[0].route[i])
-
-      $('.bus-message').html(resultElement);
-      break;
-    } else {
-      resultElement = 'No predictions available for this bus stop at this time 2.'
-      $('.bus-message').html(resultElement);
-    }
-  }
-
-
-};
-
 
 let displayData = (data, display) => {
+  console.log("data & display:", data, display);
+  let resultElement;
+  switch (display) {
 
+    case 'RoutesData':
+
+      console.log("displayRoutesData: ", data);
+      resultElement = '';
+      //data.mode = 3 is bus
+      data.mode[3].route.forEach(item => {
+        if (!item.hasOwnProperty('route_hide')) {
+          resultElement += `<option value = "${item.route_id}"> ${item.route_name} </option>`;
+        }
+      });
+
+      $('.bus-list').append(resultElement);
+      break;
+
+    case 'BusStopData':
+
+      console.log('displayBusStopData :', data);
+      resultElement = '';
+      data.direction[busDirection].stop.forEach(item => {
+        resultElement += `<li
+        data-lat='${item.stop_lat}'
+        data-lon='${item.stop_lon}'
+        data-stopid='${item.stop_id}'
+        >${item.stop_name}</li>`;
+      });
+      $('.bus-stop-list').html(resultElement);
+      break;
+
+    case 'PreditionsByStopData':
+
+      console.log('displayPreditionsByStopData data: ', data);
+
+      resultElement = '';
+      //if there is not mode available for this route then display this message
+      if (!data.hasOwnProperty('mode')) {
+
+        resultElement = 'No predictions available for this bus stop at this time 1.';
+        $('.bus-message').html(resultElement);
+        return;
+      }
+      //if there is data display pass
+
+      for (let i = 0; i < data.mode[0].route.length; i++) {
+        if (data.mode[0].route[i].route_id === busRouteID) {
+
+          let currentTime = new Date();
+
+          resultElement = `Valid as of ${currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds()}`;
+          recursiveIteration(data.mode[0].route[i])
+
+          $('.bus-message').html(resultElement);
+          break;
+        } else {
+          resultElement = 'No predictions available for this bus stop at this time 2.'
+          $('.bus-message').html(resultElement);
+        }
+      }
+      break;
+      // default:
+    case 'WUData':
+
+      console.log("displayWUData: ", data);
+      break;
+  }
 };
 
-
-
-let recursiveIteration = (object, routeid = -1, stopid = -1) => {
+let recursiveIteration = (object) => {
   let resultElement;
   for (var property in object) {
     if (object.hasOwnProperty(property)) {
@@ -156,42 +160,10 @@ let recursiveIteration = (object, routeid = -1, stopid = -1) => {
 
           $('.next-bus-predictions').html(resultElement)
         }
-
       }
     }
   }
 };
-
-
-// $('.bus-stop-list').on('click', 'li', (event) => {
-//   //  console.log(event.currentTarget);
-//   strLat = event.currentTarget.getAttribute('data-lat');
-//   strLon = event.currentTarget.getAttribute('data-lon');
-//   strStopID = event.currentTarget.getAttribute('data-stopid');
-//   MBtAPreditionsByStopQuery.stop = event.currentTarget.getAttribute('data-stopid');
-//
-//   getWUDataFromApi(WUEndPoint, strLat, strLon, displayWUData);
-//   MBtAPreditionsByStopQuery.direction = busDirection;
-//   getDataFromApi(MBTAPredictionsByStopEndPoint, MBtAPreditionsByStopQuery, displayPreditionsByStopData);
-// });
-
-// $('.bus-list, input[type="radio"]').on('change', (event) => {
-//   //console.log(event);
-//
-//   // MBTABusStopQuery.route = event.currentTarget.value;
-//   MBTABusStopQuery.route = $('select').val();
-//   busRouteID = $('select').val();
-//   busDirection = $('input:checked').val();
-//
-//
-//   getDataFromApi(MBTABusStopEndPoint, MBTABusStopQuery, displayBusStopData);
-// })
-
-// function watchSubmit() {
-//   getDataFromApi(MBTARoutesEndPoint, MBTARoutesQuery, displayRoutesData);
-// }
-
-
 
 let getBusStopID = event => {
   //  console.log(event.currentTarget);
@@ -200,9 +172,9 @@ let getBusStopID = event => {
   strStopID = event.currentTarget.getAttribute('data-stopid');
   MBtAPreditionsByStopQuery.stop = event.currentTarget.getAttribute('data-stopid');
 
-  getWUDataFromApi(WUEndPoint, strLat, strLon, displayWUData);
+  getWUDataFromApi(endPoints.WeatherUnderground, strLat, strLon, 'WUData');
   MBtAPreditionsByStopQuery.direction = busDirection;
-  getDataFromApi(MBTAPredictionsByStopEndPoint, MBtAPreditionsByStopQuery, displayPreditionsByStopData);
+  getDataFromApi(endPoints.MBTAPredictionsByStop, MBtAPreditionsByStopQuery, 'PreditionsByStopData');
 };
 
 let getBusDirection = event => {
@@ -211,7 +183,11 @@ let getBusDirection = event => {
   busRouteID = $('select').val();
   busDirection = $('input:checked').val();
 
-  getDataFromApi(MBTABusStopEndPoint, MBTABusStopQuery, displayBusStopData);
+  getDataFromApi(endPoints.MBTABusStop, MBTABusStopQuery, 'BusStopData');
+};
+
+let getClearMSG = () => {
+  $('.bus-stop-list, .bus-message, .next-bus-predictions, .weather-message ').html("");
 };
 
 let createEventListeners = () => {
@@ -219,12 +195,13 @@ let createEventListeners = () => {
     getBusStopID(event);
   });
   $('.bus-list, input[type="radio"]').on('change', (event) => {
+    getClearMSG();
     getBusDirection(event);
   });
 };
 
 const renderApp = () => {
-  getDataFromApi(MBTARoutesEndPoint, MBTARoutesQuery, displayRoutesData);
+  getDataFromApi(endPoints.MBTARoutes, MBTARoutesQuery, 'RoutesData');
   createEventListeners();
 };
 
