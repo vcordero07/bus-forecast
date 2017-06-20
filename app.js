@@ -3,6 +3,7 @@
 const apiKeys = {
   MBTA: '1VI-9UmYpE64qhHFmhr1ew',
   WeatherUnderground: '682f91fd7c03e86f',
+  DarkSky: '93ee5f3d7542687660862c09d91dbb09',
 };
 
 const endPoints = {
@@ -10,6 +11,7 @@ const endPoints = {
   MBTABusStop: 'https://realtime.mbta.com/developer/api/v2/stopsbyroute',
   MBTAPredictionsByStop: 'https://realtime.mbta.com/developer/api/v2/predictionsbystop',
   WeatherUnderground: `https://api.wunderground.com/api/${apiKeys.WeatherUnderground}/conditions/q/`,
+  DarkSky: `https://api.darksky.net/forecast/${apiKeys.DarkSky}/`,
 };
 
 let busRouteID;
@@ -41,27 +43,19 @@ let getWUDataFromApi = (searchTerm, lat, lon, callback) => {
       method: 'GET'
     })
     .done(function(data) {
-      let resultElement;
-
-      resultElement = `<p
-      data-forecasturl='${data.current_observation.forecast_url}'
-      data-icon='${data.current_observation.icon}'
-      data-iconurl='${data.current_observation.icon_url}'
-      data-tempf='${data.current_observation.temp_f}'
-      data-weather='${data.current_observation.weather}'>
-      Current Weather: ${data.current_observation.weather} <br/>
-      Current Temp:${data.current_observation.temp_f} <br/>
-      </p>`;
-      //data.current_observation.forecast_url
-      //data.current_observation.icon
-      //data.current_observation.icon_url
-      //data.current_observation.temp_f
-      //data.current_observation.weather
-
-      $('.weather-message').html(resultElement)
+      displayData(data, callback);
     });
 };
 
+let getDKDataFromApi = (searchTerm, lat, lon, callback) => {
+  $.ajax({
+      url: `${searchTerm}${lat},${lon}`,
+      method: 'GET'
+    })
+    .done(function(data) {
+      displayData(data, callback);
+    });
+};
 
 let displayData = (data, display) => {
   console.log("data & display:", data, display);
@@ -130,6 +124,30 @@ let displayData = (data, display) => {
     case 'WUData':
 
       console.log("displayWUData: ", data);
+      resultElement = "";
+
+      resultElement = `<p
+      data-forecasturl='${data.current_observation.forecast_url}'
+      data-icon='${data.current_observation.icon}'
+      data-iconurl='${data.current_observation.icon_url}'
+      data-tempf='${data.current_observation.temp_f}'
+      data-weather='${data.current_observation.weather}'>
+      Current Weather: ${data.current_observation.weather} <br/>
+      Current Temp:${data.current_observation.temp_f} <br/>
+      </p>`;
+      //data.current_observation.forecast_url
+      //data.current_observation.icon
+      //data.current_observation.icon_url
+      //data.current_observation.temp_f
+      //data.current_observation.weather
+
+      $('.weather-message').html(resultElement)
+
+      break;
+
+    case 'DarkSkyData':
+
+      console.log('DarkSkyData: ', data);
       break;
   }
 };
@@ -166,6 +184,7 @@ let getBusStopID = event => {
   MBTAQuery.stop = event.currentTarget.getAttribute('data-stopid');
 
   getWUDataFromApi(endPoints.WeatherUnderground, strLat, strLon, 'WUData');
+  getDKDataFromApi(endPoints.DarkSky, strLat, strLon, 'DarkSkyData');
   MBTAQuery.direction = busDirection;
   getDataFromApi(endPoints.MBTAPredictionsByStop, MBTAQuery, 'PreditionsByStopData');
 };
