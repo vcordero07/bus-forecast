@@ -1,5 +1,4 @@
 //06-19-2017
-//make it responsible design
 
 const apiKeys = {
   MBTA: '1VI-9UmYpE64qhHFmhr1ew',
@@ -18,18 +17,12 @@ let strLat;
 let strLon;
 let strStopID;
 let busDirection = 0;
-
 let minTime = 0;
 
-let MBTARoutesQuery = {};
-
-let MBTABusStopQuery = {
-  route: busRouteID,
-};
-
-let MBtAPreditionsByStopQuery = {
-  stop: strStopID,
-  direction: busDirection,
+let MBTAQuery = {
+  // route: busRouteID,
+  // stop: strStopID,
+  // direction: busDirection,
 };
 
 let getDataFromApi = (searchTerm, query, callback) => {
@@ -170,20 +163,20 @@ let getBusStopID = event => {
   strLat = event.currentTarget.getAttribute('data-lat');
   strLon = event.currentTarget.getAttribute('data-lon');
   strStopID = event.currentTarget.getAttribute('data-stopid');
-  MBtAPreditionsByStopQuery.stop = event.currentTarget.getAttribute('data-stopid');
+  MBTAQuery.stop = event.currentTarget.getAttribute('data-stopid');
 
   getWUDataFromApi(endPoints.WeatherUnderground, strLat, strLon, 'WUData');
-  MBtAPreditionsByStopQuery.direction = busDirection;
-  getDataFromApi(endPoints.MBTAPredictionsByStop, MBtAPreditionsByStopQuery, 'PreditionsByStopData');
+  MBTAQuery.direction = busDirection;
+  getDataFromApi(endPoints.MBTAPredictionsByStop, MBTAQuery, 'PreditionsByStopData');
 };
 
 let getBusDirection = event => {
   //console.log(event);
-  MBTABusStopQuery.route = $('select').val();
+  MBTAQuery.route = $('select').val();
   busRouteID = $('select').val();
   busDirection = $('input:checked').val();
 
-  getDataFromApi(endPoints.MBTABusStop, MBTABusStopQuery, 'BusStopData');
+  getDataFromApi(endPoints.MBTABusStop, MBTAQuery, 'BusStopData');
 };
 
 let getClearMSG = () => {
@@ -201,7 +194,7 @@ let createEventListeners = () => {
 };
 
 const renderApp = () => {
-  getDataFromApi(endPoints.MBTARoutes, MBTARoutesQuery, 'RoutesData');
+  getDataFromApi(endPoints.MBTARoutes, MBTAQuery, 'RoutesData');
   createEventListeners();
 };
 
