@@ -30,9 +30,7 @@ let MBTAQuery = {
 let getDataFromApi = (searchTerm, query, callback) => {
   query.api_key = apiKeys.MBTA;
   query.format = 'json';
-  console.log(query);
   $.getJSON(searchTerm, query, function(data) {
-    console.log(data);
     displayData(data, callback);
   });
 }
@@ -50,6 +48,7 @@ let getWUDataFromApi = (searchTerm, lat, lon, callback) => {
 let getDKDataFromApi = (searchTerm, lat, lon, callback) => {
   $.ajax({
       url: `${searchTerm}${lat},${lon}`,
+      dataType: 'jsonp',
       method: 'GET'
     })
     .done(function(data) {
@@ -58,7 +57,6 @@ let getDKDataFromApi = (searchTerm, lat, lon, callback) => {
 };
 
 let displayData = (data, display) => {
-  console.log("data & display:", data, display);
   let resultElement;
   switch (display) {
 
@@ -92,7 +90,7 @@ let displayData = (data, display) => {
 
     case 'PreditionsByStopData':
 
-      console.log('displayPreditionsByStopData data: ', data);
+      console.log('displayPreditionsByStop data: ', data);
 
       resultElement = '';
       //if there is not mode available for this route then display this message
@@ -141,13 +139,25 @@ let displayData = (data, display) => {
       //data.current_observation.temp_f
       //data.current_observation.weather
 
-      $('.weather-message').html(resultElement)
+      //  $('.weather-message').html(resultElement)
 
       break;
 
     case 'DarkSkyData':
 
       console.log('DarkSkyData: ', data);
+
+      resultElement = "";
+      console.log(data.currently.icon);
+      resultElement = `<figure class="icons">
+        <canvas id="${data.currently.icon}" width="64" height="64">
+        </canvas>
+      </figure>`;
+
+
+
+      $('.weather-message').html(resultElement);
+      console.log('test darksky');
       break;
   }
 };
@@ -189,6 +199,45 @@ let getBusStopID = event => {
   getDataFromApi(endPoints.MBTAPredictionsByStop, MBTAQuery, 'PreditionsByStopData');
 };
 
+let getSkyIcons = (event) => {
+
+  let icons = new Skycons();
+  switch (event) {
+    case 'clear-day':
+      icons.set(event, Skycons.CLEAR_DAY);
+      break;
+    case 'clear-night':
+      icons.set(event, Skycons.CLEAR_NIGHT);
+      break;
+    case 'partly-cloudy-day':
+      icons.set(event, Skycons.PARTLY_CLOUDY_DAY);
+      break;
+    case 'partly-cloudy-night':
+      icons.set(event, Skycons.PARTLY_CLOUDY_NIGHT);
+      break;
+    case 'cloudy':
+      icons.set(event, Skycons.CLOUDY);
+      break;
+    case 'rain':
+      icons.set(event, Skycons.RAIN);
+      break;
+    case 'sleet':
+      icons.set(event, Skycons.SLEET);
+      break;
+    case 'snow':
+      icons.set(event, Skycons.SNOW);
+      break;
+    case 'wind':
+      icons.set(event, Skycons.WIND);
+      break;
+    case 'fog':
+      icons.set(event, Skycons.FOG);
+      break;
+  }
+
+  icons.play();
+};
+
 let getBusDirection = event => {
   //console.log(event);
   MBTAQuery.route = $('select').val();
@@ -209,6 +258,10 @@ let createEventListeners = () => {
   $('.bus-list, input[type="radio"]').on('change', (event) => {
     getClearMSG();
     getBusDirection(event);
+  });
+
+  $('.icons').on('change', (event) => {
+    getSkyIcons();
   });
 };
 
