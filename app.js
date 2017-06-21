@@ -149,14 +149,26 @@ let displayData = (data, display) => {
 
       resultElement = "";
       console.log(data.currently.icon);
-      resultElement = `<figure class="icons">
+      resultElement = `
+      <div data-icon='${data.currently.icon}>'
+      data-summary='${data.currently.summary}'
+      data-time='${data.currently.time}'
+      data-temperature='${data.currently.temperature}'>
+      Current Weather: '${data.currently.summary}' <br/>
+      Current Temp:'${data.currently.temperature}' <br/>
+      </div>
+
+      <figure class="icons">
         <canvas id="${data.currently.icon}" width="64" height="64">
         </canvas>
-      </figure>`;
+      </figure>
+
+      `;
 
 
 
       $('.weather-message').html(resultElement);
+      getSkyIcons(data.currently.icon);
       console.log('test darksky');
       break;
   }
