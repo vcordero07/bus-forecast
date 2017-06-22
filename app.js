@@ -1,4 +1,10 @@
-//06-19-2017
+//06-21-2017
+
+
+//get google maps location of that specific bus by changing the lat and loc of the link below;
+//http://maps.googleapis.com/maps/api/staticmap?center=42.370772,-71.076536&markers=42.370772,-71.076536&zoom=15&size=320x320&sensor=false
+//http://maps.googleapis.com/maps/api/staticmap?center=${strLat},${strLon}&markers={strLat},${strLon}&zoom=15&size=320x320&sensor=false
+
 
 const apiKeys = {
   MBTA: '1VI-9UmYpE64qhHFmhr1ew',
@@ -12,6 +18,7 @@ const endPoints = {
   MBTAPredictionsByStop: 'https://realtime.mbta.com/developer/api/v2/predictionsbystop',
   WeatherUnderground: `https://api.wunderground.com/api/${apiKeys.WeatherUnderground}/conditions/q/`,
   DarkSky: `https://api.darksky.net/forecast/${apiKeys.DarkSky}/`,
+  gglMaps: `http://maps.googleapis.com/maps/api/staticmap/`,
 };
 
 let busRouteID;
@@ -25,6 +32,11 @@ let MBTAQuery = {
   // route: busRouteID,
   // stop: strStopID,
   // direction: busDirection,
+};
+let MapsQuery = {
+  zoom: 15,
+  size: '320x320',
+  sensor: false,
 };
 
 let getDataFromApi = (searchTerm, query, callback) => {
@@ -55,6 +67,18 @@ let getDKDataFromApi = (searchTerm, lat, lon, callback) => {
       displayData(data, callback);
     });
 };
+
+let getMapsData = (lat, lon) => {
+  //center=${strLat},${strLon}&markers={strLat},${strLon}&zoom=15&size=320x320&sensor=false
+  //make this just an url with the dynamic lat and lon
+  let resultElement = `http://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers={lat},${lon}&zoom=15&size=320x320&sensor=false`;
+
+
+  $('.bus-stop-location').html(`
+  <img src = "${resultElement}" alt = "bus stop location" height="320" width="320" >
+  `);
+
+}
 
 let displayData = (data, display) => {
   let resultElement;
@@ -148,14 +172,14 @@ let displayData = (data, display) => {
       console.log('DarkSkyData: ', data);
 
       resultElement = "";
-      console.log(data.currently.icon);
+
       resultElement = `
       <div data-icon='${data.currently.icon}>'
       data-summary='${data.currently.summary}'
       data-time='${data.currently.time}'
       data-temperature='${data.currently.temperature}'>
-      Current Weather: '${data.currently.summary}' <br/>
-      Current Temp:'${data.currently.temperature}' <br/>
+      Current Weather: ${data.currently.summary} <br/>
+      Current Temp:${data.currently.temperature} <br/>
       </div>
 
       <figure class="icons">
@@ -165,11 +189,14 @@ let displayData = (data, display) => {
 
       `;
 
-
-
       $('.weather-message').html(resultElement);
       getSkyIcons(data.currently.icon);
-      console.log('test darksky');
+      break;
+
+    case 'MapsData':
+      console.log('MapsData', data);
+
+
       break;
   }
 };
@@ -209,6 +236,8 @@ let getBusStopID = event => {
   getDKDataFromApi(endPoints.DarkSky, strLat, strLon, 'DarkSkyData');
   MBTAQuery.direction = busDirection;
   getDataFromApi(endPoints.MBTAPredictionsByStop, MBTAQuery, 'PreditionsByStopData');
+
+  getMapsData(strLat, strLon);
 };
 
 let getSkyIcons = (event) => {
@@ -272,9 +301,6 @@ let createEventListeners = () => {
     getBusDirection(event);
   });
 
-  $('.icons').on('change', (event) => {
-    getSkyIcons();
-  });
 };
 
 const renderApp = () => {
