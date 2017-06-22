@@ -1,11 +1,5 @@
 //06-21-2017
-
-
-//get google maps location of that specific bus by changing the lat and loc of the link below;
-//http://maps.googleapis.com/maps/api/staticmap?center=42.370772,-71.076536&markers=42.370772,-71.076536&zoom=15&size=320x320&sensor=false
-//http://maps.googleapis.com/maps/api/staticmap?center=${strLat},${strLon}&markers={strLat},${strLon}&zoom=15&size=320x320&sensor=false
-
-
+//
 const apiKeys = {
   MBTA: '1VI-9UmYpE64qhHFmhr1ew',
   WeatherUnderground: '682f91fd7c03e86f',
@@ -18,7 +12,7 @@ const endPoints = {
   MBTAPredictionsByStop: 'https://realtime.mbta.com/developer/api/v2/predictionsbystop',
   WeatherUnderground: `https://api.wunderground.com/api/${apiKeys.WeatherUnderground}/conditions/q/`,
   DarkSky: `https://api.darksky.net/forecast/${apiKeys.DarkSky}/`,
-  gglMaps: `http://maps.googleapis.com/maps/api/staticmap/`,
+  // gglMaps: `http://maps.googleapis.com/maps/api/staticmap/`,
 };
 
 let busRouteID;
@@ -71,7 +65,7 @@ let getDKDataFromApi = (searchTerm, lat, lon, callback) => {
 let getMapsData = (lat, lon) => {
   //center=${strLat},${strLon}&markers={strLat},${strLon}&zoom=15&size=320x320&sensor=false
   //make this just an url with the dynamic lat and lon
-  let resultElement = `http://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers={lat},${lon}&zoom=15&size=320x320&sensor=false`;
+  let resultElement = `http://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=${lat},${lon}&zoom=15&size=320x320&sensor=false`;
 
 
   $('.bus-stop-location').html(`
@@ -95,7 +89,9 @@ let displayData = (data, display) => {
         }
       });
 
-      $('.bus-list').append(resultElement);
+      $('.selectpicker').append(resultElement);
+      // $('.selectpicker').selectpicker('render');
+      // $('.selectpicker').selectpicker('refresh');
       break;
 
     case 'BusStopData':
@@ -179,7 +175,7 @@ let displayData = (data, display) => {
       data-time='${data.currently.time}'
       data-temperature='${data.currently.temperature}'>
       Current Weather: ${data.currently.summary} <br/>
-      Current Temp:${data.currently.temperature} <br/>
+      Current Temp: ${data.currently.temperature} <br/>
       </div>
 
       <figure class="icons">
@@ -232,7 +228,7 @@ let getBusStopID = event => {
   strStopID = event.currentTarget.getAttribute('data-stopid');
   MBTAQuery.stop = event.currentTarget.getAttribute('data-stopid');
 
-  getWUDataFromApi(endPoints.WeatherUnderground, strLat, strLon, 'WUData');
+  //getWUDataFromApi(endPoints.WeatherUnderground, strLat, strLon, 'WUData');
   getDKDataFromApi(endPoints.DarkSky, strLat, strLon, 'DarkSkyData');
   MBTAQuery.direction = busDirection;
   getDataFromApi(endPoints.MBTAPredictionsByStop, MBTAQuery, 'PreditionsByStopData');
@@ -241,41 +237,10 @@ let getBusStopID = event => {
 };
 
 let getSkyIcons = (event) => {
-
+  let keyEvent = event.toUpperCase().replace(/-/g, '_')
   let icons = new Skycons();
-  switch (event) {
-    case 'clear-day':
-      icons.set(event, Skycons.CLEAR_DAY);
-      break;
-    case 'clear-night':
-      icons.set(event, Skycons.CLEAR_NIGHT);
-      break;
-    case 'partly-cloudy-day':
-      icons.set(event, Skycons.PARTLY_CLOUDY_DAY);
-      break;
-    case 'partly-cloudy-night':
-      icons.set(event, Skycons.PARTLY_CLOUDY_NIGHT);
-      break;
-    case 'cloudy':
-      icons.set(event, Skycons.CLOUDY);
-      break;
-    case 'rain':
-      icons.set(event, Skycons.RAIN);
-      break;
-    case 'sleet':
-      icons.set(event, Skycons.SLEET);
-      break;
-    case 'snow':
-      icons.set(event, Skycons.SNOW);
-      break;
-    case 'wind':
-      icons.set(event, Skycons.WIND);
-      break;
-    case 'fog':
-      icons.set(event, Skycons.FOG);
-      break;
-  }
 
+  icons.set(event, Skycons[keyEvent]);
   icons.play();
 };
 
@@ -289,14 +254,21 @@ let getBusDirection = event => {
 };
 
 let getClearMSG = () => {
-  $('.bus-stop-list, .bus-message, .next-bus-predictions, .weather-message ').html("");
+  $('.bus-stop-list, .bus-message, .next-bus-predictions, .weather-message, .bus-stop-location').html("");
 };
 
 let createEventListeners = () => {
+  // $('.selectpicker').selectpicker({
+  //   style: 'btn-primary',
+  //   size: 4
+  // });
+
   $('.bus-stop-list').on('click', 'li', (event) => {
     getBusStopID(event);
+    MBTAQuery = {};
+
   });
-  $('.bus-list, input[type="radio"]').on('change', (event) => {
+  $('.selectpicker, input[type="radio"]').on('change', (event) => {
     getClearMSG();
     getBusDirection(event);
   });
