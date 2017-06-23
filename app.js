@@ -74,6 +74,18 @@ let getMapsData = (lat, lon) => {
 
 }
 
+let getCurrentTime = () => {
+  let time = new Date();
+  let hours = time.getHours() > 12 ? time.getHours() - 12 : time.getHours();
+  let am_pm = time.getHours() >= 12 ? "PM" : "AM";
+  hours = hours < 10 ? "0" + hours : hours;
+  let minutes = time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
+  let seconds = time.getSeconds() < 10 ? "0" + time.getSeconds() : time.getSeconds();
+
+  time = hours + ":" + minutes + ":" + seconds + " " + am_pm;
+  return time;
+};
+
 let displayData = (data, display) => {
   let resultElement;
   switch (display) {
@@ -127,7 +139,8 @@ let displayData = (data, display) => {
 
           let currentTime = new Date();
 
-          resultElement = `Valid as of ${currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds()}`;
+          resultElement = `Valid as of ${getCurrentTime()}`;
+          // console.log("data.mode.route", data.mode[0].route[i]);
           recursiveIteration(data.mode[0].route[i])
 
           $('.bus-message').html(resultElement);
@@ -199,6 +212,7 @@ let displayData = (data, display) => {
 
 let recursiveIteration = (object) => {
   let resultElement;
+  minTime = 0;
   for (var property in object) {
     if (object.hasOwnProperty(property)) {
       if (typeof object[property] == "object") {
@@ -214,7 +228,7 @@ let recursiveIteration = (object) => {
           //resultElement = `Next Bus in: ${Math.round(object[property] / 60)} min`;
           resultElement = `Next Bus in: ${Math.round(minTime / 60)} min`;
 
-          $('.next-bus-predictions').html(resultElement)
+          $('.next-bus-predictions').html(resultElement);
         }
       }
     }
@@ -253,8 +267,16 @@ let getBusDirection = event => {
   getDataFromApi(endPoints.MBTABusStop, MBTAQuery, 'BusStopData');
 };
 
-let getClearMSG = () => {
-  $('.bus-stop-list, .bus-message, .next-bus-predictions, .weather-message, .bus-stop-location').html("");
+let getClearMSG = (options) => {
+  switch (options) {
+    case 'all':
+      $('.bus-stop-list, .bus-message, .next-bus-predictions, .weather-message, .bus-stop-location').html("");
+      break;
+    case 'msg-only':
+      $('.bus-message, .next-bus-predictions, .weather-message, .bus-stop-location').html("");
+      break;
+  }
+
 };
 
 let createEventListeners = () => {
@@ -264,12 +286,13 @@ let createEventListeners = () => {
   // });
 
   $('.bus-stop-list').on('click', 'li', (event) => {
+    getClearMSG('msg-only');
     getBusStopID(event);
     MBTAQuery = {};
 
   });
   $('.selectpicker, input[type="radio"]').on('change', (event) => {
-    getClearMSG();
+    getClearMSG('all');
     getBusDirection(event);
   });
 

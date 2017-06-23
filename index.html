@@ -24,8 +24,11 @@
       <option value="">Select bus</option>
     </select>
 
-    <label for="bus-outbound"><input type="radio" name="bus-direction" checked value="0">Outbound</label>
-    <label for="bus-inbound"><input type="radio" name="bus-direction" value="1">Inbound</label>
+    <div class="btn-group direction-opt" data-toggle='buttons'>
+      <label for="bus-outbound" class="btn btn-primary active"><input type="radio" name="bus-direction" checked value="0">Outbound</label>
+      <label for="bus-inbound" class="btn btn-primary"><input type="radio" name="bus-direction" value="1">Inbound</label>
+
+    </div>
   </nav>
 
   <div id="bus-info" class="row">
