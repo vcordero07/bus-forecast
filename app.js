@@ -110,11 +110,21 @@ let displayData = (data, display) => {
       console.log('displayBusStopData :', data);
       resultElement = '';
       data.direction[busDirection].stop.forEach(item => {
-        resultElement += `<li
+        resultElement += `
+        <div class="cd-timeline-block">
+        <div class="cd-timeline-content">
+
+        <h6>
+        <li
         data-lat='${item.stop_lat}'
         data-lon='${item.stop_lon}'
         data-stopid='${item.stop_id}'
-        >${item.stop_name}</li>`;
+        >${item.stop_name}</li></h6>
+
+
+        </div> <!-- cd-timeline-content -->
+        </div>
+        `;
       });
       $('.bus-stop-list').html(resultElement);
       break;
@@ -284,13 +294,14 @@ let createEventListeners = () => {
   // });
 
 
-  $('.bus-stop-list').on('click', 'li', (event) => {
+  $('.bus-stop-list').on('click', 'ul, li', (event) => {
 
     getClearMSG('msg-only');
     getBusStopID(event);
 
     $('li.selected').removeClass('selected');
     $(event.currentTarget).addClass('selected');
+    //$(event.currentTarget).siblings('li').hide();
     MBTAQuery = {};
   });
   $('.selectpicker, input[type="radio"]').on('change', (event) => {
