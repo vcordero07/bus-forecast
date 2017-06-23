@@ -97,10 +97,9 @@ let displayData = (data, display) => {
       //data.mode = 3 is bus
       data.mode[3].route.forEach(item => {
         if (!item.hasOwnProperty('route_hide')) {
-          resultElement += `<option value = "${item.route_id}"> ${item.route_name} </option>`;
+          resultElement += `<option val="${item.route_id}">${item.route_name}</option>`;
         }
       });
-
       $('.selectpicker').append(resultElement);
       // $('.selectpicker').selectpicker('render');
       // $('.selectpicker').selectpicker('refresh');
@@ -282,14 +281,17 @@ let getClearMSG = (options) => {
 let createEventListeners = () => {
   // $('.selectpicker').selectpicker({
   //   style: 'btn-primary',
-  //   size: 4
   // });
 
+
   $('.bus-stop-list').on('click', 'li', (event) => {
+
     getClearMSG('msg-only');
     getBusStopID(event);
-    MBTAQuery = {};
 
+    $('li.selected').removeClass('selected');
+    $(event.currentTarget).addClass('selected');
+    MBTAQuery = {};
   });
   $('.selectpicker, input[type="radio"]').on('change', (event) => {
     getClearMSG('all');

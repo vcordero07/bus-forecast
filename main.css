@@ -10,3 +10,7 @@ body {
   padding: 30px;
   background-color: #ecf0f1;
 }
+
+.selected {
+  font-weight: bold;
+}
