@@ -32,3 +32,7 @@ body {
   width: 4px;
   background: #e67e22;
 }
+
+.glyphicon {
+  display: none;
+}

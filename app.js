@@ -102,7 +102,11 @@ let displayData = (data, display) => {
       });
       $('.selectpicker').append(resultElement);
       // $('.selectpicker').selectpicker('render');
-      // $('.selectpicker').selectpicker('refresh');
+      $('.selectpicker').selectpicker({
+        style: 'btn-primary',
+      });
+
+
       break;
 
     case 'BusStopData':
@@ -221,7 +225,7 @@ let displayData = (data, display) => {
 
 let recursiveIteration = (object) => {
   let resultElement;
-  minTime = 0;
+  // [5, 15, 25]
   for (var property in object) {
     if (object.hasOwnProperty(property)) {
       if (typeof object[property] == "object") {
@@ -233,7 +237,7 @@ let recursiveIteration = (object) => {
           //console.log("Next Bus in: ", (object[property] / 60));
           //math min is not working because is selecting the mintime but for all the buses available
           minTime = (minTime === 0) ? object[property] : Math.min(object[property], minTime);
-
+          console.log('minTime:', minTime);
           //resultElement = `Next Bus in: ${Math.round(object[property] / 60)} min`;
           resultElement = `Next Bus in: ${Math.round(minTime / 60)} min`;
 
@@ -288,20 +292,22 @@ let getClearMSG = (options) => {
 
 };
 
+
+
+
 let createEventListeners = () => {
-  // $('.selectpicker').selectpicker({
-  //   style: 'btn-primary',
-  // });
 
 
-  $('.bus-stop-list').on('click', 'ul, li', (event) => {
+  $('.bus-stop-list').on('click', 'li', (event) => {
 
     getClearMSG('msg-only');
     getBusStopID(event);
 
     $('li.selected').removeClass('selected');
     $(event.currentTarget).addClass('selected');
-    //$(event.currentTarget).siblings('li').hide();
+
+    $(event.currentTarget).closest('.cd-timeline-block').siblings().hide();
+    minTime = 0;
     MBTAQuery = {};
   });
   $('.selectpicker, input[type="radio"]').on('change', (event) => {
@@ -316,4 +322,4 @@ const renderApp = () => {
   createEventListeners();
 };
 
-$(renderApp());
+$(document).ready(renderApp);
