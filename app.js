@@ -1,4 +1,4 @@
-//06-21-2017
+//06-23-2017
 //
 const apiKeys = {
   MBTA: '1VI-9UmYpE64qhHFmhr1ew',
@@ -65,13 +65,11 @@ let getDKDataFromApi = (searchTerm, lat, lon, callback) => {
 let getMapsData = (lat, lon) => {
   //center=${strLat},${strLon}&markers={strLat},${strLon}&zoom=15&size=320x320&sensor=false
   //make this just an url with the dynamic lat and lon
-  let resultElement = `http://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=${lat},${lon}&zoom=15&size=320x320&sensor=false`;
-
+  let resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=${lat},${lon}&zoom=15&size=320x320&sensor=false`;
 
   $('.bus-stop-location').html(`
   <img src = "${resultElement}" alt = "bus stop location" height="320" width="320" >
   `);
-
 }
 
 let getCurrentTime = () => {
@@ -103,9 +101,8 @@ let displayData = (data, display) => {
       $('.selectpicker').append(resultElement);
       // $('.selectpicker').selectpicker('render');
       $('.selectpicker').selectpicker({
-        style: 'btn-primary',
+        // style: 'btn-selector',
       });
-
 
       break;
 
@@ -124,7 +121,6 @@ let displayData = (data, display) => {
         data-lon='${item.stop_lon}'
         data-stopid='${item.stop_id}'
         >${item.stop_name}</li></h6>
-
 
         </div> <!-- cd-timeline-content -->
         </div>
@@ -146,7 +142,6 @@ let displayData = (data, display) => {
         return;
       }
       //if there is data display pass
-
       for (let i = 0; i < data.mode[0].route.length; i++) {
         if (data.mode[0].route[i].route_id === busRouteID) {
 
@@ -164,7 +159,7 @@ let displayData = (data, display) => {
         }
       }
       break;
-      // default:
+
     case 'WUData':
 
       console.log("displayWUData: ", data);
@@ -179,13 +174,6 @@ let displayData = (data, display) => {
       Current Weather: ${data.current_observation.weather} <br/>
       Current Temp:${data.current_observation.temp_f} <br/>
       </p>`;
-      //data.current_observation.forecast_url
-      //data.current_observation.icon
-      //data.current_observation.icon_url
-      //data.current_observation.temp_f
-      //data.current_observation.weather
-
-      //  $('.weather-message').html(resultElement)
 
       break;
 
@@ -233,7 +221,6 @@ let recursiveIteration = (object) => {
       } else {
         //found a property which is not an object, check for your conditions here
         if (property === 'pre_away') {
-
           //console.log("Next Bus in: ", (object[property] / 60));
           //math min is not working because is selecting the mintime but for all the buses available
           minTime = (minTime === 0) ? object[property] : Math.min(object[property], minTime);
@@ -289,17 +276,10 @@ let getClearMSG = (options) => {
       $('.bus-message, .next-bus-predictions, .weather-message, .bus-stop-location').html("");
       break;
   }
-
 };
 
-
-
-
 let createEventListeners = () => {
-
-
   $('.bus-stop-list').on('click', 'li', (event) => {
-
     getClearMSG('msg-only');
     getBusStopID(event);
 
@@ -310,14 +290,16 @@ let createEventListeners = () => {
     minTime = 0;
     MBTAQuery = {};
   });
+
   $('.selectpicker, input[type="radio"]').on('change', (event) => {
     getClearMSG('all');
+    $('#bus-info').show();
     getBusDirection(event);
   });
-
 };
 
 const renderApp = () => {
+  $('#bus-info').hide();
   getDataFromApi(endPoints.MBTARoutes, MBTAQuery, 'RoutesData');
   createEventListeners();
 };

@@ -11,6 +11,17 @@ body {
   background-color: #ecf0f1;
 }
 
+.Title {
+  background-color: #E67E22;
+  color: #FFF;
+  font-size: 36px;
+  padding: 8px 30px;
+  font-weight: bold;
+  margin: 0 -30px 10px;
+  position: relative;
+  border-radius: 3px;
+}
+
 .selected {
   font-weight: bold;
 }
@@ -30,9 +41,96 @@ body {
   left: 18px;
   height: 100%;
   width: 4px;
-  background: #e67e22;
+  background-color: #e67e22;
 }
 
 .glyphicon {
   display: none;
+}
+
+.bus-selector {
+  color: #fff;
+  background-color: #3498DB;
+  border-color: #2980D9;
+  border-radius: 3px;
+}
+
+.btn-direction {
+  color: #e67e22;
+  background-color: #ecf0f1;
+  border-color: #D35400;
+}
+
+.btn-direction:hover {
+  color: #fff;
+  background-color: #e67e22;
+  border-color: #D35400;
+}
+
+.btn-direction:active, .btn-direction.active {
+  color: #fff;
+  background-color: #e67e22;
+  border-color: #D35400;
+}
+
+.btn-direction:active:hover, .btn-direction.active:hover {
+  color: #fff;
+  background-color: #D35400;
+  border-color: #D35400;
+}
+
+.btn-direction.disabled:hover, .btn-direction[disabled]:hover {
+  background-color: #e67e22;
+  border-color: #D35400;
+}
+
+.btn-direction .badge {
+  color: #e67e22;
+  background-color: #fff;
+}
+
+.btn-selector {
+  color: #fff;
+  background-color: #3498DB;
+  border-color: #2980D9;
+}
+
+.btn-selector:focus, .btn-selector.focus {
+  color: #fff;
+  background-color: #2980D9;
+  border-color: #2980D9;
+}
+
+.btn-selector:hover {
+  color: #fff;
+  background-color: #2980D9;
+  border-color: #2980D9;
+}
+
+.btn-selector:active, .btn-selector.active, .open>.dropdown-toggle.btn-selector {
+  color: #fff;
+  background-color: #2980D9;
+  border-color: #2980D9;
+}
+
+.btn-selector:active:hover, .btn-selector.active:hover, .open>.dropdown-toggle.btn-selector:hover, .btn-selector:active:focus, .btn-selector.active:focus, .open>.dropdown-toggle.btn-selector:focus, .btn-selector:active.focus, .btn-selector.active.focus, .open>.dropdown-toggle.btn-selector.focus {
+  color: #fff;
+  background-color: #2980D9;
+  border-color: #2980D9;
+}
+
+.btn-selector .badge {
+  color: #3498DB;
+  background-color: #fff;
+}
+
+a:link, a:visited, a:active {
+  color: #e67e22;
+  font-weight: bold;
+}
+
+a:hover {
+  color: #3498DB;
+  text-decoration: none;
+  font-weight: bold;
 }

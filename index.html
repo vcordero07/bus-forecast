@@ -8,8 +8,6 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
 
-
-
   <link rel="stylesheet" href="main.css">
   <title>Bus Forecast</title>
 </head>
@@ -17,58 +15,59 @@
 <body>
   <header>
     <!-- LOGO -->
+    <h1 class="Title">Bus Forecast</h1>
   </header>
 
   <nav>
 
-    <select class="selectpicker" id="bus-list" name="MBTA-Bus-Line">
+    <select class="selectpicker bus-selector" id="bus-list" name="MBTA-Bus-Line" data-style="btn-selector" data-live-search="true">
       <option value="">Select bus</option>
        <!-- <optgroup label="Select bus" ></optgroup> -->
     </select>
 
     <div class="btn-group direction-opt" data-toggle='buttons'>
-      <label for="bus-outbound" class="btn btn-primary active"><input type="radio" name="bus-direction" checked value="0">Outbound</label>
-      <label for="bus-inbound" class="btn btn-primary"><input type="radio" name="bus-direction" value="1">Inbound</label>
-
+      <label for="bus-outbound" class="btn btn-primary active btn-direction"><input type="radio" name="bus-direction" checked value="0">Outbound</label>
+      <label for="bus-inbound" class="btn btn-primary btn-direction"><input type="radio" name="bus-direction" value="1">Inbound</label>
     </div>
+
   </nav>
 
-  <div id="bus-info" class="row">
-    <!-- <div class="col-md-12"> -->
-    <section id="cd-timeline" class="cd-container">
-      <ul class="bus-stop-list">
+  <section id="bus-info">
+    <div class="row">
+      <!-- <div class="col-md-12"> -->
+      <div id="cd-timeline" class="cd-container">
+        <ul class="bus-stop-list">
 
-        <!-- cd-timeline-block -->
-
-      </ul>
-    </section>
-
-    <!-- </div> -->
-    <div class="col-md-12">
-      <div class="bus-message"></div>
+        </ul>
+      </div>
+      <!-- </div> -->
+      <div class="col-md-12">
+        <div class="bus-message"></div>
+      </div>
+      <div class="col-md-12">
+        <div class="next-bus-predictions"></div>
+      </div>
     </div>
-    <div class="col-md-12">
-      <div class="next-bus-predictions"></div>
-    </div>
-  </div>
-
+  </section>
 
   <section id="weather-info">
     <div class="weather-message"></div>
   </section>
+
   <section id="map-info">
     <div class="bus-stop-location"></div>
   </section>
 
-
   <footer>
     <br><br><br> &copy; Bus Forecast 2017 | Skycons by <a href="https://forecast.io" target="_blank">Forecast</a> & <a href="https://adamwhitcroft.com/climacons/" target="_blank">Climacons</a>
   </footer>
-  <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 
+  <!--  Error: Uncaught TypeError: Cannot set property 'mobile' of undefined
+Still testing jquery mobile
+-->
+  <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.js"></script>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.5.4/bootstrap-select.js"></script>
 
   <script src="skycons.js" charset="utf-8"></script>
