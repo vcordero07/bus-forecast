@@ -65,7 +65,7 @@ let getDKDataFromApi = (searchTerm, lat, lon, callback) => {
 let getMapsData = (lat, lon) => {
   //center=${strLat},${strLon}&markers={strLat},${strLon}&zoom=15&size=320x320&sensor=false
   //make this just an url with the dynamic lat and lon
-  let resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=${lat},${lon}&zoom=15&size=320x320&sensor=false`;
+  let resultElement = `http://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=${lat},${lon}&zoom=15&size=320x320&sensor=false`;
 
   $('.bus-stop-location').html(`
   <img src = "${resultElement}" alt = "bus stop location" height="320" width="320" >
