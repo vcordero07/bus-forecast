@@ -134,3 +134,8 @@ a:hover {
   text-decoration: none;
   font-weight: bold;
 }
+
+li {
+  cursor: pointer;
+  /*cursor: hand;*/
+}
