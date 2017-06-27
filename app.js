@@ -37,9 +37,15 @@ let getDataFromApi = (searchTerm, query, callback) => {
   query.api_key = apiKeys.MBTA;
   query.format = 'json';
   $.getJSON(searchTerm, query, function(data) {
-    displayData(data, callback);
-  });
-}
+      displayData(data, callback);
+    })
+    .fail(function(data) {
+      console.log('error data:', data);
+      if (data.status === 404) {
+        $('.bus-message').html(`${data.responseText}`);
+      }
+    });
+};
 
 let getWUDataFromApi = (searchTerm, lat, lon, callback) => {
   $.ajax({
@@ -48,6 +54,9 @@ let getWUDataFromApi = (searchTerm, lat, lon, callback) => {
     })
     .done(function(data) {
       displayData(data, callback);
+    })
+    .fail(function(data) {
+      console.log('error data:', data);
     });
 };
 
@@ -59,6 +68,9 @@ let getDKDataFromApi = (searchTerm, lat, lon, callback) => {
     })
     .done(function(data) {
       displayData(data, callback);
+    })
+    .fail(function(data) {
+      console.log('error data:', data);
     });
 };
 
