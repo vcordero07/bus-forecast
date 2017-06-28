@@ -13,53 +13,58 @@
 </head>
 
 <body>
-  <header>
-    <!-- LOGO -->
-    <h1 class="Title">Bus Forecast</h1>
-  </header>
+  <div class="wrapper">
+    <header>
+      <!-- LOGO -->
+      <h1 class="Title">Bus Forecast</h1>
+    </header>
 
-  <nav>
+    <nav>
 
-    <select class="selectpicker show-menu-arrow bus-selector" id="bus-list" name="MBTA-Bus-Line" data-style="btn-selector" data-live-search="true">
+      <select class="selectpicker show-menu-arrow bus-selector" id="bus-list" name="MBTA-Bus-Line" data-style="btn-selector" data-live-search="true">
       <option value="">Select bus</option>
        <!-- <optgroup label="Select bus" ></optgroup> -->
     </select>
 
-    <div class="btn-group direction-opt" data-toggle='buttons'>
-      <label for="bus-outbound" class="btn btn-primary active btn-direction"><input type="radio" name="bus-direction" checked value="0">Outbound</label>
-      <label for="bus-inbound" class="btn btn-primary btn-direction"><input type="radio" name="bus-direction" value="1">Inbound</label>
-    </div>
-
-  </nav>
-
-  <section id="bus-info">
-    <div class="row">
-      <!-- <div class="col-md-12"> -->
-      <div id="cd-timeline" class="cd-container">
-        <ul class="bus-stop-list">
-
-        </ul>
+      <div class="btn-group direction-opt" data-toggle='buttons'>
+        <label for="bus-outbound" class="btn btn-primary active btn-direction"><input type="radio" name="bus-direction" checked value="0">Outbound</label>
+        <label for="bus-inbound" class="btn btn-primary btn-direction"><input type="radio" name="bus-direction" value="1">Inbound</label>
       </div>
-      <!-- </div> -->
-      <div class="col-md-12">
-        <div class="bus-message"></div>
+
+    </nav>
+
+    <section id="bus-info">
+      <div class="row">
+        <!-- <div class="col-md-12"> -->
+        <div id="cd-timeline" class="cd-container">
+          <ul class="bus-stop-list">
+
+          </ul>
+        </div>
+        <!-- </div> -->
+        <div class="col-md-12">
+          <div class="bus-message"></div>
+        </div>
+        <div class="col-md-12">
+          <div class="next-bus-predictions"></div>
+        </div>
       </div>
-      <div class="col-md-12">
-        <div class="next-bus-predictions"></div>
+    </section>
+
+    <section id="weather-info">
+      <div class="row">
+        <div class="col-md-12 weather-message"></div>
       </div>
-    </div>
-  </section>
 
-  <section id="weather-info">
-    <div class="row">
-      <div class="col-md-12 weather-message"></div>
-    </div>
+    </section>
 
-  </section>
+    <section id="map-info">
+      <div class="bus-stop-location"></div>
+    </section>
+  </div>
 
-  <section id="map-info">
-    <div class="bus-stop-location"></div>
-  </section>
+  <div id="content">
+  </div>
 
   <footer>
     &copy; Bus Forecast 2017 | Data by <a href="http://www.mbta.com/rider_tools/developers/">MBTA</a>, <a href="https://darksky.net/dev/">DarkSky</a>, <a href="https://developers.google.com/maps/">Google</a> | Skycons by <a href="https://forecast.io"
