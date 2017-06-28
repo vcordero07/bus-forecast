@@ -28,9 +28,9 @@ body {
 
 #cd-timeline {
   position: relative;
-  padding: 2em 0;
-  margin-top: 2em;
-  margin-bottom: 2em;
+  padding: 15px 0;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 #cd-timeline::before {
@@ -138,4 +138,27 @@ a:hover {
 li {
   cursor: pointer;
   /*cursor: hand;*/
+}
+
+
+/*.bus-selector {
+  font-size: 36px;
+  padding: 8px 30px;
+  font-weight: bold;
+  margin: 0 -30px 10px;
+  position: relative;
+  border-radius: 3px;
+}*/
+
+footer {
+  /*background-color: #E67E22;*/
+  /*color: #FFF;*/
+  font-size: 12px;
+  padding: 8px 30px;
+  font-weight: bold;
+  margin: 0 -30px 10px;
+  /*position: relative;*/
+  border-radius: 3px;
+  position: relative;
+  bottom: 0;
 }

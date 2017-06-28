@@ -299,6 +299,16 @@ let createEventListeners = () => {
     $(event.currentTarget).addClass('selected');
 
     $(event.currentTarget).closest('.cd-timeline-block').siblings().hide();
+    $(event.currentTarget).closest('.cd-timeline-block').prepend(`
+      <div class="cd-timeline-block">
+      <div class="cd-timeline-content">
+
+      <h6>
+      <li>Back</li><br><br></h6>
+
+      </div> <!-- cd-timeline-content -->
+      </div>
+      `);
     minTime = 0;
     MBTAQuery = {};
   });

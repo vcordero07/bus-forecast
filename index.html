@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
 
-  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="css/main.css">
   <title>Bus Forecast</title>
 </head>
 
@@ -20,7 +20,7 @@
 
   <nav>
 
-    <select class="selectpicker bus-selector" id="bus-list" name="MBTA-Bus-Line" data-style="btn-selector" data-live-search="true">
+    <select class="selectpicker show-menu-arrow bus-selector" id="bus-list" name="MBTA-Bus-Line" data-style="btn-selector" data-live-search="true">
       <option value="">Select bus</option>
        <!-- <optgroup label="Select bus" ></optgroup> -->
     </select>
@@ -51,7 +51,10 @@
   </section>
 
   <section id="weather-info">
-    <div class="weather-message"></div>
+    <div class="row">
+      <div class="col-md-12 weather-message"></div>
+    </div>
+
   </section>
 
   <section id="map-info">
@@ -59,7 +62,8 @@
   </section>
 
   <footer>
-    <br><br><br> &copy; Bus Forecast 2017 | Skycons by <a href="https://forecast.io" target="_blank">Forecast</a> & <a href="https://adamwhitcroft.com/climacons/" target="_blank">Climacons</a>
+    &copy; Bus Forecast 2017 | Data by <a href="http://www.mbta.com/rider_tools/developers/">MBTA</a>, <a href="https://darksky.net/dev/">DarkSky</a>, <a href="https://developers.google.com/maps/">Google</a> | Skycons by <a href="https://forecast.io"
+      target="_blank">Forecast</a> & <a href="https://adamwhitcroft.com/climacons/" target="_blank">Climacons</a>
   </footer>
 
   <!--  Error: Uncaught TypeError: Cannot set property 'mobile' of undefined
@@ -70,8 +74,8 @@ Still testing jquery mobile
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.5.4/bootstrap-select.js"></script>
 
-  <script src="skycons.js" charset="utf-8"></script>
-  <script src="app.js" charset="utf-8"></script>
+  <script type="text/javascript" src="js/skycons.js" charset="utf-8"></script>
+  <script type="text/javascript" src="js/app.js" charset="utf-8"></script>
 </body>
 
 </html>
