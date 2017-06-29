@@ -30,14 +30,14 @@ body {
   font-weight: bold;
 }
 
-#cd-timeline {
+.cd-timeline {
   position: relative;
   padding: 15px 0;
   margin-top: 15px;
   margin-bottom: 15px;
 }
 
-#cd-timeline::before {
+.cd-timeline::before {
   /* this is the vertical line */
   content: '';
   position: absolute;
@@ -52,7 +52,7 @@ body {
   display: none;
 }
 
-.bus-selector {
+.bus-selector, .search-by-opts {
   color: #fff;
   background-color: #3498DB;
   border-color: #2980D9;
@@ -155,11 +155,11 @@ li {
 }*/
 
 #content {
-  padding-bottom: 100px;
+  padding-bottom: 1px;
   /* Height of the footer element */
 }
 
-#wrapper {
+.wrapper {
   min-height: 100%;
   position: relative;
 }
@@ -175,5 +175,5 @@ footer {
   border-radius: 3px;
   position: relative;
   bottom: 0;
-  height: 100px
+  height: 10px
 }

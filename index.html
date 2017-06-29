@@ -21,15 +21,26 @@
 
     <nav>
 
-      <select class="selectpicker show-menu-arrow bus-selector" id="bus-list" name="MBTA-Bus-Line" data-style="btn-selector" data-live-search="true">
-      <option value="">Select bus</option>
-       <!-- <optgroup label="Select bus" ></optgroup> -->
-    </select>
+      <input type="button" name="Find by Location" value="Find by Location" class='btn btn-primary find-bus-by-location search-by-opts'></input>
+      <input type="button" name="Find by Route" value="Find by Route" class='btn btn-primary find-bus-by-route search-by-opts'></input>
 
-      <div class="btn-group direction-opt" data-toggle='buttons'>
-        <label for="bus-outbound" class="btn btn-primary active btn-direction"><input type="radio" name="bus-direction" checked value="0">Outbound</label>
-        <label for="bus-inbound" class="btn btn-primary btn-direction"><input type="radio" name="bus-direction" value="1">Inbound</label>
+
+      <div class="by-location-opts">
+        <div class="loading-bar"></div>
       </div>
+
+      <div class="by-route-opts">
+        <select class="selectpicker show-menu-arrow bus-selector" id="bus-list" name="MBTA-Bus-Line" data-style="btn-selector" data-live-search="true">
+          <option value="">Select bus</option>
+        </select>
+
+        <div class="btn-group direction-opt" data-toggle='buttons'>
+          <label for="bus-outbound" class="btn btn-primary active btn-direction"><input type="radio" name="bus-direction" checked value="0">Outbound</label>
+          <label for="bus-inbound" class="btn btn-primary btn-direction"><input type="radio" name="bus-direction" value="1">Inbound</label>
+        </div>
+
+      </div>
+
 
     </nav>
 
@@ -71,9 +82,7 @@
       target="_blank">Forecast</a> & <a href="https://adamwhitcroft.com/climacons/" target="_blank">Climacons</a>
   </footer>
 
-  <!--  Error: Uncaught TypeError: Cannot set property 'mobile' of undefined
-Still testing jquery mobile
--->
+
   <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.js"></script>

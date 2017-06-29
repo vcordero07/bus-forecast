@@ -10,6 +10,7 @@ const endPoints = {
   MBTARoutes: 'https://realtime.mbta.com/developer/api/v2/routes',
   MBTABusStop: 'https://realtime.mbta.com/developer/api/v2/stopsbyroute',
   MBTAPredictionsByStop: 'https://realtime.mbta.com/developer/api/v2/predictionsbystop',
+  MBTAStopsByLocation: 'http://realtime.mbta.com/developer/api/v2/stopsbylocation', //?api_key=wX9NwuHnZU2ToO7GmGR9uw&lat=42.352913&lon=-71.064648&format=json
   WeatherUnderground: `https://api.wunderground.com/api/${apiKeys.WeatherUnderground}/conditions/q/`,
   DarkSky: `https://api.darksky.net/forecast/${apiKeys.DarkSky}/`,
   // gglMaps: `http://maps.googleapis.com/maps/api/staticmap/`,
@@ -36,6 +37,7 @@ let MapsQuery = {
 let getDataFromApi = (searchTerm, query, callback) => {
   query.api_key = apiKeys.MBTA;
   query.format = 'json';
+  console.log('query:', query);
   $.getJSON(searchTerm, query, function(data) {
       displayData(data, callback);
     })
@@ -220,6 +222,11 @@ let displayData = (data, display) => {
 
 
       break;
+
+    case 'StopByLocation':
+      console.log('StopByLocationData:', data);
+
+      break;
   }
 };
 
@@ -290,38 +297,74 @@ let getClearMSG = (options) => {
   }
 };
 
+let getLocation = () => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else {
+    $('.bus-message').html("Geolocation is not supported by this browser.");
+  }
+
+
+};
+
+let showPosition = (position) => {
+  console.log('position:', position);
+  strLat = position.coords.latitude;
+  strLon = position.coords.longitude;
+  MBTAQuery.lat = position.coords.latitude;
+  MBTAQuery.lon = position.coords.longitude;
+  $('.bus-message').html(`Latitude: ${strLat} <br>Longitude: ${strLon}`);
+  // x.innerHTML = "Latitude: " + position.coords.latitude +
+  //   "<br>Longitude: " + position.coords.longitude;
+  getDataFromApi(endPoints.MBTAStopsByLocation, MBTAQuery, 'StopByLocation');
+};
+
 let createEventListeners = () => {
-  $('.bus-stop-list').on('click', 'li', (event) => {
-    getClearMSG('msg-only');
-    getBusStopID(event);
 
-    $('li.selected').removeClass('selected');
-    $(event.currentTarget).addClass('selected');
+  $('.find-bus-by-location').on('click', (event) => {
+    $('.by-location-opts').show();
+    getLocation();
 
-    $(event.currentTarget).closest('.cd-timeline-block').siblings().hide();
-    $(event.currentTarget).closest('.cd-timeline-block').prepend(`
-      <div class="cd-timeline-block">
-      <div class="cd-timeline-content">
+  })
 
-      <h6>
-      <li>Back</li><br><br></h6>
+  $('.find-bus-by-route').on('click', (event) => {
+    $('.by-route-opts').show();
 
-      </div> <!-- cd-timeline-content -->
-      </div>
-      `);
-    minTime = 0;
-    MBTAQuery = {};
+    $('.bus-stop-list').on('click', 'li', (event) => {
+      getClearMSG('msg-only');
+      getBusStopID(event);
+
+      $('li.selected').removeClass('selected');
+      $(event.currentTarget).addClass('selected');
+
+      $(event.currentTarget).closest('.cd-timeline-block').siblings().hide();
+      $(event.currentTarget).closest('.cd-timeline-block').prepend(`
+        <div class="cd-timeline-block">
+        <div class="cd-timeline-content">
+
+        <h6>
+        <li>Back</li><br><br></h6>
+
+        </div> <!-- cd-timeline-content -->
+        </div>
+        `);
+      minTime = 0;
+      MBTAQuery = {};
+    });
+
+    $('.selectpicker, input[type="radio"]').on('change', (event) => {
+      getClearMSG('all');
+      //$('#bus-info').show();
+      getBusDirection(event);
+    });
   });
 
-  $('.selectpicker, input[type="radio"]').on('change', (event) => {
-    getClearMSG('all');
-    $('#bus-info').show();
-    getBusDirection(event);
-  });
 };
 
 const renderApp = () => {
-  $('#bus-info').hide();
+  //$('#bus-info').hide();
+  $('.by-location-opts').hide();
+  $('.by-route-opts').hide();
   getDataFromApi(endPoints.MBTARoutes, MBTAQuery, 'RoutesData');
   createEventListeners();
 };
