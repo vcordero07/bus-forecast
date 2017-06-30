@@ -225,6 +225,25 @@ let displayData = (data, display) => {
 
     case 'StopByLocation':
       console.log('StopByLocationData:', data);
+      resultElement = '';
+      data.stop.forEach(item => {
+        resultElement += `
+        <div class="cd-timeline-block">
+        <div class="cd-timeline-content">
+
+        <h6>
+        <li
+        data-lat='${item.stop_lat}'
+        data-lon='${item.stop_lon}'
+        data-stopid='${item.stop_id}'
+        data-distance='${item.distance}'
+        >${item.stop_name}</li></h6>
+
+        </div> <!-- cd-timeline-content -->
+        </div>
+        `;
+      });
+      $('.bus-stop-list').html(resultElement);
 
       break;
   }
@@ -329,34 +348,34 @@ let createEventListeners = () => {
 
   $('.find-bus-by-route').on('click', (event) => {
     $('.by-route-opts').show();
+  });
 
-    $('.bus-stop-list').on('click', 'li', (event) => {
-      getClearMSG('msg-only');
-      getBusStopID(event);
+  $('.bus-stop-list').on('click', 'li', (event) => {
+    getClearMSG('msg-only');
+    getBusStopID(event);
 
-      $('li.selected').removeClass('selected');
-      $(event.currentTarget).addClass('selected');
+    $('li.selected').removeClass('selected');
+    $(event.currentTarget).addClass('selected');
 
-      $(event.currentTarget).closest('.cd-timeline-block').siblings().hide();
-      $(event.currentTarget).closest('.cd-timeline-block').prepend(`
-        <div class="cd-timeline-block">
-        <div class="cd-timeline-content">
+    $(event.currentTarget).closest('.cd-timeline-block').siblings().hide();
+    $(event.currentTarget).closest('.cd-timeline-block').prepend(`
+      <div class="cd-timeline-block">
+      <div class="cd-timeline-content">
 
-        <h6>
-        <li>Back</li><br><br></h6>
+      <h6>
+      <li>Back</li><br><br></h6>
 
-        </div> <!-- cd-timeline-content -->
-        </div>
-        `);
-      minTime = 0;
-      MBTAQuery = {};
-    });
+      </div> <!-- cd-timeline-content -->
+      </div>
+      `);
+    minTime = 0;
+    MBTAQuery = {};
+  });
 
-    $('.selectpicker, input[type="radio"]').on('change', (event) => {
-      getClearMSG('all');
-      //$('#bus-info').show();
-      getBusDirection(event);
-    });
+  $('.selectpicker, input[type="radio"]').on('change', (event) => {
+    getClearMSG('all');
+    //$('#bus-info').show();
+    getBusDirection(event);
   });
 
 };

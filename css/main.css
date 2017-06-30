@@ -144,15 +144,10 @@ li {
   /*cursor: hand;*/
 }
 
-
-/*.bus-selector {
-  font-size: 36px;
-  padding: 8px 30px;
-  font-weight: bold;
-  margin: 0 -30px 10px;
-  position: relative;
-  border-radius: 3px;
-}*/
+.search-by-opts, #bus-list {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
 
 #content {
   padding-bottom: 1px;
