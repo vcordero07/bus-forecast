@@ -317,6 +317,7 @@ let getClearMSG = (options) => {
 };
 
 let getLocation = () => {
+  hideShow([], ['.by-location-opts']);
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition);
   } else {
@@ -337,10 +338,10 @@ let showPosition = (position) => {
   // x.innerHTML = "Latitude: " + position.coords.latitude +
   //   "<br>Longitude: " + position.coords.longitude;
   getDataFromApi(endPoints.MBTAStopsByLocation, MBTAQuery, 'StopByLocation');
-  hideShow([], ['.cd-container']);
+  hideShow(['.loading-bar'], ['.cd-container']);
 };
 
-let hideShow = (toHide, toShow = []) => {
+let hideShow = (toHide = [], toShow = []) => {
   toHide.forEach(function(item, indx) {
     $(item).hide()
   });
@@ -354,7 +355,7 @@ let createEventListeners = () => {
 
   $('.find-bus-by-location').on('click', (event) => {
     getClearMSG('all');
-    hideShow(['.by-route-opts', '.cd-container'], ['.by-location-opts']);
+    hideShow(['.by-route-opts', '.cd-container'], []);
 
     getLocation();
 

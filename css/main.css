@@ -63,7 +63,6 @@ body {
   color: #e67e22;
   background-color: #ecf0f1;
   border-color: #D35400;
-  vertical-align: top;
 }
 
 .btn-direction:hover {
@@ -146,7 +145,7 @@ li {
 }
 
 .search-by-opts, #bus-list, .bus-selector {
-  margin-right: 10px !important;
+  margin-right: 10px;
   margin-bottom: 10px;
 }
 
@@ -158,6 +157,35 @@ li {
 .wrapper {
   min-height: 100%;
   position: relative;
+}
+
+.direction-opt {
+  vertical-align: top;
+}
+
+.loading-bar {
+  color: #fff;
+  background-color: #3498DB;
+  font-family: Consolas, Menlo, Monaco, monospace;
+  font-weight: bold;
+  font-size: 15px;
+  opacity: 0.8;
+}
+
+.loading-bar span {
+  display: inline-block;
+  animation: pulse 0.4s alternate infinite ease-in-out;
+}
+
+.loading-bar span:nth-child(odd) {
+  animation-delay: 0.4s;
+}
+
+@keyframes pulse {
+  to {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
 }
 
 footer {
