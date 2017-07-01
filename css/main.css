@@ -30,14 +30,14 @@ body {
   font-weight: bold;
 }
 
-.cd-timeline {
+#cd-timeline {
   position: relative;
   padding: 15px 0;
   margin-top: 15px;
   margin-bottom: 15px;
 }
 
-.cd-timeline::before {
+#cd-timeline::before {
   /* this is the vertical line */
   content: '';
   position: absolute;
@@ -63,6 +63,7 @@ body {
   color: #e67e22;
   background-color: #ecf0f1;
   border-color: #D35400;
+  vertical-align: top;
 }
 
 .btn-direction:hover {
@@ -144,8 +145,8 @@ li {
   /*cursor: hand;*/
 }
 
-.search-by-opts, #bus-list {
-  margin-right: 10px;
+.search-by-opts, #bus-list, .bus-selector {
+  margin-right: 10px !important;
   margin-bottom: 10px;
 }
 

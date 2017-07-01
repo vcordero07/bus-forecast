@@ -332,22 +332,38 @@ let showPosition = (position) => {
   strLon = position.coords.longitude;
   MBTAQuery.lat = position.coords.latitude;
   MBTAQuery.lon = position.coords.longitude;
-  $('.bus-message').html(`Latitude: ${strLat} <br>Longitude: ${strLon}`);
+  console.log('user coords:', `Latitude: ${strLat} <br>Longitude: ${strLon}`);
+  //$('.bus-message').html(`Latitude: ${strLat} <br>Longitude: ${strLon}`);
   // x.innerHTML = "Latitude: " + position.coords.latitude +
   //   "<br>Longitude: " + position.coords.longitude;
   getDataFromApi(endPoints.MBTAStopsByLocation, MBTAQuery, 'StopByLocation');
+  hideShow([], ['.cd-container']);
 };
+
+let hideShow = (toHide, toShow = []) => {
+  toHide.forEach(function(item, indx) {
+    $(item).hide()
+  });
+  toShow.forEach(function(item, indx) {
+    $(item).show()
+  });
+};
+
 
 let createEventListeners = () => {
 
   $('.find-bus-by-location').on('click', (event) => {
-    $('.by-location-opts').show();
+    getClearMSG('all');
+    hideShow(['.by-route-opts', '.cd-container'], ['.by-location-opts']);
+
     getLocation();
 
   })
 
   $('.find-bus-by-route').on('click', (event) => {
-    $('.by-route-opts').show();
+    getClearMSG('all');
+    hideShow(['.by-location-opts', '.cd-container'], ['.by-route-opts'])
+
   });
 
   $('.bus-stop-list').on('click', 'li', (event) => {
@@ -376,14 +392,16 @@ let createEventListeners = () => {
     getClearMSG('all');
     //$('#bus-info').show();
     getBusDirection(event);
+    hideShow([], ['.cd-container']);
   });
 
 };
 
 const renderApp = () => {
   //$('#bus-info').hide();
-  $('.by-location-opts').hide();
-  $('.by-route-opts').hide();
+  // $('.by-location-opts').hide();
+  // $('.by-route-opts').hide();
+  hideShow(['.by-location-opts', '.by-route-opts', '.cd-container'])
   getDataFromApi(endPoints.MBTARoutes, MBTAQuery, 'RoutesData');
   createEventListeners();
 };
