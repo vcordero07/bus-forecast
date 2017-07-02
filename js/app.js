@@ -10,7 +10,8 @@ const endPoints = {
   MBTARoutes: 'https://realtime.mbta.com/developer/api/v2/routes',
   MBTABusStop: 'https://realtime.mbta.com/developer/api/v2/stopsbyroute',
   MBTAPredictionsByStop: 'https://realtime.mbta.com/developer/api/v2/predictionsbystop',
-  MBTAStopsByLocation: 'http://realtime.mbta.com/developer/api/v2/stopsbylocation', //?api_key=wX9NwuHnZU2ToO7GmGR9uw&lat=42.352913&lon=-71.064648&format=json
+  MBTAStopsByLocation: 'https://realtime.mbta.com/developer/api/v2/stopsbylocation', //?api_key=wX9NwuHnZU2ToO7GmGR9uw&lat=42.352913&lon=-71.064648&format=json
+  MBTARoutesByStop: 'http://realtime.mbta.com/developer/api/v2/routesbystop', //?api_key=wX9NwuHnZU2ToO7GmGR9uw&stop=1425&format=json
   WeatherUnderground: `https://api.wunderground.com/api/${apiKeys.WeatherUnderground}/conditions/q/`,
   DarkSky: `https://api.darksky.net/forecast/${apiKeys.DarkSky}/`,
   // gglMaps: `http://maps.googleapis.com/maps/api/staticmap/`,
@@ -162,7 +163,7 @@ let displayData = (data, display) => {
           let currentTime = new Date();
 
           resultElement = `Valid as of ${getCurrentTime()}`;
-          // console.log("data.mode.route", data.mode[0].route[i]);
+          console.log("data.mode.route", data.mode[0].route[i]);
           recursiveIteration(data.mode[0].route[i])
 
           $('.bus-message').html(resultElement);
@@ -246,6 +247,15 @@ let displayData = (data, display) => {
       $('.bus-stop-list').html(resultElement);
 
       break;
+
+    case 'RoutesByStop':
+      console.log('RoutesByStopData:', data);
+      data.mode[0].route.forEach(item => {
+        console.log('item.route_id:', item.route_id);
+        busRouteID = item.route_id;
+      });
+
+      break;
   }
 };
 
@@ -279,6 +289,14 @@ let getBusStopID = event => {
   strLon = event.currentTarget.getAttribute('data-lon');
   strStopID = event.currentTarget.getAttribute('data-stopid');
   MBTAQuery.stop = event.currentTarget.getAttribute('data-stopid');
+
+
+  //if (!busRouteID === '0') {
+  console.log('busRouteID:', busRouteID);
+  getDataFromApi(endPoints.MBTARoutesByStop, MBTAQuery, 'RoutesByStop');
+  //}
+
+
 
   //getWUDataFromApi(endPoints.WeatherUnderground, strLat, strLon, 'WUData');
   getDKDataFromApi(endPoints.DarkSky, strLat, strLon, 'DarkSkyData');
@@ -339,6 +357,7 @@ let showPosition = (position) => {
   //   "<br>Longitude: " + position.coords.longitude;
   getDataFromApi(endPoints.MBTAStopsByLocation, MBTAQuery, 'StopByLocation');
   hideShow(['.loading-bar'], ['.cd-container']);
+  MBTAQuery = {};
 };
 
 let hideShow = (toHide = [], toShow = []) => {
