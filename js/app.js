@@ -23,6 +23,7 @@ let strLon;
 let strStopID;
 let busDirection = 0;
 let minTime = 0;
+let toggleMode;
 
 let MBTAQuery = {
   // route: busRouteID,
@@ -163,7 +164,7 @@ let displayData = (data, display) => {
           let currentTime = new Date();
 
           resultElement = `Valid as of ${getCurrentTime()}`;
-          console.log("data.mode.route", data.mode[0].route[i]);
+          //console.log("data.mode.route", data.mode[0].route[i]);
           recursiveIteration(data.mode[0].route[i])
 
           $('.bus-message').html(resultElement);
@@ -249,6 +250,8 @@ let displayData = (data, display) => {
       break;
 
     case 'RoutesByStop':
+
+      //fix this
       console.log('RoutesByStopData:', data);
       data.mode[0].route.forEach(item => {
         console.log('item.route_id:', item.route_id);
@@ -270,10 +273,10 @@ let recursiveIteration = (object) => {
         //found a property which is not an object, check for your conditions here
         if (property === 'pre_away') {
           //console.log("Next Bus in: ", (object[property] / 60));
-          //math min is not working because is selecting the mintime but for all the buses available
+
           minTime = (minTime === 0) ? object[property] : Math.min(object[property], minTime);
           console.log('minTime:', minTime);
-          //resultElement = `Next Bus in: ${Math.round(object[property] / 60)} min`;
+          //
           resultElement = `Next Bus in: ${Math.round(minTime / 60)} min`;
 
           $('.next-bus-predictions').html(resultElement);
@@ -291,16 +294,17 @@ let getBusStopID = event => {
   MBTAQuery.stop = event.currentTarget.getAttribute('data-stopid');
 
 
-  //if (!busRouteID === '0') {
-  console.log('busRouteID:', busRouteID);
-  getDataFromApi(endPoints.MBTARoutesByStop, MBTAQuery, 'RoutesByStop');
-  //}
-
-
-
   //getWUDataFromApi(endPoints.WeatherUnderground, strLat, strLon, 'WUData');
   getDKDataFromApi(endPoints.DarkSky, strLat, strLon, 'DarkSkyData');
-  MBTAQuery.direction = busDirection;
+  //change to work only when find by route to pass busDirection
+  //console.log('toggleMode:', toggleMode);
+  if (toggleMode === 'routes') {
+    MBTAQuery.direction = busDirection;
+  } else {
+    //console.log('busRouteID:', busRouteID);
+    getDataFromApi(endPoints.MBTARoutesByStop, MBTAQuery, 'RoutesByStop');
+  };
+
   getDataFromApi(endPoints.MBTAPredictionsByStop, MBTAQuery, 'PreditionsByStopData');
 
   getMapsData(strLat, strLon);
@@ -346,17 +350,17 @@ let getLocation = () => {
 };
 
 let showPosition = (position) => {
-  console.log('position:', position);
+  //console.log('position:', position);
   strLat = position.coords.latitude;
   strLon = position.coords.longitude;
   MBTAQuery.lat = position.coords.latitude;
   MBTAQuery.lon = position.coords.longitude;
-  console.log('user coords:', `Latitude: ${strLat} <br>Longitude: ${strLon}`);
+  // console.log('user coords:', `Latitude: ${strLat} <br>Longitude: ${strLon}`);
   //$('.bus-message').html(`Latitude: ${strLat} <br>Longitude: ${strLon}`);
   // x.innerHTML = "Latitude: " + position.coords.latitude +
   //   "<br>Longitude: " + position.coords.longitude;
   getDataFromApi(endPoints.MBTAStopsByLocation, MBTAQuery, 'StopByLocation');
-  hideShow(['.loading-bar'], ['.cd-container']);
+  hideShow(['.by-location-opts'], ['.cd-container']);
   MBTAQuery = {};
 };
 
@@ -373,6 +377,7 @@ let hideShow = (toHide = [], toShow = []) => {
 let createEventListeners = () => {
 
   $('.find-bus-by-location').on('click', (event) => {
+    toggleMode = 'nearby';
     getClearMSG('all');
     hideShow(['.by-route-opts', '.cd-container'], []);
 
@@ -381,6 +386,7 @@ let createEventListeners = () => {
   })
 
   $('.find-bus-by-route').on('click', (event) => {
+    toggleMode = 'routes';
     getClearMSG('all');
     hideShow(['.by-location-opts', '.cd-container'], ['.by-route-opts'])
 
@@ -410,7 +416,6 @@ let createEventListeners = () => {
 
   $('.selectpicker, input[type="radio"]').on('change', (event) => {
     getClearMSG('all');
-    //$('#bus-info').show();
     getBusDirection(event);
     hideShow([], ['.cd-container']);
   });
@@ -418,9 +423,6 @@ let createEventListeners = () => {
 };
 
 const renderApp = () => {
-  //$('#bus-info').hide();
-  // $('.by-location-opts').hide();
-  // $('.by-route-opts').hide();
   hideShow(['.by-location-opts', '.by-route-opts', '.cd-container'])
   getDataFromApi(endPoints.MBTARoutes, MBTAQuery, 'RoutesData');
   createEventListeners();
