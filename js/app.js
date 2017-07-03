@@ -215,6 +215,49 @@ let displayData = (data, display) => {
 
       `;
 
+      if (data.currently.temperature >= 100) {
+        console.log('#C0392D', data.currently.temperature);
+        $('body').css("background-color", "#C0392D");
+      } else if (data.currently.temperature >= 90 && data.currently.temperature < 100) {
+        console.log('#D35400', data.currently.temperature);
+        $('body').css("background-color", "#D35400");
+      } else if (data.currently.temperature >= 80 && data.currently.temperature < 90) {
+        console.log('#E67E22', data.currently.temperature);
+        $('body').css("background-color", "#E67E22");
+      } else if (data.currently.temperature >= 70 && data.currently.temperature < 80) {
+        console.log('#F39C12', data.currently.temperature);
+        $('body').css("background-color", "#F39C12");
+      } else if (data.currently.temperature >= 60 && data.currently.temperature < 70) {
+        console.log('#F1C40F', data.currently.temperature);
+        $('body').css("background-color", "#F1C40F");
+      } else if (data.currently.temperature >= 50 && data.currently.temperature < 60) {
+        console.log('#2ECC71', data.currently.temperature);
+        $('body').css("background-color", "#2ECC71");
+      } else if (data.currently.temperature >= 40 && data.currently.temperature < 50) {
+        console.log('#27AE60', data.currently.temperature);
+        $('body').css("background-color", "#27AE60");
+      } else if (data.currently.temperature >= 30 && data.currently.temperature < 40) {
+        console.log('#3498DB', data.currently.temperature);
+        $('body').css("background-color", "#3498DB");
+      } else if (data.currently.temperature >= 20 && data.currently.temperature < 30) {
+        console.log('#2980D9', data.currently.temperature);
+        $('body').css("background-color", "#2980D9");
+      } else if (data.currently.temperature >= 10 && data.currently.temperature < 20) {
+        console.log('#9B59B6', data.currently.temperature);
+        $('body').css("background-color", "#9B59B6");
+      } else if (data.currently.temperature >= 0 && data.currently.temperature < 10) {
+        console.log('#8E44AD', data.currently.temperature);
+        $('body').css("background-color", "#8E44AD");
+      } else if (data.currently.temperature >= -10 && data.currently.temperature < 0) {
+        console.log('#34495E', data.currently.temperature);
+        $('body').css("background-color", "#34495E");
+      } else if (data.currently.temperature >= -20 && data.currently.temperature < -10) {
+        console.log('#2C3E50', data.currently.temperature);
+        $('body').css("background-color", "#2C3E50");
+      } else {
+        console.log('Warning:', "Please don't go outside!");
+      };
+
       $('.weather-message').html(resultElement);
       getSkyIcons(data.currently.icon);
       break;
