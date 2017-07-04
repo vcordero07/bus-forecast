@@ -38,7 +38,7 @@ body {
   content: '';
   position: absolute;
   top: 0;
-  left: 1px;
+  left: 15px;
   height: 100%;
   width: 4px;
   background-color: #e67e22;
@@ -46,7 +46,8 @@ body {
 
 .list-group-item {
   border: 0;
-  background-color: #ecf0f1;
+  background-color: transparent;
+  font-size: 10px;
 }
 
 .selected-stop {
@@ -54,14 +55,11 @@ body {
   /* @include chk(#e67e22, "\f00c"); */
 }
 
-.selected-stop::after {
+.selected-stop::before {
+  margin-right: 10px;
   line-height: 2;
-  position: absolute;
-  z-index: 499;
   font-family: 'fontawesome';
   content: "\f057";
-  bottom: 0;
-  right: 37px;
   font-size: 1.9em;
   color: #e67e22;
 }
@@ -163,8 +161,8 @@ li {
 }
 
 .search-by-opts, #bus-list, .bus-selector {
-  margin-right: 10px;
-  margin-bottom: 10px;
+  margin-right: 5px;
+  margin-bottom: 5px;
 }
 
 #content {

@@ -10,8 +10,8 @@ const endPoints = {
   MBTARoutes: 'https://realtime.mbta.com/developer/api/v2/routes',
   MBTABusStop: 'https://realtime.mbta.com/developer/api/v2/stopsbyroute',
   MBTAPredictionsByStop: 'https://realtime.mbta.com/developer/api/v2/predictionsbystop',
-  MBTAStopsByLocation: 'https://realtime.mbta.com/developer/api/v2/stopsbylocation', //?api_key=wX9NwuHnZU2ToO7GmGR9uw&lat=42.352913&lon=-71.064648&format=json
-  MBTARoutesByStop: 'http://realtime.mbta.com/developer/api/v2/routesbystop', //?api_key=wX9NwuHnZU2ToO7GmGR9uw&stop=1425&format=json
+  MBTAStopsByLocation: 'https://realtime.mbta.com/developer/api/v2/stopsbylocation',
+  MBTARoutesByStop: 'http://realtime.mbta.com/developer/api/v2/routesbystop',
   WeatherUnderground: `https://api.wunderground.com/api/${apiKeys.WeatherUnderground}/conditions/q/`,
   DarkSky: `https://api.darksky.net/forecast/${apiKeys.DarkSky}/`,
   // gglMaps: `http://maps.googleapis.com/maps/api/staticmap/`,
@@ -79,10 +79,7 @@ let getDKDataFromApi = (searchTerm, lat, lon, callback) => {
 };
 
 let getMapsData = (lat, lon) => {
-  //center=${strLat},${strLon}&markers={strLat},${strLon}&zoom=15&size=320x320&sensor=false
-  //make this just an url with the dynamic lat and lon
   let resultElement = `http://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=${lat},${lon}&zoom=15&size=320x320&sensor=false`;
-
   $('.bus-stop-location').html(`
   <img src = "${resultElement}" alt = "bus stop location" height="320" width="320" >
   `);
@@ -115,10 +112,7 @@ let displayData = (data, display) => {
         }
       });
       $('.selectpicker').append(resultElement);
-      // $('.selectpicker').selectpicker('render');
-      $('.selectpicker').selectpicker({
-        // style: 'btn-selector',
-      });
+      $('.selectpicker').selectpicker({});
 
       break;
 
@@ -127,21 +121,6 @@ let displayData = (data, display) => {
       console.log('displayBusStopData :', data);
       resultElement = '';
       data.direction[busDirection].stop.forEach(item => {
-        // resultElement += `
-        // <div class="cd-timeline-block">
-        // <div class="cd-timeline-content">
-        //
-        // <h6>
-        // <li
-        // data-lat='${item.stop_lat}'
-        // data-lon='${item.stop_lon}'
-        // data-stopid='${item.stop_id}'
-        // >${item.stop_name}</li></h6>
-        //
-        // </div> <!-- cd-timeline-content -->
-        // </div>
-        // `;
-        //
         resultElement += `
         <li class='list-group-item'
         data-lat='${item.stop_lat}'
@@ -204,7 +183,6 @@ let displayData = (data, display) => {
     case 'DarkSkyData':
 
       console.log('DarkSkyData: ', data);
-
       resultElement = "";
 
       resultElement = `
@@ -273,28 +251,12 @@ let displayData = (data, display) => {
     case 'MapsData':
       console.log('MapsData', data);
 
-
       break;
 
     case 'StopByLocation':
       console.log('StopByLocationData:', data);
       resultElement = '';
       data.stop.forEach(item => {
-        // resultElement += `
-        // <div class="cd-timeline-block">
-        // <div class="cd-timeline-content">
-        //
-        // <h6>
-        // <li class='list-group-item'
-        // data-lat='${item.stop_lat}'
-        // data-lon='${item.stop_lon}'
-        // data-stopid='${item.stop_id}'
-        // data-distance='${item.distance}'
-        // >${item.stop_name}</li></h6>
-        //
-        // </div> <!-- cd-timeline-content -->
-        // </div>
-        // `;
         resultElement += `
         <li class='list-group-item'
         data-lat='${item.stop_lat}'
@@ -331,13 +293,10 @@ let recursiveIteration = (object) => {
       } else {
         //found a property which is not an object, check for your conditions here
         if (property === 'pre_away') {
-          //console.log("Next Bus in: ", (object[property] / 60));
-
           minTime = (minTime === 0) ? object[property] : Math.min(object[property], minTime);
           console.log('minTime:', minTime);
           //
           resultElement = `Next Bus in: ${Math.round(minTime / 60)} min`;
-
           $('.next-bus-predictions').html(resultElement);
         }
       }
@@ -352,20 +311,13 @@ let getBusStopID = event => {
   strStopID = event.currentTarget.getAttribute('data-stopid');
   MBTAQuery.stop = event.currentTarget.getAttribute('data-stopid');
 
-
-  //getWUDataFromApi(endPoints.WeatherUnderground, strLat, strLon, 'WUData');
   getDKDataFromApi(endPoints.DarkSky, strLat, strLon, 'DarkSkyData');
-  //change to work only when find by route to pass busDirection
-  //console.log('toggleMode:', toggleMode);
   if (toggleMode === 'routes') {
     MBTAQuery.direction = busDirection;
   } else {
-    //console.log('busRouteID:', busRouteID);
     getDataFromApi(endPoints.MBTARoutesByStop, MBTAQuery, 'RoutesByStop');
   };
-
   getDataFromApi(endPoints.MBTAPredictionsByStop, MBTAQuery, 'PreditionsByStopData');
-
   getMapsData(strLat, strLon);
 };
 
@@ -404,23 +356,18 @@ let getLocation = () => {
   } else {
     $('.bus-message').html("Geolocation is not supported by this browser.");
   }
-
-
 };
 
 let showPosition = (position) => {
-  //console.log('position:', position);
   strLat = position.coords.latitude;
   strLon = position.coords.longitude;
   MBTAQuery.lat = position.coords.latitude;
   MBTAQuery.lon = position.coords.longitude;
-  // console.log('user coords:', `Latitude: ${strLat} <br>Longitude: ${strLon}`);
-  //$('.bus-message').html(`Latitude: ${strLat} <br>Longitude: ${strLon}`);
-  // x.innerHTML = "Latitude: " + position.coords.latitude +
-  //   "<br>Longitude: " + position.coords.longitude;
+
   getDataFromApi(endPoints.MBTAStopsByLocation, MBTAQuery, 'StopByLocation');
   hideShow(['.by-location-opts'], ['.cd-container']);
   MBTAQuery = {};
+  $('.find-bus-by-route').css('pointer-events', 'auto');
 };
 
 let hideShow = (toHide = [], toShow = []) => {
@@ -432,38 +379,34 @@ let hideShow = (toHide = [], toShow = []) => {
   });
 };
 
-
 let createEventListeners = () => {
 
   $('.find-bus-by-location').on('click', (event) => {
     toggleMode = 'nearby';
+    $('.find-bus-by-route').css('pointer-events', 'none');
     getClearMSG('all');
     hideShow(['.by-route-opts', '.cd-container'], []);
-
     getLocation();
-
-  })
+  });
 
   $('.find-bus-by-route').on('click', (event) => {
     toggleMode = 'routes';
     getClearMSG('all');
     hideShow(['.by-location-opts', '.cd-container'], ['.by-route-opts'])
-
   });
 
   $('.bus-stop-list').on('click', 'li', (event) => {
+    if ($(event.currentTarget).hasClass('selected-stop')) {
+      $(event.currentTarget).closest('li').siblings().show();
+      $('li.selected-stop ').removeClass('selected-stop');
+      return;
+    }
     getClearMSG('msg-only');
     getBusStopID(event);
 
     $('li.selected-stop ').removeClass('selected-stop ');
     $(event.currentTarget).addClass('selected-stop ');
-
     $(event.currentTarget).closest('li').siblings().hide();
-
-
-    // $(event.currentTarget).closest('.cd-timeline-block');
-
-    //   <i class="fa fa-times-circle fa-lg" aria-hidden="true">  </i>s
     minTime = 0;
     MBTAQuery = {};
   });
