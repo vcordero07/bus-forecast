@@ -4,6 +4,7 @@ const apiKeys = {
   MBTA: '1VI-9UmYpE64qhHFmhr1ew',
   WeatherUnderground: '682f91fd7c03e86f',
   DarkSky: '93ee5f3d7542687660862c09d91dbb09',
+  gglMaps: 'AIzaSyBzwpCEKRqw8gXTUZZ1oVuB3TuMG-aCV1Q',
 };
 
 const endPoints = {
@@ -14,7 +15,7 @@ const endPoints = {
   MBTARoutesByStop: 'http://realtime.mbta.com/developer/api/v2/routesbystop',
   WeatherUnderground: `https://api.wunderground.com/api/${apiKeys.WeatherUnderground}/conditions/q/`,
   DarkSky: `https://api.darksky.net/forecast/${apiKeys.DarkSky}/`,
-  // gglMaps: `http://maps.googleapis.com/maps/api/staticmap/`,
+  gglMapsGeocode: `https://maps.googleapis.com/maps/api/geocode/json`, //?latlng=40.714224,-73.961452&key=YOUR_API_KEY
 };
 
 let busRouteID;
@@ -34,6 +35,10 @@ let MapsQuery = {
   zoom: 15,
   size: '320x320',
   sensor: false,
+};
+
+let geoQuery = {
+  key: apiKeys.gglMaps,
 };
 
 let getDataFromApi = (searchTerm, query, callback) => {
@@ -248,8 +253,19 @@ let displayData = (data, display) => {
       getSkyIcons(data.currently.icon);
       break;
 
-    case 'MapsData':
-      console.log('MapsData', data);
+    case 'GeocodingData':
+      console.log('GeocodingData', data);
+      let geoCity;
+
+      data.results[0].address_components.forEach(item => {
+        if (item.types.hasOwnProperty('0')) {
+          if (item.types[0] === 'locality') {
+            geoCity = item.long_name;
+            console.log('geoCity:', geoCity);
+            return geoCity;
+          }
+        }
+      });
 
       break;
 
@@ -317,6 +333,9 @@ let getBusStopID = event => {
   } else {
     getDataFromApi(endPoints.MBTARoutesByStop, MBTAQuery, 'RoutesByStop');
   };
+  geoQuery.latlng = `${strLat}, ${strLon}`;
+  getDataFromApi(endPoints.gglMapsGeocode, geoQuery, 'GeocodingData');
+
   getDataFromApi(endPoints.MBTAPredictionsByStop, MBTAQuery, 'PreditionsByStopData');
   getMapsData(strLat, strLon);
 };
@@ -378,6 +397,9 @@ let hideShow = (toHide = [], toShow = []) => {
     $(item).show()
   });
 };
+
+
+
 
 let createEventListeners = () => {
 
