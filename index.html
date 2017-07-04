@@ -5,10 +5,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
-
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.css" type="text/css" />
+  <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css" type="text/css" />
   <link rel="stylesheet" href="css/main.css">
+
   <title>Bus Forecast</title>
 </head>
 
@@ -20,9 +24,14 @@
     </header>
 
     <nav>
+      <!-- <input type="button" name="Find by Location" value="&#xf041; Nearby" class='btn btn-primary find-bus-by-location search-by-opts'></input>
+      <input type="button" name="Find by Route" value="&#xf0c9; Routes" class='btn btn-primary find-bus-by-route search-by-opts'></input>
+     -->
+      <a class="btn btn-primary find-bus-by-route search-by-opts" href="#">
+      <i class="fa fa-bars"></i> Routes</a>
 
-      <input type="button" name="Find by Location" value="Nearby" class='btn btn-primary find-bus-by-location search-by-opts'></input>
-      <input type="button" name="Find by Route" value="Routes" class='btn btn-primary find-bus-by-route search-by-opts'></input>
+      <a class="btn btn-primary find-bus-by-location search-by-opts" href="#">
+      <i class="fa fa-map-marker"></i> Nearby</a>
 
       <!-- <br><br> -->
       <div class="by-location-opts">
@@ -51,7 +60,7 @@
       <div class="row">
         <!-- <div class="col-md-12"> -->
         <div id="cd-timeline" class="cd-container">
-          <ul class="bus-stop-list">
+          <ul class="list-group bus-stop-list">
 
           </ul>
         </div>
@@ -81,9 +90,9 @@
   </div>
 
   <footer>
-    &copy; Bus Forecast 2017 | Data by <a href="http://www.mbta.com/rider_tools/developers/">MBTA</a>,
-    <a href="https://darksky.net/dev/">DarkSky</a>,
-    <a href="https://developers.google.com/maps/">Google</a> | Skycons by <a href="https://forecast.io" target="_blank">Forecast</a> & <a href="https://adamwhitcroft.com/climacons/" target="_blank">Climacons</a>
+    &copy; Bus Forecast 2017 | Data by <a href="http://www.mbta.com/rider_tools/developers/" target="_blank">MBTA</a>,
+    <a href="https://darksky.net/dev/" target="_blank">DarkSky</a>,
+    <a href="https://developers.google.com/maps/" target="_blank">Google</a> | Skycons by <a href="https://forecast.io" target="_blank">Forecast</a> & <a href="https://adamwhitcroft.com/climacons/" target="_blank">Climacons</a>
   </footer>
 
 

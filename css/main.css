@@ -26,26 +26,44 @@ body {
   border-radius: 3px;
 }
 
-.selected {
-  font-weight: bold;
-}
-
-#cd-timeline {
+.bus-stop-list {
   position: relative;
-  padding: 15px 0;
+  padding: 15px 15px;
   margin-top: 15px;
   margin-bottom: 15px;
 }
 
-#cd-timeline::before {
+.bus-stop-list::before {
   /* this is the vertical line */
   content: '';
   position: absolute;
   top: 0;
-  left: 18px;
+  left: 1px;
   height: 100%;
   width: 4px;
   background-color: #e67e22;
+}
+
+.list-group-item {
+  border: 0;
+  background-color: #ecf0f1;
+}
+
+.selected-stop {
+  font-weight: bold;
+  /* @include chk(#e67e22, "\f00c"); */
+}
+
+.selected-stop::after {
+  line-height: 2;
+  position: absolute;
+  z-index: 499;
+  font-family: 'fontawesome';
+  content: "\f057";
+  bottom: 0;
+  right: 37px;
+  font-size: 1.9em;
+  color: #e67e22;
 }
 
 .glyphicon {
@@ -128,12 +146,12 @@ body {
   background-color: #fff;
 }
 
-a:link, a:visited, a:active {
-  color: #e67e22;
+footer a:link, footer a:visited, footer a:active {
+  color: #fff;
   font-weight: bold;
 }
 
-a:hover {
+footer a:hover {
   color: #3498DB;
   text-decoration: none;
   font-weight: bold;
@@ -189,8 +207,8 @@ li {
 }
 
 footer {
-  /*background-color: #E67E22;*/
-  /*color: #FFF;*/
+  background-color: #E67E22;
+  color: #FFF;
   font-size: 12px;
   padding: 8px 30px;
   font-weight: bold;
@@ -199,5 +217,5 @@ footer {
   border-radius: 3px;
   position: relative;
   bottom: 0;
-  height: 10px
+  height: 45px;
 }
