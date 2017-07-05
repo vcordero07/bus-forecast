@@ -11,7 +11,7 @@ body {
   max-width: 960px;
   margin: 0 auto;
   min-width: 250px;
-  padding: 30px;
+  padding: 5px 30px;
   background-color: #ecf0f1;
 }
 
@@ -47,7 +47,8 @@ body {
 .list-group-item {
   border: 0;
   background-color: transparent;
-  font-size: 10px;
+  font-size: 11px;
+  padding: 5px 15px;
 }
 
 .selected-stop {
@@ -73,6 +74,10 @@ body {
   background-color: #3498DB;
   border-color: #2980D9;
   border-radius: 3px;
+}
+
+.bootstrap-select {
+  width: 108px;
 }
 
 .btn-direction {
@@ -166,17 +171,59 @@ li {
 }
 
 #content {
-  padding-bottom: 1px;
+  padding: 5px;
   /* Height of the footer element */
 }
 
 .wrapper {
-  min-height: 100%;
+  min-height: 95%;
   position: relative;
 }
 
 .direction-opt {
   vertical-align: top;
+}
+
+.bus-message {
+  background-color: #e67e22;
+  color: #fff;
+  padding: 15px 10px;
+  width: 320px;
+}
+
+#bus-info {
+  padding: 0px 15px;
+}
+
+#weather-info {
+  padding: 0px 15px;
+}
+
+.weather-message {
+  background-color: #e67e22;
+  color: #fff;
+  padding: 15px 10px;
+  width: 320px;
+}
+
+.bus-container {
+  width: 320px;
+}
+
+figure .icons {
+  display: inline-block;
+}
+
+h3 {
+  display: inline-block;
+}
+
+h6 {
+  display: inline-block;
+  padding: 1px 1px;
+  font-size: 9px;
+  margin-top: 1px;
+  margin-bottom: 1px;
 }
 
 .loading-bar {

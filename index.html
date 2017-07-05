@@ -24,70 +24,60 @@
     </header>
 
     <nav>
-      <!-- <input type="button" name="Find by Location" value="&#xf041; Nearby" class='btn btn-primary find-bus-by-location search-by-opts'></input>
-      <input type="button" name="Find by Route" value="&#xf0c9; Routes" class='btn btn-primary find-bus-by-route search-by-opts'></input>
-     -->
       <a class="btn btn-primary find-bus-by-route search-by-opts" href="#">
       <i class="fa fa-bus"></i> Routes</a>
-
       <a class="btn btn-primary find-bus-by-location search-by-opts" href="#">
       <i class="fa fa-map-marker"></i> Nearby</a>
 
-      <!-- <br><br> -->
       <div class="by-location-opts">
         <div class="loading-bar">
           <span>{</span>loading<span>}</span>
-
         </div>
       </div>
 
       <div class="by-route-opts">
-        <select class="selectpicker show-menu-arrow bus-selector" id="bus-list" name="MBTA-Bus-Line" data-style="btn-selector" width='fit' data-live-search="true">
+        <select class="selectpicker show-menu-arrow bus-selector" id="bus-list" name="MBTA-Bus-Line" data-style="btn-selector" data-live-search="true">
           <option value="">Select bus</option>
         </select>
 
         <div class="btn-group direction-opt" data-toggle='buttons'>
-          <label for="bus-outbound" class="btn btn-primary active btn-direction"><input type="radio" name="bus-direction" checked value="0">Outbound</label>
-          <label for="bus-inbound" class="btn btn-primary btn-direction"><input type="radio" name="bus-direction" value="1">Inbound</label>
+          <label for="bus-outbound" class="btn btn-primary active btn-direction"><i class="fa fa-arrow-down" aria-hidden="true"></i><input type="radio" name="bus-direction" checked value="0"> Outbound</label>
+          <label for="bus-inbound" class="btn btn-primary btn-direction"><i class="fa fa-arrow-up" aria-hidden="true"></i><input type="radio" name="bus-direction" value="1"> Inbound</label>
         </div>
-
       </div>
-
-
     </nav>
 
     <section id="bus-info">
-      <div class="row">
-        <!-- <div class="col-md-12"> -->
+      <div class="row bus-container">
         <div id="cd-timeline" class="cd-container">
-          <ul class="list-group bus-stop-list">
+          <ul class="list-group bus-stop-list"></ul>
+        </div>
+      </div>
 
-          </ul>
-        </div>
-        <!-- </div> -->
-        <div class="col-md-12">
-          <div class="bus-message"></div>
-        </div>
+      <div class="row bus-message">
         <div class="col-md-12">
           <div class="next-bus-predictions"></div>
         </div>
+        <div class="col-md-12">
+          <div class="bus-valid-time"></div>
+        </div>
       </div>
+    </section>
+
+    <section id="map-info">
+      <div class="bus-stop-location"></div>
     </section>
 
     <section id="weather-info">
       <div class="row">
         <div class="col-md-12 weather-message"></div>
       </div>
-
     </section>
 
-    <section id="map-info">
-      <div class="bus-stop-location"></div>
-    </section>
+
   </div>
 
-  <div id="content">
-  </div>
+  <div id="content"></div>
 
   <footer>
     &copy; Bus Forecast 2017 | Data by <a href="http://www.mbta.com/rider_tools/developers/" target="_blank">MBTA</a>,

@@ -25,6 +25,7 @@ let strStopID;
 let busDirection = 0;
 let minTime = 0;
 let toggleMode;
+let geoCity;
 
 let MBTAQuery = {
   // route: busRouteID,
@@ -51,7 +52,7 @@ let getDataFromApi = (searchTerm, query, callback) => {
     .fail(function(data) {
       console.log('error data:', data);
       if (data.status === 404) {
-        $('.bus-message').html(`${data.responseText}`);
+        $('.bus-valid-time').html(`${data.responseText}`);
       }
     });
 };
@@ -146,7 +147,7 @@ let displayData = (data, display) => {
       if (!data.hasOwnProperty('mode')) {
 
         resultElement = 'No predictions available for this bus stop at this time 1.';
-        $('.bus-message').html(resultElement);
+        $('.bus-valid-time').html(resultElement);
         return;
       }
       //if there is data display pass
@@ -155,15 +156,15 @@ let displayData = (data, display) => {
 
           let currentTime = new Date();
 
-          resultElement = `Valid as of ${getCurrentTime()}`;
+          resultElement = `<h6>Valid as of ${getCurrentTime()}</h6>`;
           //console.log("data.mode.route", data.mode[0].route[i]);
           recursiveIteration(data.mode[0].route[i])
 
-          $('.bus-message').html(resultElement);
+          $('.bus-valid-time').html(resultElement);
           break;
         } else {
           resultElement = 'No predictions available for this bus stop at this time 2.'
-          $('.bus-message').html(resultElement);
+          $('.bus-valid-time').html(resultElement);
         }
       }
       break;
@@ -191,19 +192,19 @@ let displayData = (data, display) => {
       resultElement = "";
 
       resultElement = `
-      <div data-icon='${data.currently.icon}>'
+
+      <div class='weather-window'
+      data-icon='${data.currently.icon}>'
       data-summary='${data.currently.summary}'
       data-time='${data.currently.time}'
       data-temperature='${data.currently.temperature}'>
-      Current Weather: ${data.currently.summary} <br/>
-      Current Temp: ${data.currently.temperature} <br/>
-      </div>
-
       <figure class="icons">
-        <canvas id="${data.currently.icon}" width="64" height="64">
+        <canvas id="${data.currently.icon}" width="32" height="32">
         </canvas>
       </figure>
-
+      ${data.currently.temperature}&#176; in ${geoCity}<br/>
+      <h6> ${data.currently.summary}</h6>
+      </div>
       `;
 
       // if (data.currently.temperature >= 100) {
@@ -255,7 +256,7 @@ let displayData = (data, display) => {
 
     case 'GeocodingData':
       console.log('GeocodingData', data);
-      let geoCity;
+      geoCity = '';
 
       data.results[0].address_components.forEach(item => {
         if (item.types.hasOwnProperty('0')) {
@@ -312,7 +313,7 @@ let recursiveIteration = (object) => {
           minTime = (minTime === 0) ? object[property] : Math.min(object[property], minTime);
           console.log('minTime:', minTime);
           //
-          resultElement = `Next Bus in: ${Math.round(minTime / 60)} min`;
+          resultElement = `<h3>${Math.round(minTime / 60)}</h3><h6>min<h6>`;
           $('.next-bus-predictions').html(resultElement);
         }
       }
@@ -342,7 +343,9 @@ let getBusStopID = event => {
 
 let getSkyIcons = (event) => {
   let keyEvent = event.toUpperCase().replace(/-/g, '_')
-  let icons = new Skycons();
+  let icons = new Skycons({
+    'color': 'white'
+  });
 
   icons.set(event, Skycons[keyEvent]);
   icons.play();
@@ -360,10 +363,10 @@ let getBusDirection = event => {
 let getClearMSG = (options) => {
   switch (options) {
     case 'all':
-      $('.bus-stop-list, .bus-message, .next-bus-predictions, .weather-message, .bus-stop-location').html("");
+      $('.bus-stop-list, .bus-valid-time, .next-bus-predictions, .weather-message, .bus-stop-location').html("");
       break;
     case 'msg-only':
-      $('.bus-message, .next-bus-predictions, .weather-message, .bus-stop-location').html("");
+      $('.bus-valid-time, .next-bus-predictions, .weather-message, .bus-stop-location').html("");
       break;
   }
 };
@@ -373,7 +376,7 @@ let getLocation = () => {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition);
   } else {
-    $('.bus-message').html("Geolocation is not supported by this browser.");
+    $('.bus-valid-time').html("Geolocation is not supported by this browser.");
   }
 };
 
@@ -398,9 +401,6 @@ let hideShow = (toHide = [], toShow = []) => {
   });
 };
 
-
-
-
 let createEventListeners = () => {
 
   $('.find-bus-by-location').on('click', (event) => {
@@ -421,6 +421,8 @@ let createEventListeners = () => {
     if ($(event.currentTarget).hasClass('selected-stop')) {
       $(event.currentTarget).closest('li').siblings().show();
       $('li.selected-stop ').removeClass('selected-stop');
+      getClearMSG('msg-only');
+      hideShow(['.bus-message', '#weather-info', '#map-info'], []);
       return;
     }
     getClearMSG('msg-only');
@@ -429,6 +431,7 @@ let createEventListeners = () => {
     $('li.selected-stop ').removeClass('selected-stop ');
     $(event.currentTarget).addClass('selected-stop ');
     $(event.currentTarget).closest('li').siblings().hide();
+    hideShow([], ['.bus-message', '#weather-info', '#map-info']);
     minTime = 0;
     MBTAQuery = {};
   });
@@ -442,7 +445,7 @@ let createEventListeners = () => {
 };
 
 const renderApp = () => {
-  hideShow(['.by-location-opts', '.by-route-opts', '.cd-container'])
+  hideShow(['.by-location-opts', '.by-route-opts', '.cd-container', '.bus-message', '#weather-info', '#map-info'], [])
   getDataFromApi(endPoints.MBTARoutes, MBTAQuery, 'RoutesData');
   createEventListeners();
 };
