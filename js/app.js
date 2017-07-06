@@ -12,7 +12,7 @@ const endPoints = {
   MBTABusStop: '//realtime.mbta.com/developer/api/v2/stopsbyroute',
   MBTAPredictionsByStop: '//realtime.mbta.com/developer/api/v2/predictionsbystop',
   MBTAStopsByLocation: '//realtime.mbta.com/developer/api/v2/stopsbylocation',
-  MBTARoutesByStop: 'http://realtime.mbta.com/developer/api/v2/routesbystop',
+  MBTARoutesByStop: '//realtime.mbta.com/developer/api/v2/routesbystop',
   WeatherUnderground: `//api.wunderground.com/api/${apiKeys.WeatherUnderground}/conditions/q/`,
   DarkSky: `//api.darksky.net/forecast/${apiKeys.DarkSky}/`,
   gglMapsGeocode: `//maps.googleapis.com/maps/api/geocode/json`, //?latlng=40.714224,-73.961452&key=YOUR_API_KEY
