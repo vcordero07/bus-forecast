@@ -8,14 +8,14 @@ const apiKeys = {
 };
 
 const endPoints = {
-  MBTARoutes: 'https://realtime.mbta.com/developer/api/v2/routes',
-  MBTABusStop: 'https://realtime.mbta.com/developer/api/v2/stopsbyroute',
-  MBTAPredictionsByStop: 'https://realtime.mbta.com/developer/api/v2/predictionsbystop',
-  MBTAStopsByLocation: 'https://realtime.mbta.com/developer/api/v2/stopsbylocation',
+  MBTARoutes: '//realtime.mbta.com/developer/api/v2/routes',
+  MBTABusStop: '//realtime.mbta.com/developer/api/v2/stopsbyroute',
+  MBTAPredictionsByStop: '//realtime.mbta.com/developer/api/v2/predictionsbystop',
+  MBTAStopsByLocation: '//realtime.mbta.com/developer/api/v2/stopsbylocation',
   MBTARoutesByStop: 'http://realtime.mbta.com/developer/api/v2/routesbystop',
-  WeatherUnderground: `https://api.wunderground.com/api/${apiKeys.WeatherUnderground}/conditions/q/`,
-  DarkSky: `https://api.darksky.net/forecast/${apiKeys.DarkSky}/`,
-  gglMapsGeocode: `https://maps.googleapis.com/maps/api/geocode/json`, //?latlng=40.714224,-73.961452&key=YOUR_API_KEY
+  WeatherUnderground: `//api.wunderground.com/api/${apiKeys.WeatherUnderground}/conditions/q/`,
+  DarkSky: `//api.darksky.net/forecast/${apiKeys.DarkSky}/`,
+  gglMapsGeocode: `//maps.googleapis.com/maps/api/geocode/json`, //?latlng=40.714224,-73.961452&key=YOUR_API_KEY
 };
 
 let busRouteID;
