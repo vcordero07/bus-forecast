@@ -4,7 +4,7 @@ const apiKeys = {
   MBTA: '1VI-9UmYpE64qhHFmhr1ew',
   WeatherUnderground: '682f91fd7c03e86f',
   DarkSky: '93ee5f3d7542687660862c09d91dbb09',
-  gglMaps: 'AIzaSyBzwpCEKRqw8gXTUZZ1oVuB3TuMG-aCV1Q',
+  gglMaps: 'AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88', //'AIzaSyBzwpCEKRqw8gXTUZZ1oVuB3TuMG-aCV1Q',
 };
 
 const endPoints = {
@@ -86,9 +86,9 @@ let getDKDataFromApi = (searchTerm, lat, lon, callback) => {
 
 let getMapsData = (lat, lon) => {
   console.log('lat, lon:', lat, lon);
-  let resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=${lat},${lon}&zoom=15&size=320x200&sensor=false`;
+  let resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=${lat},${lon}&zoom=15&size=320x320&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
   $('.bus-stop-location').html(`
-  <img src = "${resultElement}" alt = "bus stop location ${lat}, ${lon}" height="200" width="320" >
+  <img src = "${resultElement}" alt = "bus stop location ${lat}, ${lon}" height="320" width="320" >
   `);
 }
 
@@ -104,23 +104,25 @@ let getCurrentTime = () => {
   return time;
 };
 
+let generateRoutesData = (data) => {
+  resultElement = '';
+  //data.mode = 3 is bus
+  data.mode[3].route.forEach(item => {
+    if (!item.hasOwnProperty('route_hide')) {
+      resultElement += `<option val="${item.route_id}">${item.route_name}</option>`;
+    }
+  });
+  $('.selectpicker').append(resultElement);
+  $('.selectpicker').selectpicker({});
+};
+
 let displayData = (data, display) => {
   let resultElement;
   switch (display) {
 
     case 'RoutesData':
-
       console.log("displayRoutesData: ", data);
-      resultElement = '';
-      //data.mode = 3 is bus
-      data.mode[3].route.forEach(item => {
-        if (!item.hasOwnProperty('route_hide')) {
-          resultElement += `<option val="${item.route_id}">${item.route_name}</option>`;
-        }
-      });
-      $('.selectpicker').append(resultElement);
-      $('.selectpicker').selectpicker({});
-
+      generateRoutesData(data);
       break;
 
     case 'BusStopData':
