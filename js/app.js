@@ -1,4 +1,4 @@
-//06-23-2017
+//07-06-2017
 //
 const apiKeys = {
   MBTA: '1VI-9UmYpE64qhHFmhr1ew',
@@ -87,7 +87,7 @@ let getDKDataFromApi = (searchTerm, lat, lon, callback) => {
 let getMapsData = (lat, lon) => {
   console.log('lat, lon:', lat, lon);
   let resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=${lat},${lon}&zoom=15&size=320x320&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
-  $('.bus-stop-location').html(`
+  $('.map-stop-location').html(`
   <img src = "${resultElement}" alt = "bus stop location ${lat}, ${lon}" height="320" width="320" >
   `);
 }
@@ -175,7 +175,6 @@ let generateDarkSkyData = (data) => {
   resultElement = "";
 
   resultElement = `
-
   <div class='weather-window'
   data-icon='${data.currently.icon}>'
   data-summary='${data.currently.summary}'
@@ -382,10 +381,10 @@ let getBusDirection = event => {
 let getClearMSG = (options) => {
   switch (options) {
     case 'all':
-      $('.bus-stop-list, .bus-valid-time, .next-bus-predictions, .weather-message, .bus-stop-location').html("");
+      $('.bus-stop-list, .bus-valid-time, .next-bus-predictions, .weather-message, .map-stop-location').html("");
       break;
     case 'msg-only':
-      $('.bus-valid-time, .next-bus-predictions, .weather-message, .bus-stop-location').html("");
+      $('.bus-valid-time, .next-bus-predictions, .weather-message, .map-stop-location').html("");
       break;
   }
 };
@@ -438,6 +437,7 @@ let createEventListeners = () => {
 
   $('.bus-stop-list').on('click', 'li', (event) => {
     if ($(event.currentTarget).hasClass('selected-stop')) {
+      $('.appended').remove();
       $(event.currentTarget).closest('li').siblings().show();
       $('li.selected-stop ').removeClass('selected-stop');
       getClearMSG('msg-only');
@@ -445,12 +445,41 @@ let createEventListeners = () => {
       return;
     }
     getClearMSG('msg-only');
-    getBusStopID(event);
+
 
     $('li.selected-stop ').removeClass('selected-stop ');
     $(event.currentTarget).addClass('selected-stop ');
     $(event.currentTarget).closest('li').siblings().hide();
     hideShow([], ['.bus-message', '#weather-info', '#map-info']);
+    $(event.currentTarget).append(`
+      <span class="appended">
+      <section id="bus-info">
+        <div class="row bus-message">
+          <div class="col-md-12">
+            <div class="next-bus-route-id"></div>
+            <div class="next-bus-predictions"></div>
+
+          </div>
+          <div class="col-md-12">
+            <div class="bus-valid-time"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="map-info">
+        <div class="map-stop-location"></div>
+      </section>
+
+      <section id="weather-info">
+        <div class="row">
+          <div class="col-md-12 weather-message"></div>
+        </div>
+      </section>
+      </span>
+      `);
+
+    getBusStopID(event);
+
     minTime = 0;
     MBTAQuery = {};
   });

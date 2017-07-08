@@ -28,7 +28,7 @@ body {
 
 .bus-stop-list {
   position: relative;
-  padding: 15px 15px;
+  padding: 15px 0px;
   margin-top: 15px;
   margin-bottom: 15px;
 }
@@ -38,31 +38,10 @@ body {
   content: '';
   position: absolute;
   top: 0;
-  left: 15px;
+  left: 0px;
   height: 100%;
   width: 4px;
   background-color: #e67e22;
-}
-
-.list-group-item {
-  border: 0;
-  background-color: transparent;
-  font-size: 11px;
-  padding: 5px 15px;
-}
-
-.selected-stop {
-  font-weight: bold;
-  /* @include chk(#e67e22, "\f00c"); */
-}
-
-.selected-stop::before {
-  margin-right: 10px;
-  line-height: 2;
-  font-family: 'fontawesome';
-  content: "\f057";
-  font-size: 1.9em;
-  color: #e67e22;
 }
 
 .glyphicon {
@@ -78,6 +57,60 @@ body {
 
 .bootstrap-select {
   width: 108px;
+}
+
+li {
+  cursor: pointer;
+  /*cursor: hand;*/
+}
+
+.search-by-opts, #bus-list, .bus-selector {
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+#footer-content {
+  padding: 5px;
+  /* Height of the footer element */
+}
+
+.wrapper {
+  min-height: 95%;
+  position: relative;
+}
+
+.direction-opt {
+  vertical-align: top;
+}
+
+.bus-message {
+  background-color: #e67e22;
+  color: #fff;
+  padding: 15px 10px;
+  width: 320px;
+}
+
+#bus-stop-info {
+  padding: 0px 15px;
+}
+
+#bus-info {
+  padding: 0px 15px;
+}
+
+#weather-info {
+  padding: 0px 15px;
+}
+
+.weather-message {
+  background-color: #e67e22;
+  color: #fff;
+  padding: 15px 10px;
+  width: 320px;
+}
+
+.bus-container {
+  width: 320px;
 }
 
 .btn-direction {
@@ -160,70 +193,18 @@ footer a:hover {
   font-weight: bold;
 }
 
-li {
-  cursor: pointer;
-  /*cursor: hand;*/
-}
-
-.search-by-opts, #bus-list, .bus-selector {
-  margin-right: 5px;
-  margin-bottom: 5px;
-}
-
-#content {
-  padding: 5px;
-  /* Height of the footer element */
-}
-
-.wrapper {
-  min-height: 95%;
+footer {
+  background-color: #E67E22;
+  color: #FFF;
+  font-size: 12px;
+  padding: 8px 30px;
+  font-weight: bold;
+  margin: 0 -30px 10px;
+  position: absolute;
+  border-radius: 3px;
   position: relative;
-}
-
-.direction-opt {
-  vertical-align: top;
-}
-
-.bus-message {
-  background-color: #e67e22;
-  color: #fff;
-  padding: 15px 10px;
-  width: 320px;
-}
-
-#bus-info {
-  padding: 0px 15px;
-}
-
-#weather-info {
-  padding: 0px 15px;
-}
-
-.weather-message {
-  background-color: #e67e22;
-  color: #fff;
-  padding: 15px 10px;
-  width: 320px;
-}
-
-.bus-container {
-  width: 320px;
-}
-
-figure .icons {
-  display: inline-block;
-}
-
-h3 {
-  display: inline-block;
-}
-
-h6 {
-  display: inline-block;
-  padding: 1px 1px;
-  font-size: 9px;
-  margin-top: 1px;
-  margin-bottom: 1px;
+  bottom: 0;
+  height: 45px;
 }
 
 .loading-bar {
@@ -251,16 +232,40 @@ h6 {
   }
 }
 
-footer {
-  background-color: #E67E22;
-  color: #FFF;
-  font-size: 12px;
-  padding: 8px 30px;
+.list-group-item {
+  border: 0;
+  background-color: transparent;
+  font-size: 11px;
+  padding: 5px 15px;
+}
+
+.selected-stop {
   font-weight: bold;
-  margin: 0 -30px 10px;
-  position: absolute;
-  border-radius: 3px;
-  position: relative;
-  bottom: 0;
-  height: 45px;
+  /* @include chk(#e67e22, "\f00c"); */
+}
+
+.selected-stop::before {
+  margin-right: 10px;
+  line-height: 2;
+  font-family: 'fontawesome';
+  content: "\f057";
+  font-size: 1.9em;
+  color: #e67e22;
+}
+
+figure .icons {
+  display: inline-block;
+}
+
+h3 {
+  display: inline-block;
+  font-size: 30px;
+}
+
+h6 {
+  display: inline-block;
+  padding: 1px 1px;
+  font-size: 9px;
+  margin-top: 1px;
+  margin-bottom: 1px;
 }
