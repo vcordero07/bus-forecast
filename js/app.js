@@ -86,9 +86,12 @@ let getDKDataFromApi = (searchTerm, lat, lon, callback) => {
 
 let getMapsData = (lat, lon) => {
   console.log('lat, lon:', lat, lon);
-  let resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=${lat},${lon}&zoom=15&size=320x320&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
+  let paddingLeft = parseInt($('#bus-stop-info').css('padding-left').replace('px', '')) * 2;
+
+  let imgWidth = $('.bus-container').width() - paddingLeft; //- $('#bus-stop-info').css('padding-left');
+  let resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=${lat},${lon}&zoom=15&size=${imgWidth}x320&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
   $('.map-stop-location').html(`
-  <img src = "${resultElement}" alt = "bus stop location ${lat}, ${lon}" height="320" width="320" >
+  <img id="static-map" data-padding-left="${paddingLeft}" src = "${resultElement}" alt = "bus stop location ${lat}, ${lon}" height="320" width="${imgWidth}" >
   `);
 }
 
@@ -446,7 +449,6 @@ let createEventListeners = () => {
     }
     getClearMSG('msg-only');
 
-
     $('li.selected-stop ').removeClass('selected-stop ');
     $(event.currentTarget).addClass('selected-stop ');
     $(event.currentTarget).closest('li').siblings().hide();
@@ -488,6 +490,11 @@ let createEventListeners = () => {
     getClearMSG('all');
     getBusDirection(event);
     hideShow([], ['.cd-container']);
+  });
+
+  $(window).resize(event => {
+    console.log('event:', event);
+    $('#static-map').attr('width', $('.bus-container').width() - $('#static-map').attr('data-padding-left'));
   });
 
 };
