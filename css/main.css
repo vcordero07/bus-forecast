@@ -57,6 +57,7 @@ figure {
 h3 {
   display: inline-block;
   font-size: 30px;
+  font-weight: bold;
 }
 
 h6 {
@@ -216,7 +217,7 @@ h6 {
 .bus-stop-list::before {
   /* this is the vertical line */
   /*background-color: #e67e22;*/
-  background-color: #ecf0f1;
+  background-color: #000;
   content: '';
   height: 100%;
   left: 0px;
@@ -260,7 +261,7 @@ h6 {
 
 .selected-stop::before {
   /*color: #e67e22;*/
-  color: #ecf0f1;
+  color: 000;
   content: "\f057";
   line-height: 2;
   font-family: 'fontawesome';

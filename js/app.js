@@ -237,7 +237,7 @@ let generateDarkSkyData = (data) => {
   <h6> ${data.currently.summary}</h6>
   </div>
   `;
-  generateWeatherBgSwithcer(data);
+  // generateWeatherBgSwithcer(data);
 
   $('.weather-message').html(resultElement);
   getSkyIcons(data.currently.icon);
