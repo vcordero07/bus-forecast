@@ -18,12 +18,12 @@
 
 <body>
   <div class="wrapper">
-    <header>
+    <header role="banner">
       <!-- LOGO -->
       <h1 class="Title">Bus Forecast</h1>
     </header>
 
-    <nav>
+    <nav role="navigation">
       <a class="btn btn-primary find-bus-by-route search-by-opts" href="#">
       <i class="fa fa-bus"></i> Routes</a>
       <a class="btn btn-primary find-bus-by-location search-by-opts" href="#">
@@ -40,14 +40,14 @@
           <option value="">Select bus</option>
         </select>
 
-        <div class="btn-group direction-opt" data-toggle='buttons'>
+        <div class="btn-group direction-opt" data-toggle='buttons' role="menuitemradio">
           <label for="bus-outbound" class="btn btn-primary active btn-direction"><i class="fa fa-arrow-down" aria-hidden="true"></i><input type="radio" name="bus-direction" checked value="0"> Outbound</label>
           <label for="bus-inbound" class="btn btn-primary btn-direction"><i class="fa fa-arrow-up" aria-hidden="true"></i><input type="radio" name="bus-direction" value="1"> Inbound</label>
         </div>
       </div>
     </nav>
 
-    <section id="bus-stop-info">
+    <section id="bus-stop-info" role="main">
       <div class="row bus-container">
         <div id="cd-timeline" class="cd-container">
           <ul class="list-group bus-stop-list"></ul>
@@ -59,7 +59,7 @@
 
   <div id="footer-content"></div>
 
-  <footer>
+  <footer role="contentinfo">
     &copy; Bus Forecast 2017 | Data by <a href="//www.mbta.com/rider_tools/developers/" target="_blank">MBTA</a>,
     <a href="https://darksky.net/dev/" target="_blank">DarkSky</a>,
     <a href="https://developers.google.com/maps/" target="_blank">Google</a> | Skycons by <a href="//forecast.io" target="_blank">Forecast</a> & <a href="//adamwhitcroft.com/climacons/" target="_blank">Climacons</a>
