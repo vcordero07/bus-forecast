@@ -84,6 +84,7 @@ let getDKDataFromApi = (searchTerm, lat, lon, callback) => {
     });
 };
 
+
 let getMapsData = (lat, lon) => {
   console.log('lat, lon:', lat, lon);
   let paddingLeft = parseInt($('#bus-stop-info').css('padding-left').replace('px', '')) * 2;
@@ -174,24 +175,7 @@ let generateWeatherUndergroundData = (data) => {
   </p>`;
 };
 
-let generateDarkSkyData = (data) => {
-  resultElement = "";
-
-  resultElement = `
-  <div class='weather-window'
-  data-icon='${data.currently.icon}>'
-  data-summary='${data.currently.summary}'
-  data-time='${data.currently.time}'
-  data-temperature='${data.currently.temperature}'>
-  <figure class="icons">
-    <canvas id="${data.currently.icon}" width="32" height="32">
-    </canvas>
-  </figure>
-  ${data.currently.temperature}&#176; in ${geoCity}<br/>
-  <h6> ${data.currently.summary}</h6>
-  </div>
-  `;
-
+let generateWeatherBgSwithcer = (data) => {
   // if (data.currently.temperature >= 100) {
   //   //console.log('#C0392D', data.currently.temperature);
   //   $('body').css("background-color", "#C0392D");
@@ -234,6 +218,26 @@ let generateDarkSkyData = (data) => {
   // } else {
   //   console.log('Warning:', "Please don't go outside!");
   // };
+};
+
+let generateDarkSkyData = (data) => {
+  resultElement = "";
+
+  resultElement = `
+  <div class='weather-window'
+  data-icon='${data.currently.icon}>'
+  data-summary='${data.currently.summary}'
+  data-time='${data.currently.time}'
+  data-temperature='${data.currently.temperature}'>
+  <figure class="icons">
+    <canvas id="${data.currently.icon}" width="32" height="32">
+    </canvas>
+  </figure>
+  ${data.currently.temperature}&#176; in ${geoCity}<br/>
+  <h6> ${data.currently.summary}</h6>
+  </div>
+  `;
+  generateWeatherBgSwithcer(data);
 
   $('.weather-message').html(resultElement);
   getSkyIcons(data.currently.icon);
@@ -422,6 +426,35 @@ let hideShow = (toHide = [], toShow = []) => {
   });
 };
 
+let appendContentData = () => {
+  return `
+      <span class="appended">
+        <section id="bus-info">
+          <div class="row bus-message">
+            <div class="col-md-12">
+              <div class="next-bus-route-id"></div>
+              <div class="next-bus-predictions"></div>
+
+            </div>
+            <div class="col-md-12">
+              <div class="bus-valid-time"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="map-info">
+          <div class="map-stop-location"></div>
+        </section>
+
+        <section id="weather-info">
+          <div class="row">
+            <div class="col-md-12 weather-message"></div>
+          </div>
+        </section>
+      </span>
+    `;
+}
+
 let createEventListeners = () => {
 
   $('.find-bus-by-location').on('click', (event) => {
@@ -453,32 +486,9 @@ let createEventListeners = () => {
     $(event.currentTarget).addClass('selected-stop ');
     $(event.currentTarget).closest('li').siblings().hide();
     hideShow([], ['.bus-message', '#weather-info', '#map-info']);
-    $(event.currentTarget).append(`
-      <span class="appended">
-      <section id="bus-info">
-        <div class="row bus-message">
-          <div class="col-md-12">
-            <div class="next-bus-route-id"></div>
-            <div class="next-bus-predictions"></div>
-
-          </div>
-          <div class="col-md-12">
-            <div class="bus-valid-time"></div>
-          </div>
-        </div>
-      </section>
-
-      <section id="map-info">
-        <div class="map-stop-location"></div>
-      </section>
-
-      <section id="weather-info">
-        <div class="row">
-          <div class="col-md-12 weather-message"></div>
-        </div>
-      </section>
-      </span>
-      `);
+    $(event.currentTarget).append(
+      appendContentData()
+    );
 
     getBusStopID(event);
 
