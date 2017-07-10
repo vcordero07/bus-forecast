@@ -128,7 +128,7 @@ let generateBusStopData = (data) => {
     data-lat='${item.stop_lat}'
     data-lon='${item.stop_lon}'
     data-stopid='${item.stop_id}'
-    >${item.stop_name}</li>
+    ><a href='#'>${item.stop_name}</a></li>
     `;
   });
   $('.bus-stop-list').html(resultElement);
@@ -266,7 +266,7 @@ let generateStopByLocationData = (data) => {
     data-lon='${item.stop_lon}'
     data-stopid='${item.stop_id}'
     data-distance='${item.distance}'
-    >${item.stop_name}</li>
+    ><a href='#'>${item.stop_name}</a></li>
     `;
   });
   $('.bus-stop-list').html(resultElement);
