@@ -111,8 +111,15 @@ h6 {
   color: #fff;
 }
 
-.search-by-opts,
 .bus-selector,
+.search-by-opts:hover {
+  background-color: #2980D9;
+  border-color: #2980D9;
+  color: #fff;
+}
+
+.bus-selector,
+.search-by-opts,
 #bus-list {
   margin-bottom: 5px;
   margin-right: 5px;
@@ -161,29 +168,31 @@ h6 {
 }
 
 .btn-selector {
-  background-color: #3498DB;
-  border-color: #2980D9;
+  /*background-color: #3498DB;
+  border-color: #2980D9;*/
+  background-color: #e67e22;
+  border-color: #D35400;
   color: #fff;
 }
 
 .btn-selector:focus,
 .btn-selector.focus {
-  background-color: #2980D9;
-  border-color: #2980D9;
+  background-color: #D35400;
+  border-color: #D35400;
   color: #fff;
 }
 
 .btn-selector:hover {
-  background-color: #2980D9;
-  border-color: #2980D9;
+  background-color: #D35400;
+  border-color: #D35400;
   color: #fff;
 }
 
 .btn-selector:active,
 .btn-selector.active,
 .open>.dropdown-toggle.btn-selector {
-  background-color: #2980D9;
-  border-color: #2980D9;
+  background-color: #D35400;
+  border-color: #D35400;
   color: #fff;
 }
 
@@ -196,14 +205,21 @@ h6 {
 .btn-selector:active.focus,
 .btn-selector.active.focus,
 .open>.dropdown-toggle.btn-selector.focus {
-  background-color: #2980D9;
-  border-color: #2980D9;
+  background-color: #D35400;
+  border-color: #D35400;
   color: #fff;
 }
 
 .btn-selector .badge {
   background-color: #fff;
-  color: #3498DB;
+  color: #D35400;
+}
+
+.dropdown-menu>.active>a,
+.dropdown-menu>.active>a:focus,
+.dropdown-menu>.active>a:hover {
+  background-color: #e67e22;
+  color: #fff;
 }
 
 /*-----main-content-----*/
@@ -224,6 +240,12 @@ h6 {
   position: absolute;
   top: 0;
   width: 4px;
+}
+
+.bus-container>.cd-container>.list-group>li:hover {
+  color: #e67e22;
+  /*font-size: 11.5px;*/
+  font-weight: 900;
 }
 
 .bus-message {
@@ -270,11 +292,12 @@ h6 {
 }
 
 /*-----loading bar------*/
+
 .loading-bar {
-  background-color: #3498DB;
+  background-color: #e67e22;
   color: #fff;
   font-family: Consolas, Menlo, Monaco, monospace;
-  font-size: 15px;
+  font-size: 20px;
   font-weight: bold;
   opacity: 0.8;
 }

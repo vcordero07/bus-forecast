@@ -230,11 +230,11 @@ let generateDarkSkyData = (data) => {
   data-time='${data.currently.time}'
   data-temperature='${data.currently.temperature}'>
   <figure class="icons">
-    <canvas id="${data.currently.icon}" width="32" height="32">
+    <canvas id="${data.currently.icon}" width="40" height="40">
     </canvas>
   </figure>
-  ${data.currently.temperature}&#176; in ${geoCity}<br/>
-  <h6> ${data.currently.summary}</h6>
+  <span><h4>${data.currently.temperature}&#176;</h4> in ${geoCity}</span>
+  <h6> {${data.currently.summary}}</h6>
   </div>
   `;
   // generateWeatherBgSwithcer(data);
@@ -477,7 +477,7 @@ let createEventListeners = () => {
       $(event.currentTarget).closest('li').siblings().show();
       $('li.selected-stop ').removeClass('selected-stop');
       getClearMSG('msg-only');
-      hideShow(['.bus-message', '#weather-info', '#map-info'], []);
+      hideShow(['.bus-message', '#weather-info', '#map-info'], ['.direction-opt']);
       return;
     }
     getClearMSG('msg-only');
@@ -485,7 +485,7 @@ let createEventListeners = () => {
     $('li.selected-stop ').removeClass('selected-stop ');
     $(event.currentTarget).addClass('selected-stop ');
     $(event.currentTarget).closest('li').siblings().hide();
-    hideShow([], ['.bus-message', '#weather-info', '#map-info']);
+    hideShow(['.direction-opt'], ['.bus-message', '#weather-info', '#map-info']);
     $(event.currentTarget).append(
       appendContentData()
     );
