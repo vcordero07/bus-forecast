@@ -9,24 +9,25 @@ This is a MBTA app with bus predictions by stop or location, as well as the weat
 4. [Technical](#technical)
 
 ---
-<div id='id-summary'/>
+<a name="summary"/>
 ## Summary
 
 ---
-<div id='id-sceenshots'/>
+<a name="sceenshots"/>
 ## Screenshots
-![Screenshot-1](https://github.com/vcordero07/bus-forecast/raw/master/img/screenshot-1.png "Screenshot-1") ![Screenshot-2](https://github.com/vcordero07/bus-forecast/raw/master/img/screenshot-2.png "Screenshot-2")
+![Screenshot-1](https://github.com/vcordero07/bus-forecast/raw/master/img/Screenshot-1.png "Screenshot-1")
+![Screenshot-2](https://github.com/vcordero07/bus-forecast/raw/master/img/Screenshot-2.png "Screenshot-2")
 
-![Screenshot-3](https://github.com/vcordero07/bus-forecast/raw/master/img/screenshot-3.png "Screenshot-3")
-![Screenshot-4](https://github.com/vcordero07/bus-forecast/raw/master/img/screenshot-4.png "Screenshot-4")
+![Screenshot-3](https://github.com/vcordero07/bus-forecast/raw/master/img/Screenshot-3.png "Screenshot-3")
+![Screenshot-4](https://github.com/vcordero07/bus-forecast/raw/master/img/Screenshot-4.png "Screenshot-4")
 
 ---
-<div id='id-live_site'/>
+<a name="live_site"/>
 ## Live Site
-You can find Bus Forecast at https://vcordero07.github.io/bus-forecast/
+You can find Bus Forecast at [https://vcordero07.github.io/bus-forecast/](https://vcordero07.github.io/bus-forecast/)
 
 ---
-<div id='id-technical'/>
+<a name="technical"/>
 ## Technical
 * The app was built using HTML, CSS, JavaScript, and JQuery.
 * Data by [MBTA](https//www.mbta.com/rider_tools/developers/), [DarkSky](https://darksky.net/dev/), [Google](https://developers.google.com/maps/) | Skycons by [Forecast](https//forecast.io) & [Climacons](https//adamwhitcroft.com/climacons/)
