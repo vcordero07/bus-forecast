@@ -4,8 +4,8 @@ This is a MBTA app with bus predictions by stop or location, as well as the weat
 ---
 ## Table of Contents
 1. [Summary](#summary)
-2. [Screenshots](#sceenshots)
-3. [Live Site](#live_site)
+2. [Screenshots](#screenshots)
+3. [Live Site](#live-site)
 4. [Technical](#technical)
 
 ---
