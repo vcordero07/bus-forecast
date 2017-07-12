@@ -29,4 +29,4 @@ You can find Bus Forecast at [https://vcordero07.github.io/bus-forecast/](https:
 ## Technical
 
 * The app was built using HTML, CSS, JavaScript, and JQuery.
-* Data by [MBTA](https//www.mbta.com/rider_tools/developers/), [DarkSky](https://darksky.net/dev/), [Google](https://developers.google.com/maps/) | Skycons by [Forecast](https//forecast.io) & [Climacons](https//adamwhitcroft.com/climacons/)
+* Data by [MBTA](http://www.mbta.com/rider_tools/developers/), [DarkSky](https://darksky.net/dev/), [Google](https://developers.google.com/maps/) | Skycons by [Forecast](https://forecast.io) & [Climacons](https://adamwhitcroft.com/climacons/)
