@@ -52,7 +52,7 @@ let getDataFromApi = (searchTerm, query, callback) => {
     .fail(function(data) {
       console.log('error data:', data);
       if (data.status === 404) {
-        $('.bus-valid-time').html(`${data.responseText}`);
+        $('.error-catch-message').html(`<br><br>${data.responseText}`);
       }
     });
 };
@@ -67,6 +67,9 @@ let getWUDataFromApi = (searchTerm, lat, lon, callback) => {
     })
     .fail(function(data) {
       console.log('error data:', data);
+      if (data.status === 404) {
+        $('.error-catch-message').html(`<br><br>${data.responseText}`);
+      }
     });
 };
 
@@ -81,6 +84,9 @@ let getDKDataFromApi = (searchTerm, lat, lon, callback) => {
     })
     .fail(function(data) {
       console.log('error data:', data);
+      if (data.status === 404) {
+        $('.error-catch-message').html(`<br><br>${data.responseText}`);
+      }
     });
 };
 
@@ -113,7 +119,7 @@ let generateRoutesData = (data) => {
   //data.mode = 3 is bus
   data.mode[3].route.forEach(item => {
     if (!item.hasOwnProperty('route_hide')) {
-      resultElement += `<option val="${item.route_id}">${item.route_name}</option>`;
+      resultElement += `<option value="${item.route_id}">${item.route_name}</option>`;
     }
   });
   $('.selectpicker').append(resultElement);
@@ -377,7 +383,7 @@ let getSkyIcons = (event) => {
 };
 
 let getBusDirection = event => {
-  //console.log(event);
+  // console.log('getBusDirection:', event);
   MBTAQuery.route = $('select').val();
   busRouteID = $('select').val();
   busDirection = $('input:checked').val();
@@ -497,6 +503,7 @@ let createEventListeners = () => {
   });
 
   $('.selectpicker, input[type="radio"]').on('change', (event) => {
+    //console.log('event.currentTarget:', event.currentTarget);
     getClearMSG('all');
     getBusDirection(event);
     hideShow([], ['.cd-container']);
