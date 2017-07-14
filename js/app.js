@@ -158,7 +158,9 @@ let generatePreditionsByStopData = (data) => {
     console.log('busRouteID.constructor = true');
     for (let x = 0; x < busRouteID.length; x++) {
       //if there is data display pass
+
       for (let i = 0; i < data.mode[0].route.length; i++) {
+        resultElement = `Route ${busRouteID[x]}: `;
         if (data.mode[0].route[i].route_id === busRouteID[x]) {
 
           let currentTime = new Date();
@@ -171,9 +173,9 @@ let generatePreditionsByStopData = (data) => {
           data.mode[0].route[i].direction[0].trip.forEach(item => {
             //console.log('itemForEach:', Math.round(item.pre_away / 60));
             minTime = Math.round(item.pre_away / 60)
-            resultElement = `<h3>${minTime}</h3><h6>min<h6>`;
+            resultElement += `<h3>${minTime}</h3><h6>min<h6> `;
 
-            $('.next-bus-predictions').append(resultElement);
+            $('.next-bus-predictions').append(resultElement, "<br>");
           });
 
           $('.bus-valid-time').html(validTime);
@@ -197,7 +199,7 @@ let generatePreditionsByStopData = (data) => {
         //recursiveIteration(data.mode[0].route[i])
 
         //use this to get all the predictions
-        data.mode[0].route[i].direction[0].trip.forEach(item => {
+        data.mode[0].route[i].direction[busDirection].trip.forEach(item => {
           //console.log('itemForEach:', Math.round(item.pre_away / 60));
           minTime = Math.round(item.pre_away / 60)
           resultElement = `<h3>${minTime}</h3><h6>min<h6>`;
@@ -478,7 +480,7 @@ let showPosition = (position) => {
   MBTAQuery.lon = '-71.118124';
 
   getDataFromApi(endPoints.MBTAStopsByLocation, MBTAQuery, 'StopByLocation');
-  hideShow(['.by-location-opts'], ['.cd-container']);
+  hideShow(['.loading-bar'], ['.cd-container']);
   MBTAQuery = {};
   $('.find-bus-by-route').css('pointer-events', 'auto');
 };
