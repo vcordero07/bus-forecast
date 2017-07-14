@@ -142,27 +142,75 @@ let generateBusStopData = (data) => {
 
 let generatePreditionsByStopData = (data) => {
   resultElement = '';
+  let validTime = '';
+  let errorMsg = '';
+  minTime = 0;
+
   //if there is not mode available for this route then display this message
   if (!data.hasOwnProperty('mode')) {
 
-    resultElement = 'No predictions available for this bus stop at this time 1.';
-    $('.bus-valid-time').html(resultElement);
+    errorMsg = 'No predictions available for this bus stop at this time 1.';
+    $('.error-msg').html(errorMsg);
     return;
   }
-  //if there is data display pass
-  for (let i = 0; i < data.mode[0].route.length; i++) {
-    if (data.mode[0].route[i].route_id === busRouteID) {
 
-      let currentTime = new Date();
-      resultElement = `<h6>Valid as of ${getCurrentTime()}</h6>`;
-      //console.log("data.mode.route", data.mode[0].route[i]);
-      recursiveIteration(data.mode[0].route[i])
+  if (busRouteID.constructor === Array) {
+    console.log('busRouteID.constructor = true');
+    for (let x = 0; x < busRouteID.length; x++) {
+      //if there is data display pass
+      for (let i = 0; i < data.mode[0].route.length; i++) {
+        if (data.mode[0].route[i].route_id === busRouteID[x]) {
 
-      $('.bus-valid-time').html(resultElement);
-      break;
-    } else {
-      resultElement = 'No predictions available for this bus stop at this time 2.'
-      $('.bus-valid-time').html(resultElement);
+          let currentTime = new Date();
+          validTime = `<h6>Valid as of ${getCurrentTime()}</h6>`;
+          //console.log("data.mode.route", data.mode[0].route[i]);
+          //use this to get only the most current predictions
+          //recursiveIteration(data.mode[0].route[i])
+
+          //use this to get all the predictions
+          data.mode[0].route[i].direction[0].trip.forEach(item => {
+            //console.log('itemForEach:', Math.round(item.pre_away / 60));
+            minTime = Math.round(item.pre_away / 60)
+            resultElement = `<h3>${minTime}</h3><h6>min<h6>`;
+
+            $('.next-bus-predictions').append(resultElement);
+          });
+
+          $('.bus-valid-time').html(validTime);
+          break;
+        } else {
+          errorMsg = 'No predictions available for this bus stop at this time 2.'
+          $('.error-msg').html(errorMsg);
+        }
+      }
+    }
+  } else {
+    console.log('busRouteID.constructor = false');
+    //if there is data display pass
+    for (let i = 0; i < data.mode[0].route.length; i++) {
+      if (data.mode[0].route[i].route_id === busRouteID) {
+
+        let currentTime = new Date();
+        validTime = `<h6>Valid as of ${getCurrentTime()}</h6>`;
+        //console.log("data.mode.route", data.mode[0].route[i]);
+        //use this to get only the most current predictions
+        //recursiveIteration(data.mode[0].route[i])
+
+        //use this to get all the predictions
+        data.mode[0].route[i].direction[0].trip.forEach(item => {
+          //console.log('itemForEach:', Math.round(item.pre_away / 60));
+          minTime = Math.round(item.pre_away / 60)
+          resultElement = `<h3>${minTime}</h3><h6>min<h6>`;
+
+          $('.next-bus-predictions').append(resultElement);
+        });
+
+        $('.bus-valid-time').html(validTime);
+        break;
+      } else {
+        errorMsg = 'No predictions available for this bus stop at this time 2.'
+        $('.error-msg').html(errorMsg);
+      }
     }
   }
 };
@@ -279,10 +327,13 @@ let generateStopByLocationData = (data) => {
 };
 
 let generateRoutesByStopData = (data) => {
+  busRouteID = [];
   data.mode[0].route.forEach(item => {
-    console.log('item.route_id:', item.route_id);
-    busRouteID = item.route_id;
+    //console.log('item.route_id:', item.route_id);
+    //busRouteID += item.route_id;
+    busRouteID.push(`${item.route_id}`);
   });
+  console.log('busRouteID:', busRouteID);
 };
 
 let displayData = (data, display) => {
@@ -341,9 +392,13 @@ let recursiveIteration = (object) => {
       } else {
         //found a property which is not an object, check for your conditions here
         if (property === 'pre_away') {
+          console.log('math.min(object[property]) :', object[property]);
+          //to display only the next bus
           minTime = (minTime === 0) ? object[property] : Math.min(object[property], minTime);
-          //console.log('minTime:', minTime);
-          //
+
+          //to display all the trips for that specific stop
+          //minTime = object[property];
+
           resultElement = `<h3>${Math.round(minTime / 60)}</h3><h6>min<h6>`;
           $('.next-bus-predictions').html(resultElement);
         }
@@ -394,10 +449,10 @@ let getBusDirection = event => {
 let getClearMSG = (options) => {
   switch (options) {
     case 'all':
-      $('.bus-stop-list, .bus-valid-time, .next-bus-predictions, .weather-message, .map-stop-location').html("");
+      $('.bus-stop-list, .bus-valid-time, .error-msg, .next-bus-predictions, .weather-message, .map-stop-location').html("");
       break;
     case 'msg-only':
-      $('.bus-valid-time, .next-bus-predictions, .weather-message, .map-stop-location').html("");
+      $('.bus-valid-time, .error-msg, .next-bus-predictions, .weather-message, .map-stop-location').html("");
       break;
   }
 };
@@ -407,15 +462,20 @@ let getLocation = () => {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition);
   } else {
-    $('.bus-valid-time').html("Geolocation is not supported by this browser.");
+    $('.error-msg').html("Geolocation is not supported by this browser.");
   }
 };
 
 let showPosition = (position) => {
-  strLat = position.coords.latitude;
-  strLon = position.coords.longitude;
-  MBTAQuery.lat = position.coords.latitude;
-  MBTAQuery.lon = position.coords.longitude;
+  // strLat = position.coords.latitude;
+  // strLon = position.coords.longitude;
+  // MBTAQuery.lat = position.coords.latitude;
+  // MBTAQuery.lon = position.coords.longitude;
+
+  strLat = '42.373259';
+  strLon = '-71.118124';
+  MBTAQuery.lat = '42.373259';
+  MBTAQuery.lon = '-71.118124';
 
   getDataFromApi(endPoints.MBTAStopsByLocation, MBTAQuery, 'StopByLocation');
   hideShow(['.by-location-opts'], ['.cd-container']);
@@ -443,7 +503,7 @@ let appendContentData = () => {
 
             </div>
             <div class="col-md-12">
-              <div class="bus-valid-time"></div>
+              <div class="bus-valid-time error-msg"></div>
             </div>
           </div>
         </section>
