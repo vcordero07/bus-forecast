@@ -156,6 +156,8 @@ let generatePreditionsByStopData = (data) => {
 
   if (busRouteID.constructor === Array) {
     console.log('busRouteID.constructor = true');
+    console.log('busDirection:', busDirection);
+
     for (let x = 0; x < busRouteID.length; x++) {
       //if there is data display pass
 
@@ -170,7 +172,7 @@ let generatePreditionsByStopData = (data) => {
           //recursiveIteration(data.mode[0].route[i])
 
           //use this to get all the predictions
-          data.mode[0].route[i].direction[0].trip.forEach(item => {
+          data.mode[0].route[i].direction[busDirection].trip.forEach(item => {
             //console.log('itemForEach:', Math.round(item.pre_away / 60));
             minTime = Math.round(item.pre_away / 60)
             resultElement += `<h3>${minTime}</h3><h6>min<h6> `;
@@ -199,7 +201,7 @@ let generatePreditionsByStopData = (data) => {
         //recursiveIteration(data.mode[0].route[i])
 
         //use this to get all the predictions
-        data.mode[0].route[i].direction[busDirection].trip.forEach(item => {
+        data.mode[0].route[i].direction[0].trip.forEach(item => {
           //console.log('itemForEach:', Math.round(item.pre_away / 60));
           minTime = Math.round(item.pre_away / 60)
           resultElement = `<h3>${minTime}</h3><h6>min<h6>`;
@@ -460,7 +462,6 @@ let getClearMSG = (options) => {
 };
 
 let getLocation = () => {
-  hideShow([], ['.by-location-opts']);
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition);
   } else {
@@ -474,11 +475,21 @@ let showPosition = (position) => {
   // MBTAQuery.lat = position.coords.latitude;
   // MBTAQuery.lon = position.coords.longitude;
 
+  //harvard lat and lon
   strLat = '42.373259';
   strLon = '-71.118124';
   MBTAQuery.lat = '42.373259';
   MBTAQuery.lon = '-71.118124';
 
+  //SFO lat and lon
+  //lat = 	37.773972
+  //lon =  -122.431297
+
+  getGeoLocation();
+
+};
+
+let getGeoLocation = () => {
   getDataFromApi(endPoints.MBTAStopsByLocation, MBTAQuery, 'StopByLocation');
   hideShow(['.loading-bar'], ['.cd-container']);
   MBTAQuery = {};
@@ -529,8 +540,8 @@ let createEventListeners = () => {
     toggleMode = 'nearby';
     $('.find-bus-by-route').css('pointer-events', 'none');
     getClearMSG('all');
-    hideShow(['.by-route-opts', '.cd-container'], []);
-    getLocation();
+    hideShow(['.by-route-opts', '.cd-container'], ['.by-location-opts']);
+
   });
 
   $('.find-bus-by-route').on('click', (event) => {
@@ -567,8 +578,20 @@ let createEventListeners = () => {
   $('.selectpicker, input[type="radio"]').on('change', (event) => {
     //console.log('event.currentTarget:', event.currentTarget);
     getClearMSG('all');
-    getBusDirection(event);
-    hideShow([], ['.cd-container']);
+    if (toggleMode === "routes") {
+
+      getBusDirection(event);
+      hideShow([], ['.cd-container']);
+    } else {
+      busDirection = $('input:checked').val();
+
+      if (MBTAQuery.lat) {
+        getGeoLocation()
+      } else {
+        getLocation();
+      }
+    }
+
   });
 
   $(window).resize(event => {
