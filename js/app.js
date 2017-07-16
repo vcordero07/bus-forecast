@@ -588,6 +588,7 @@ let createEventListeners = () => {
       if (MBTAQuery.lat) {
         getGeoLocation()
       } else {
+        hideShow([], ['.loading-bar'])
         getLocation();
       }
     }
@@ -602,7 +603,7 @@ let createEventListeners = () => {
 };
 
 const renderApp = () => {
-  hideShow(['.by-location-opts', '.by-route-opts', '.cd-container', '.bus-message', '#weather-info', '#map-info'], [])
+  hideShow(['.by-location-opts', '.by-route-opts', '.cd-container', '.bus-message', '#weather-info', '#map-info', '.loading-bar'], [])
   getDataFromApi(endPoints.MBTARoutes, MBTAQuery, 'RoutesData');
   createEventListeners();
 };
