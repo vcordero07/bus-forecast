@@ -495,6 +495,10 @@ let showPosition = (position) => {
   // MBTAQuery.lat = '42.373259';
   // MBTAQuery.lon = '-71.118124';
 
+  //Honolulu, HI, USA
+  //lat = 21.315603
+  //lon = -157.858093
+
   //SFO lat and lon
   //lat = 	37.773972
   //lon =  -122.431297
@@ -512,12 +516,6 @@ let showPosition = (position) => {
     MBTAQuery.lat = '42.373259';
     MBTAQuery.lon = '-71.118124';
   }
-
-  //Honolulu, HI, USA
-  //lat = 21.315603
-  //lon = -157.858093
-
-
 
   getGeoLocation();
 
