@@ -1,5 +1,6 @@
-//07-06-2017
-//
+//07-16-2017
+//clear all values when inputs routes or nearby buttons are click
+
 const apiKeys = {
   MBTA: '1VI-9UmYpE64qhHFmhr1ew',
   WeatherUnderground: '682f91fd7c03e86f',
@@ -26,6 +27,7 @@ let busDirection = 0;
 let minTime = 0;
 let toggleMode;
 let geoCity;
+let geoState;
 
 let MBTAQuery = {
   // route: busRouteID,
@@ -310,6 +312,11 @@ let generateGeocodingData = (data) => {
         geoCity = item.long_name;
         console.log('geoCity:', geoCity);
         return geoCity;
+      };
+      if (item.types[0] === 'administrative_area_level_1') {
+        geoState = item.short_name;
+        console.log('geoState:', geoState);
+        return geoState;
       }
     }
   });
@@ -442,18 +449,25 @@ let getSkyIcons = (event) => {
 };
 
 let getBusDirection = event => {
-  // console.log('getBusDirection:', event);
-  MBTAQuery.route = $('select').val();
-  busRouteID = $('select').val();
-  busDirection = $('input:checked').val();
+  // console.log('getBusDirection:', $('select').val());
+  if ($('select').val() === "") {
 
-  getDataFromApi(endPoints.MBTABusStop, MBTAQuery, 'BusStopData');
+    $('.error-catch-message').html('<br><br><p>Please select a valid route.</p>');
+  } else {
+    // getClearMSG('all');
+    MBTAQuery.route = $('select').val();
+    busRouteID = $('select').val();
+    busDirection = $('input:checked').val();
+
+    getDataFromApi(endPoints.MBTABusStop, MBTAQuery, 'BusStopData');
+  }
+
 };
 
 let getClearMSG = (options) => {
   switch (options) {
     case 'all':
-      $('.bus-stop-list, .bus-valid-time, .error-msg, .next-bus-predictions, .weather-message, .map-stop-location').html("");
+      $('.bus-stop-list, .bus-valid-time, .error-msg, .next-bus-predictions, .weather-message, .map-stop-location, .error-catch-message').html("");
       break;
     case 'msg-only':
       $('.bus-valid-time, .error-msg, .next-bus-predictions, .weather-message, .map-stop-location').html("");
@@ -476,14 +490,34 @@ let showPosition = (position) => {
   // MBTAQuery.lon = position.coords.longitude;
 
   //harvard lat and lon
-  strLat = '42.373259';
-  strLon = '-71.118124';
-  MBTAQuery.lat = '42.373259';
-  MBTAQuery.lon = '-71.118124';
+  // strLat = '42.373259';
+  // strLon = '-71.118124';
+  // MBTAQuery.lat = '42.373259';
+  // MBTAQuery.lon = '-71.118124';
 
   //SFO lat and lon
   //lat = 	37.773972
   //lon =  -122.431297
+  strLat = '37.773972';
+  strLon = '-122.431297';
+  MBTAQuery.lat = '37.773972';
+  MBTAQuery.lon = '-122.431297';
+
+  geoQuery.latlng = `${strLat}, ${strLon}`;
+  getDataFromApi(endPoints.gglMapsGeocode, geoQuery, 'GeocodingData');
+
+  if (geoState !== "MA") {
+    console.log('geoState:', geoState);
+    console.log('msg:', "it looks like you are outside of MA, but don't worry here is an example for harvard");
+    MBTAQuery.lat = '42.373259';
+    MBTAQuery.lon = '-71.118124';
+  }
+
+  //Honolulu, HI, USA
+  //lat = 21.315603
+  //lon = -157.858093
+
+
 
   getGeoLocation();
 
@@ -537,16 +571,15 @@ let appendContentData = () => {
 let createEventListeners = () => {
 
   $('.find-bus-by-location').on('click', (event) => {
-    toggleMode = 'nearby';
-    $('.find-bus-by-route').css('pointer-events', 'none');
     getClearMSG('all');
+    toggleMode = 'nearby';
+    busDirection = 0;
     hideShow(['.by-route-opts', '.cd-container'], ['.by-location-opts']);
-
   });
 
   $('.find-bus-by-route').on('click', (event) => {
-    toggleMode = 'routes';
     getClearMSG('all');
+    toggleMode = 'routes';
     hideShow(['.by-location-opts', '.cd-container'], ['.by-route-opts'])
   });
 
@@ -583,12 +616,13 @@ let createEventListeners = () => {
       getBusDirection(event);
       hideShow([], ['.cd-container']);
     } else {
-      busDirection = $('input:checked').val();
+      busDirection = $('input:checked').val(); //***remove input checked
 
       if (MBTAQuery.lat) {
         getGeoLocation()
       } else {
-        hideShow([], ['.loading-bar'])
+        $('.find-bus-by-route').css('pointer-events', 'none');
+        hideShow([], ['.loading-bar']);
         getLocation();
       }
     }
