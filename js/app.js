@@ -159,13 +159,12 @@ let generatePreditionsByStopData = (data) => {
 
   if (busRouteID.constructor === Array) {
     console.log('busRouteID.constructor = true');
-    console.log('busDirection:', busDirection);
+    //console.log('busDirection:', busDirection);
 
     for (let x = 0; x < busRouteID.length; x++) {
       //if there is data display pass
 
       for (let i = 0; i < data.mode[0].route.length; i++) {
-        resultElement = `Route ${busRouteID[x]}: `;
         if (data.mode[0].route[i].route_id === busRouteID[x]) {
 
           let currentTime = new Date();
@@ -174,19 +173,10 @@ let generatePreditionsByStopData = (data) => {
           //use this to get only the most current predictions
           //recursiveIteration(data.mode[0].route[i])
 
-          //use this to get all the predictions
-          // data.mode[0].route[i].direction[busDirection].trip.forEach(item => {
-          //   //console.log('itemForEach:', Math.round(item.pre_away / 60));
-          //   minTime = Math.round(item.pre_away / 60)
-          //   resultElement += `<h3>${minTime}</h3><h6>min<h6> `;
-          //
-          //   $('.next-bus-predictions').append(resultElement, "<br>");
-          // });
-
-          $('.next-bus-predictions').append(`Route ${busRouteID[x]}: ` + data.mode[0].route[i].direction[busDirection].trip.map(function(itm) {
-            let minTime = Math.round(itm.pre_away / 60),
-              elem = `<h3>${minTime}</h3><h6>min</h6>`;
-            return elem;
+          $('.next-bus-predictions').append(`Route ${busRouteID[x]}: ` + data.mode[0].route[i].direction[0].trip.map(function(item) {
+            minTime = Math.round(item.pre_away / 60);
+            resultElement = `<h3> ${minTime}</h3><h6>min</h6>`;
+            return resultElement;
           }) + '<br>')
 
           $('.bus-valid-time').html(validTime);
@@ -579,8 +569,9 @@ let createEventListeners = () => {
   $('.find-bus-by-location').on('click', (event) => {
     getClearMSG('all');
     toggleMode = 'nearby';
-    busDirection = 0;
-    hideShow(['.by-route-opts', '.cd-container'], ['.by-location-opts']);
+    $('.find-bus-by-route').css('pointer-events', 'none');
+    hideShow(['.by-route-opts', '.cd-container'], ['.by-location-opts', '.loading-bar']);
+    getLocation();
   });
 
   $('.find-bus-by-route').on('click', (event) => {
@@ -621,17 +612,18 @@ let createEventListeners = () => {
 
       getBusDirection(event);
       hideShow([], ['.cd-container']);
-    } else {
-      busDirection = $('input:checked').val(); //***remove input checked
-
-      if (MBTAQuery.lat) {
-        getGeoLocation()
-      } else {
-        $('.find-bus-by-route').css('pointer-events', 'none');
-        hideShow([], ['.loading-bar']);
-        getLocation();
-      }
     }
+    // } else {
+    //   busDirection = $('input:checked').val(); //***remove input checked
+    //
+    //   if (MBTAQuery.lat) {
+    //     getGeoLocation()
+    //   } else {
+    //     $('.find-bus-by-route').css('pointer-events', 'none');
+    //     hideShow([], ['.loading-bar']);
+    //     getLocation();
+    //   }
+    // }
 
   });
 

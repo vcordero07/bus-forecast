@@ -31,14 +31,16 @@
 
       <div class="by-location-opts">
 
-        <div class="btn-group direction-opt" data-toggle='buttons' role="menuitemradio">
+        <!-- <div class="btn-group direction-opt" data-toggle='buttons' role="menuitemradio">
           <label for="bus-outbound" class="btn btn-primary btn-direction"><i class="fa fa-arrow-down" aria-hidden="true"></i><input type="radio" name="bus-direction" value="0"> Outbound</label>
           <label for="bus-inbound" class="btn btn-primary btn-direction"><i class="fa fa-arrow-up" aria-hidden="true"></i><input type="radio" name="bus-direction" value="1"> Inbound</label>
+        </div> -->
+
+        <div class="loading-bar">
+          <span>{</span> loading <span>}</span>
         </div>
       </div>
-      <div class="loading-bar">
-        <span>{</span> loading <span>}</span>
-      </div>
+
       <div class="by-route-opts">
         <select class="selectpicker show-menu-arrow bus-selector" id="bus-list" name="MBTA-Bus-Line" data-style="btn-selector" data-live-search="true">
           <option value="">Select bus</option>
