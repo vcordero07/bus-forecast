@@ -28,6 +28,7 @@ let minTime = 0;
 let toggleMode;
 let geoCity;
 let geoState;
+let isOutOfState = false;
 
 let MBTAQuery = {
   // route: busRouteID,
@@ -174,13 +175,19 @@ let generatePreditionsByStopData = (data) => {
           //recursiveIteration(data.mode[0].route[i])
 
           //use this to get all the predictions
-          data.mode[0].route[i].direction[busDirection].trip.forEach(item => {
-            //console.log('itemForEach:', Math.round(item.pre_away / 60));
-            minTime = Math.round(item.pre_away / 60)
-            resultElement += `<h3>${minTime}</h3><h6>min<h6> `;
+          // data.mode[0].route[i].direction[busDirection].trip.forEach(item => {
+          //   //console.log('itemForEach:', Math.round(item.pre_away / 60));
+          //   minTime = Math.round(item.pre_away / 60)
+          //   resultElement += `<h3>${minTime}</h3><h6>min<h6> `;
+          //
+          //   $('.next-bus-predictions').append(resultElement, "<br>");
+          // });
 
-            $('.next-bus-predictions').append(resultElement, "<br>");
-          });
+          $('.next-bus-predictions').append(`Route ${busRouteID[x]}: ` + data.mode[0].route[i].direction[busDirection].trip.map(function(itm) {
+            let minTime = Math.round(itm.pre_away / 60),
+              elem = `<h3>${minTime}</h3><h6>min</h6>`;
+            return elem;
+          }) + '<br>')
 
           $('.bus-valid-time').html(validTime);
           break;
@@ -510,7 +517,8 @@ let showPosition = (position) => {
   geoQuery.latlng = `${strLat}, ${strLon}`;
   getDataFromApi(endPoints.gglMapsGeocode, geoQuery, 'GeocodingData');
 
-  if (geoState !== "MA") {
+  if (geoState !== "MA" || isOutOfState) {
+    isOutOfState = true;
     console.log('geoState:', geoState);
     console.log('msg:', "it looks like you are outside of MA, but don't worry here is an example for harvard");
     MBTAQuery.lat = '42.373259';
