@@ -1,5 +1,8 @@
-//07-16-2017
+//07-19-2017
 //clear all values when inputs routes or nearby buttons are click
+//limit amout of predictions down to 3
+//remove subway stops from nearby location
+//create landing page
 
 const apiKeys = {
   MBTA: '1VI-9UmYpE64qhHFmhr1ew',
