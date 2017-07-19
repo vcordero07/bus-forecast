@@ -538,6 +538,12 @@ let hideShow = (toHide = [], toShow = []) => {
 let appendContentData = () => {
   return `
       <span class="appended">
+      <section id="weather-info" role="contentinfo">
+        <div class="row">
+          <div class="col-md-12 weather-message"></div>
+        </div>
+      </section>
+
         <section id="bus-info" role="contentinfo">
           <div class="row bus-message">
             <div class="col-md-12">
@@ -555,11 +561,7 @@ let appendContentData = () => {
           <div class="map-stop-location"></div>
         </section>
 
-        <section id="weather-info" role="contentinfo">
-          <div class="row">
-            <div class="col-md-12 weather-message"></div>
-          </div>
-        </section>
+
       </span>
     `;
 }
