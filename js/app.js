@@ -97,12 +97,21 @@ let getDKDataFromApi = (searchTerm, lat, lon, callback) => {
 };
 
 
-let getMapsData = (lat, lon) => {
-  console.log('lat, lon:', lat, lon);
-  let paddingLeft = parseInt($('#bus-stop-info').css('padding-left').replace('px', '')) * 2;
+let getMapsData = (lat, lon, multiple = null) => {
 
+  console.log('lat, lon:', lat, lon);
+  let mapElement;
+  let paddingLeft = parseInt($('#bus-stop-info').css('padding-left').replace('px', '')) * 2;
   let imgWidth = $('.bus-container').width() - paddingLeft; //- $('#bus-stop-info').css('padding-left');
-  let resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=${lat},${lon}&zoom=15&size=${imgWidth}x320&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
+
+  if (multiple) {
+    resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}${multiple}&zoom=11&size=${imgWidth}x320&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
+  } else {
+
+    resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=${lat},${lon}&zoom=17&size=${imgWidth}x320&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
+
+  }
+
   $('.map-stop-location').html(`
   <img id="static-map" data-padding-left="${paddingLeft}" src = "${resultElement}" alt = "bus stop location ${lat}, ${lon}" height="320" width="${imgWidth}" >
   `);
@@ -133,6 +142,9 @@ let generateRoutesData = (data) => {
 };
 
 let generateBusStopData = (data) => {
+  let imgMarkerStr = "";
+
+
   resultElement = '';
   data.direction[busDirection].stop.forEach(item => {
     resultElement += `
@@ -142,8 +154,14 @@ let generateBusStopData = (data) => {
     data-stopid='${item.stop_id}'
     ><a href='#'>${item.stop_name}</a></li>
     `;
+    imgMarkerStr += `&markers=${item.stop_lat},${item.stop_lon}`;
   });
   $('.bus-stop-list').html(resultElement);
+  console.log('imgMarkerStr:', imgMarkerStr);
+  let centerStop = imgMarkerStr.split('&markers=');
+  centerStop = centerStop[Math.round(centerStop.length / 2)].split(',');
+  console.log('centerStop[0]+', '+centerStop[1]', centerStop[0] + ',' + centerStop[1]);
+  getMapsData(centerStop[0], centerStop[1], imgMarkerStr);
 };
 
 let generatePreditionsByStopData = (data) => {
@@ -490,10 +508,10 @@ let showPosition = (position) => {
   // MBTAQuery.lon = position.coords.longitude;
 
   //harvard lat and lon
-  // strLat = '42.373259';
-  // strLon = '-71.118124';
-  // MBTAQuery.lat = '42.373259';
-  // MBTAQuery.lon = '-71.118124';
+  // strLat = '42.373716';
+  // strLon = '-71.100371';
+  // MBTAQuery.lat = '42.373716';
+  // MBTAQuery.lon = '-71.100371';
 
   //Honolulu, HI, USA
   //lat = 21.315603
@@ -514,8 +532,8 @@ let showPosition = (position) => {
     isOutOfState = true;
     console.log('geoState:', geoState);
     console.log('msg:', "it looks like you are outside of MA, but don't worry here is an example for harvard");
-    MBTAQuery.lat = '42.373259';
-    MBTAQuery.lon = '-71.118124';
+    MBTAQuery.lat = '42.373716';
+    MBTAQuery.lon = '-71.100371';
   }
 
   getGeoLocation();
@@ -570,6 +588,10 @@ let appendContentData = () => {
 }
 
 let createEventListeners = () => {
+
+  $('.btn-close-splash').on('click', (event) => {
+    $('#splash').remove();
+  });
 
   $('.find-bus-by-location').on('click', (event) => {
     getClearMSG('all');
