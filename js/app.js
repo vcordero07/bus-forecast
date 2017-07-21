@@ -102,12 +102,14 @@ let getMapsData = (lat, lon, multiple = null) => {
   console.log('lat, lon:', lat, lon);
   let mapElement;
   let paddingLeft = parseInt($('#bus-stop-info').css('padding-left').replace('px', '')) * 2;
-  let imgWidth = $('.bus-container').width() - paddingLeft; //- $('#bus-stop-info').css('padding-left');
+  let imgWidth = Math.round($('.bus-container').width() - paddingLeft); //- $('#bus-stop-info').css('padding-left');
 
   if (multiple) {
-    resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}${multiple}&zoom=12&size=320x620&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
+    let imgMarkerPath = multiple;
+    console.log('imgMarkerPath:', imgMarkerPath);
+    resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}${multiple}&zoom=12&size=400x600&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
     $('.route-map').html(`
-    <img id="static-map" src = "${resultElement}" alt = "Route Map ${lat}, ${lon}" height="620" width="320" >
+    <img id="route-static-map" src = "${resultElement}" alt = "Route Map ${lat}, ${lon}" height="600" width="400" >
     `);
   } else {
     resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=${lat},${lon}&zoom=17&size=${imgWidth}x320&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
@@ -115,8 +117,6 @@ let getMapsData = (lat, lon, multiple = null) => {
     <img id="static-map" data-padding-left="${paddingLeft}" src = "${resultElement}" alt = "Bus Stop Map ${lat}, ${lon}" height="320" width="${imgWidth}" >
     `);
   }
-
-
 }
 
 let getCurrentTime = () => {
@@ -146,7 +146,6 @@ let generateRoutesData = (data) => {
 let generateBusStopData = (data) => {
   let imgMarkerStr = "";
 
-
   resultElement = '';
   data.direction[busDirection].stop.forEach(item => {
     resultElement += `
@@ -159,10 +158,10 @@ let generateBusStopData = (data) => {
     imgMarkerStr += `&markers=${item.stop_lat},${item.stop_lon}`;
   });
   $('.bus-stop-list').html(resultElement);
-  console.log('imgMarkerStr:', imgMarkerStr);
+  //console.log('imgMarkerStr:', imgMarkerStr);
   let centerStop = imgMarkerStr.split('&markers=');
   centerStop = centerStop[Math.round(centerStop.length / 2)].split(',');
-  console.log('centerStop[0]+', '+centerStop[1]', centerStop[0] + ',' + centerStop[1]);
+  //console.log('centerStop[0]+', '+centerStop[1]', centerStop[0] + ',' + centerStop[1]);
   getMapsData(centerStop[0], centerStop[1], imgMarkerStr);
 };
 
@@ -343,6 +342,7 @@ let generateGeocodingData = (data) => {
 };
 
 let generateStopByLocationData = (data) => {
+  let imgMarkerStr = '';
   resultElement = '';
   data.stop.forEach(item => {
     resultElement += `
@@ -353,8 +353,14 @@ let generateStopByLocationData = (data) => {
     data-distance='${item.distance}'
     ><a href='#'>${item.stop_name}</a></li>
     `;
+    imgMarkerStr += `&markers=${item.stop_lat},${item.stop_lon}`;
   });
   $('.bus-stop-list').html(resultElement);
+  //console.log('imgMarkerStr:', imgMarkerStr);
+  let centerStop = imgMarkerStr.split('&markers=');
+  centerStop = centerStop[Math.round(centerStop.length / 2)].split(',');
+  //console.log('centerStop[0]+', '+centerStop[1]', centerStop[0] + ',' + centerStop[1]);
+  getMapsData(centerStop[0], centerStop[1], imgMarkerStr);
 };
 
 let generateRoutesByStopData = (data) => {
@@ -487,7 +493,7 @@ let getBusDirection = event => {
 let getClearMSG = (options) => {
   switch (options) {
     case 'all':
-      $('.bus-stop-list, .bus-valid-time, .error-msg, .next-bus-predictions, .weather-message, .map-stop-location, .error-catch-message').html("");
+      $('.bus-stop-list, .bus-valid-time, .error-msg, .next-bus-predictions, .weather-message, .route-map, .map-stop-location, .error-catch-message').html("");
       break;
     case 'msg-only':
       $('.bus-valid-time, .error-msg, .next-bus-predictions, .weather-message, .map-stop-location').html("");
@@ -615,7 +621,7 @@ let createEventListeners = () => {
       $(event.currentTarget).closest('li').siblings().show();
       $('li.selected-stop ').removeClass('selected-stop');
       getClearMSG('msg-only');
-      hideShow(['.bus-message', '#weather-info', '#map-info'], ['.direction-opt']);
+      hideShow(['.bus-message', '#weather-info', '#map-info'], ['.direction-opt, .route-map-container']);
       return;
     }
     getClearMSG('msg-only');
@@ -623,7 +629,7 @@ let createEventListeners = () => {
     $('li.selected-stop ').removeClass('selected-stop ');
     $(event.currentTarget).addClass('selected-stop ');
     $(event.currentTarget).closest('li').siblings().hide();
-    hideShow(['.direction-opt'], ['.bus-message', '#weather-info', '#map-info']);
+    hideShow(['.direction-opt, .route-map-container'], ['.bus-message', '#weather-info', '#map-info']);
     $(event.currentTarget).append(
       appendContentData()
     );
@@ -635,25 +641,11 @@ let createEventListeners = () => {
   });
 
   $('.selectpicker, input[type="radio"]').on('change', (event) => {
-    //console.log('event.currentTarget:', event.currentTarget);
     getClearMSG('all');
     if (toggleMode === "routes") {
-
       getBusDirection(event);
       hideShow([], ['.cd-container']);
     }
-    // } else {
-    //   busDirection = $('input:checked').val(); //***remove input checked
-    //
-    //   if (MBTAQuery.lat) {
-    //     getGeoLocation()
-    //   } else {
-    //     $('.find-bus-by-route').css('pointer-events', 'none');
-    //     hideShow([], ['.loading-bar']);
-    //     getLocation();
-    //   }
-    // }
-
   });
 
   $(window).resize(event => {
