@@ -105,16 +105,18 @@ let getMapsData = (lat, lon, multiple = null) => {
   let imgWidth = $('.bus-container').width() - paddingLeft; //- $('#bus-stop-info').css('padding-left');
 
   if (multiple) {
-    resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}${multiple}&zoom=11&size=${imgWidth}x320&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
+    resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}${multiple}&zoom=12&size=320x620&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
+    $('.route-map').html(`
+    <img id="static-map" src = "${resultElement}" alt = "Route Map ${lat}, ${lon}" height="620" width="320" >
+    `);
   } else {
-
     resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=${lat},${lon}&zoom=17&size=${imgWidth}x320&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
-
+    $('.map-stop-location').html(`
+    <img id="static-map" data-padding-left="${paddingLeft}" src = "${resultElement}" alt = "Bus Stop Map ${lat}, ${lon}" height="320" width="${imgWidth}" >
+    `);
   }
 
-  $('.map-stop-location').html(`
-  <img id="static-map" data-padding-left="${paddingLeft}" src = "${resultElement}" alt = "bus stop location ${lat}, ${lon}" height="320" width="${imgWidth}" >
-  `);
+
 }
 
 let getCurrentTime = () => {
