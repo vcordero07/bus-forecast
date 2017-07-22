@@ -97,20 +97,29 @@ let getDKDataFromApi = (searchTerm, lat, lon, callback) => {
 };
 
 
-let getMapsData = (lat, lon, multiple = null) => {
+let getMapsData = (lat, lon, RoutesMap = null) => {
 
   console.log('lat, lon:', lat, lon);
   let mapElement;
   let paddingLeft = parseInt($('#bus-stop-info').css('padding-left').replace('px', '')) * 2;
   let imgWidth = Math.round($('.bus-container').width() - paddingLeft); //- $('#bus-stop-info').css('padding-left');
 
-  if (multiple) {
-    let imgMarkerPath = multiple;
-    console.log('imgMarkerPath:', imgMarkerPath);
-    resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}${multiple}&zoom=12&size=400x600&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
-    $('.route-map').html(`
-    <img id="route-static-map" src = "${resultElement}" alt = "Route Map ${lat}, ${lon}" height="600" width="400" >
-    `);
+  if (RoutesMap) {
+    let imgMarkerPath = RoutesMap;
+    // console.log('imgMarkerPath:', imgMarkerPath);
+    console.log('toggleMode:', toggleMode);
+    if (toggleMode === 'nearby') {
+      resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}${RoutesMap}&zoom=16&size=400x600&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
+      $('.route-map').html(`
+      <img id="route-static-map" src = "${resultElement}" alt = "Route Map ${lat}, ${lon}" height="600" width="400" >
+      `);
+    } else if (toggleMode === 'routes') {
+      resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}${RoutesMap}&zoom=12&size=400x600&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
+      $('.route-map').html(`
+      <img id="route-static-map" src = "${resultElement}" alt = "Route Map ${lat}, ${lon}" height="600" width="400" >
+      `);
+    }
+
   } else {
     resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=${lat},${lon}&zoom=17&size=${imgWidth}x320&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
     $('.map-stop-location').html(`
