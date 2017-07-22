@@ -323,22 +323,43 @@ let generateDarkSkyData = (data) => {
 };
 
 let generateGeocodingData = (data) => {
+  // if (geoState !== "MA" || isOutOfState) {
+  //   isOutOfState = true;
+  //   console.log('geoState:', geoState);
+  //   console.log('msg:', "it looks like you are outside of MA, but don't worry here is an example for harvard");
+  //   MBTAQuery.lat = '62.373716';
+  //   MBTAQuery.lon = '-71.100371';
+  // }
+
   geoCity = '';
 
   data.results[0].address_components.forEach(item => {
+
     if (item.types.hasOwnProperty('0')) {
       if (item.types[0] === 'locality') {
         geoCity = item.long_name;
         console.log('geoCity:', geoCity);
-        return geoCity;
+        // return geoCity;
       };
       if (item.types[0] === 'administrative_area_level_1') {
+
         geoState = item.short_name;
         console.log('geoState:', geoState);
-        return geoState;
+        if (geoState !== 'MA') {
+          // alert('!');
+          console.log('msg:', "it looks like you are outside of MA, but don't worry here is an example for harvard");
+          MBTAQuery.lat = '42.373716';
+          MBTAQuery.lon = '-71.100371';
+          // return false;
+
+        }
+        getGeoLocation();
       }
+      // return geoState;
+
     }
   });
+  // getGeoLocation();
 };
 
 let generateStopByLocationData = (data) => {
@@ -356,8 +377,9 @@ let generateStopByLocationData = (data) => {
     imgMarkerStr += `&markers=${item.stop_lat},${item.stop_lon}`;
   });
   $('.bus-stop-list').html(resultElement);
-  //console.log('imgMarkerStr:', imgMarkerStr);
+  console.log('imgMarkerStr:', imgMarkerStr);
   let centerStop = imgMarkerStr.split('&markers=');
+  console.log('centerStop:', centerStop);
   centerStop = centerStop[Math.round(centerStop.length / 2)].split(',');
   //console.log('centerStop[0]+', '+centerStop[1]', centerStop[0] + ',' + centerStop[1]);
   getMapsData(centerStop[0], centerStop[1], imgMarkerStr);
@@ -535,17 +557,15 @@ let showPosition = (position) => {
 
   geoQuery.latlng = `${strLat}, ${strLon}`;
   getDataFromApi(endPoints.gglMapsGeocode, geoQuery, 'GeocodingData');
-
-  if (geoState !== "MA" || isOutOfState) {
-    isOutOfState = true;
-    console.log('geoState:', geoState);
-    console.log('msg:', "it looks like you are outside of MA, but don't worry here is an example for harvard");
-    MBTAQuery.lat = '42.373716';
-    MBTAQuery.lon = '-71.100371';
-  }
-
-  getGeoLocation();
-
+  console.log('geoState, isOutOfState:', geoState, isOutOfState);
+  // if (geoState !== "MA" || isOutOfState) {
+  //   isOutOfState = true;
+  //   console.log('geoState:', geoState);
+  //   console.log('msg:', "it looks like you are outside of MA, but don't worry here is an example for harvard");
+  //   MBTAQuery.lat = '62.373716';
+  //   MBTAQuery.lon = '-71.100371';
+  // }
+  //   getGeoLocation();
 };
 
 let getGeoLocation = () => {
@@ -590,7 +610,6 @@ let appendContentData = () => {
           <div class="map-stop-location"></div>
         </section>
 
-
       </span>
     `;
 }
@@ -602,6 +621,8 @@ let createEventListeners = () => {
   });
 
   $('.find-bus-by-location').on('click', (event) => {
+    geoState = null;
+    isOutOfState = null;
     getClearMSG('all');
     toggleMode = 'nearby';
     $('.find-bus-by-route').css('pointer-events', 'none');
