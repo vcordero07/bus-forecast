@@ -13,7 +13,7 @@ body {
   margin: 0 auto;
   max-width: 960px;
   min-width: 250px;
-  padding: 5px 30px;
+  padding: 5px 15px;
 }
 a,
 a:focus,
@@ -256,7 +256,6 @@ h6 {
   padding: 15px 10px;
 }
 
-#bus-stop-info,
 #bus-info,
 #weather-info {
   padding: 0px 15px;

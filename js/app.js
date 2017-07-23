@@ -109,21 +109,24 @@ let getMapsData = (lat, lon, RoutesMap = null) => {
     // console.log('imgMarkerPath:', imgMarkerPath);
     console.log('toggleMode:', toggleMode);
     if (toggleMode === 'nearby') {
-      resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}${RoutesMap}&zoom=16&size=400x600&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
+      resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}${RoutesMap}&size=400x600&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
       $('.route-map').html(`
+      <div class="map-title"><h5>Nearby Map</h5></div>
       <img id="route-static-map" src = "${resultElement}" alt = "Route Map ${lat}, ${lon}" height="600" width="400" >
       `);
     } else if (toggleMode === 'routes') {
-      resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}${RoutesMap}&zoom=12&size=400x600&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
+      resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}${RoutesMap}&size=400x600&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
       $('.route-map').html(`
+      <div class="map-title"><h5>Route Map</h5></div>
       <img id="route-static-map" src = "${resultElement}" alt = "Route Map ${lat}, ${lon}" height="600" width="400" >
       `);
     }
 
   } else {
-    resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=${lat},${lon}&zoom=17&size=${imgWidth}x320&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
+    resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=${lat},${lon}&style=feature:poi|visibility:off&size=400x600&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
     $('.map-stop-location').html(`
-    <img id="static-map" data-padding-left="${paddingLeft}" src = "${resultElement}" alt = "Bus Stop Map ${lat}, ${lon}" height="320" width="${imgWidth}" >
+    <div class="map-title"><h5>Bus Stop Map</h5></div>
+    <img id="static-map" data-padding-left="${paddingLeft}" src = "${resultElement}" alt = "Bus Stop Map ${lat}, ${lon}" height="600" width="400" >
     `);
   }
 }
@@ -580,8 +583,9 @@ let showPosition = (position) => {
 let getGeoLocation = () => {
   getDataFromApi(endPoints.MBTAStopsByLocation, MBTAQuery, 'StopByLocation');
   hideShow(['.loading-bar'], ['.cd-container']);
-  MBTAQuery = {};
+
   $('.find-bus-by-route').css('pointer-events', 'auto');
+  MBTAQuery = {};
 };
 
 let hideShow = (toHide = [], toShow = []) => {
