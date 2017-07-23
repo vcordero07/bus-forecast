@@ -32,6 +32,7 @@ let toggleMode;
 let geoCity;
 let geoState;
 let isOutOfState = false;
+let busStopName = '';
 
 let MBTAQuery = {
   // route: busRouteID,
@@ -125,7 +126,7 @@ let getMapsData = (lat, lon, RoutesMap = null) => {
   } else {
     resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=${lat},${lon}&style=feature:poi|visibility:off&size=400x600&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
     $('.map-stop-location').html(`
-    <div class="map-title"><h5>Bus Stop Map</h5></div>
+    <div class="map-title"><h5>${busStopName} Map</h5></div>
     <img id="static-map" data-padding-left="${paddingLeft}" src = "${resultElement}" alt = "Bus Stop Map ${lat}, ${lon}" height="600" width="400" >
     `);
   }
@@ -165,6 +166,7 @@ let generateBusStopData = (data) => {
     data-lat='${item.stop_lat}'
     data-lon='${item.stop_lon}'
     data-stopid='${item.stop_id}'
+    data-busname='${item.stop_name}'
     ><a href='#'>${item.stop_name}</a></li>
     `;
     imgMarkerStr += `&markers=${item.stop_lat},${item.stop_lon}`;
@@ -192,7 +194,7 @@ let generatePreditionsByStopData = (data) => {
   }
 
   if (busRouteID.constructor === Array) {
-    console.log('busRouteID.constructor = true');
+    //console.log('busRouteID.constructor = true');
     //console.log('busDirection:', busDirection);
 
     for (let x = 0; x < busRouteID.length; x++) {
@@ -222,7 +224,7 @@ let generatePreditionsByStopData = (data) => {
       }
     }
   } else {
-    console.log('busRouteID.constructor = false');
+    //console.log('busRouteID.constructor = false');
     //if there is data display pass
     for (let i = 0; i < data.mode[0].route.length; i++) {
       if (data.mode[0].route[i].route_id === busRouteID) {
@@ -383,6 +385,7 @@ let generateStopByLocationData = (data) => {
     data-lat='${item.stop_lat}'
     data-lon='${item.stop_lon}'
     data-stopid='${item.stop_id}'
+    data-busname='${item.stop_name}'
     data-distance='${item.distance}'
     ><a href='#'>${item.stop_name}</a></li>
     `;
@@ -479,10 +482,12 @@ let recursiveIteration = (object) => {
 };
 
 let getBusStopID = event => {
-  //  console.log(event.currentTarget);
+  //console.log(event.currentTarget);
   strLat = event.currentTarget.getAttribute('data-lat');
   strLon = event.currentTarget.getAttribute('data-lon');
   strStopID = event.currentTarget.getAttribute('data-stopid');
+  busStopName = event.currentTarget.getAttribute('data-busname');
+  //console.log('busStopName:', busStopName);
   MBTAQuery.stop = event.currentTarget.getAttribute('data-stopid');
 
   getDKDataFromApi(endPoints.DarkSky, strLat, strLon, 'DarkSkyData');
@@ -599,29 +604,17 @@ let hideShow = (toHide = [], toShow = []) => {
 
 let appendContentData = () => {
   return `
-      <span class="appended">
-      <section id="weather-info" role="contentinfo">
-        <div class="row">
-          <div class="col-md-12 weather-message"></div>
+      <span class="appended row">
+      <section id="bus-weather-info" role="contentinfo">
+        <div class="col-sm-12">
+          <div class="weather-message"></div>
+          <div class="bus-message">
+            <div class="next-bus-route-id"></div>
+            <div class="next-bus-predictions"></div>
+          </div>
+            <div class="bus-valid-time error-msg"></div>
         </div>
       </section>
-
-        <section id="bus-info" role="contentinfo">
-          <div class="row bus-message">
-            <div class="col-md-12">
-              <div class="next-bus-route-id"></div>
-              <div class="next-bus-predictions"></div>
-
-            </div>
-            <div class="col-md-12">
-              <div class="bus-valid-time error-msg"></div>
-            </div>
-          </div>
-        </section>
-
-        <section id="map-info" role="contentinfo">
-          <div class="map-stop-location"></div>
-        </section>
 
       </span>
     `;
@@ -655,7 +648,7 @@ let createEventListeners = () => {
       $(event.currentTarget).closest('li').siblings().show();
       $('li.selected-stop ').removeClass('selected-stop');
       getClearMSG('msg-only');
-      hideShow(['.bus-message', '#weather-info', '#map-info'], ['.direction-opt, .route-map-container']);
+      hideShow(['.bus-message', '#bus-weather-info', '.map-stop-location'], ['.direction-opt, .route-map']);
       return;
     }
     getClearMSG('msg-only');
@@ -663,7 +656,7 @@ let createEventListeners = () => {
     $('li.selected-stop ').removeClass('selected-stop ');
     $(event.currentTarget).addClass('selected-stop ');
     $(event.currentTarget).closest('li').siblings().hide();
-    hideShow(['.direction-opt, .route-map-container'], ['.bus-message', '#weather-info', '#map-info']);
+    hideShow(['.direction-opt, .route-map'], ['.bus-message', '#bus-weather-info', '.map-stop-location']);
     $(event.currentTarget).append(
       appendContentData()
     );
@@ -690,7 +683,7 @@ let createEventListeners = () => {
 };
 
 const renderApp = () => {
-  hideShow(['.by-location-opts', '.by-route-opts', '.cd-container', '.bus-message', '#weather-info', '#map-info', '.loading-bar'], [])
+  hideShow(['.by-location-opts', '.by-route-opts', '.cd-container', '.bus-message', '#bus-weather-info', '#map-info', '.loading-bar'], [])
   getDataFromApi(endPoints.MBTARoutes, MBTAQuery, 'RoutesData');
   createEventListeners();
 };
