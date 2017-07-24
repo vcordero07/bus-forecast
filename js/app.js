@@ -98,7 +98,7 @@ let getDKDataFromApi = (searchTerm, lat, lon, callback) => {
 };
 
 
-let getMapsData = (lat, lon, RoutesMap = null) => {
+let getMapsData = (lat, lon, RoutesMap = null, RoutesPath = null) => {
 
   console.log('lat, lon:', lat, lon);
   let mapElement;
@@ -106,25 +106,23 @@ let getMapsData = (lat, lon, RoutesMap = null) => {
   let imgWidth = Math.round($('.bus-container').width() - paddingLeft); //- $('#bus-stop-info').css('padding-left');
 
   if (RoutesMap) {
-    let imgMarkerPath = RoutesMap;
-    // console.log('imgMarkerPath:', imgMarkerPath);
+    console.log('RoutesPath:', RoutesPath);
     console.log('toggleMode:', toggleMode);
     if (toggleMode === 'nearby') {
-      resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}${RoutesMap}&size=400x600&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
+      resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}${RoutesMap}&style=feature:poi|visibility:off&size=400x600&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
       $('.route-map').html(`
       <div class="map-title"><h5>Nearby Map</h5></div>
       <img id="route-static-map" src = "${resultElement}" alt = "Route Map ${lat}, ${lon}" height="600" width="400" >
       `);
     } else if (toggleMode === 'routes') {
-      resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}${RoutesMap}&size=400x600&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
+      resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&path=color:0xff0000ff|weight:1${RoutesPath}${RoutesMap}&style=feature:poi|visibility:off&size=400x600&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
       $('.route-map').html(`
       <div class="map-title"><h5>Route Map</h5></div>
       <img id="route-static-map" src = "${resultElement}" alt = "Route Map ${lat}, ${lon}" height="600" width="400" >
       `);
     }
-
   } else {
-    resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=${lat},${lon}&style=feature:poi|visibility:off&size=400x600&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
+    resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=size:mid%7Ccolor:0xff0000|${lat},${lon}&style=feature:poi|visibility:off&size=400x600&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
     $('.map-stop-location').html(`
     <div class="map-title"><h5>${busStopName} Map</h5></div>
     <img id="static-map" data-padding-left="${paddingLeft}" src = "${resultElement}" alt = "Bus Stop Map ${lat}, ${lon}" height="600" width="400" >
@@ -158,6 +156,7 @@ let generateRoutesData = (data) => {
 
 let generateBusStopData = (data) => {
   let imgMarkerStr = "";
+  let imgMarkerPath = "";
 
   resultElement = '';
   data.direction[busDirection].stop.forEach(item => {
@@ -169,14 +168,14 @@ let generateBusStopData = (data) => {
     data-busname='${item.stop_name}'
     ><a href='#'>${item.stop_name}</a></li>
     `;
-    imgMarkerStr += `&markers=${item.stop_lat},${item.stop_lon}`;
+    imgMarkerStr += `&markers=size:tiny%7Ccolor:0xff0000|${item.stop_lat},${item.stop_lon}`;
+    imgMarkerPath += `|${item.stop_lat},${item.stop_lon}`;
   });
   $('.bus-stop-list').html(resultElement);
-  //console.log('imgMarkerStr:', imgMarkerStr);
-  let centerStop = imgMarkerStr.split('&markers=');
+
+  let centerStop = imgMarkerPath.split('|');
   centerStop = centerStop[Math.round(centerStop.length / 2)].split(',');
-  //console.log('centerStop[0]+', '+centerStop[1]', centerStop[0] + ',' + centerStop[1]);
-  getMapsData(centerStop[0], centerStop[1], imgMarkerStr);
+  getMapsData(centerStop[0], centerStop[1], imgMarkerStr, imgMarkerPath);
 };
 
 let generatePreditionsByStopData = (data) => {
@@ -184,10 +183,8 @@ let generatePreditionsByStopData = (data) => {
   let validTime = '';
   let errorMsg = '';
   minTime = 0;
-
   //if there is not mode available for this route then display this message
   if (!data.hasOwnProperty('mode')) {
-
     errorMsg = 'No predictions available for this bus stop at this time 1.';
     $('.error-msg').html(errorMsg);
     return;
@@ -196,24 +193,20 @@ let generatePreditionsByStopData = (data) => {
   if (busRouteID.constructor === Array) {
     //console.log('busRouteID.constructor = true');
     //console.log('busDirection:', busDirection);
-
     for (let x = 0; x < busRouteID.length; x++) {
       //if there is data display pass
-
       for (let i = 0; i < data.mode[0].route.length; i++) {
         if (data.mode[0].route[i].route_id === busRouteID[x]) {
-
           let currentTime = new Date();
           validTime = `<h6>Valid as of ${getCurrentTime()}</h6>`;
           //console.log("data.mode.route", data.mode[0].route[i]);
           //use this to get only the most current predictions
           //recursiveIteration(data.mode[0].route[i])
-
           $('.next-bus-predictions').append(`Route ${busRouteID[x]}: ` + data.mode[0].route[i].direction[0].trip.map(function(item) {
             minTime = Math.round(item.pre_away / 60);
             resultElement = `<h3> ${minTime}</h3><h6>min</h6>`;
             return resultElement;
-          }) + '<br>')
+          }) + '<br>');
 
           $('.bus-valid-time').html(validTime);
           break;
@@ -228,19 +221,16 @@ let generatePreditionsByStopData = (data) => {
     //if there is data display pass
     for (let i = 0; i < data.mode[0].route.length; i++) {
       if (data.mode[0].route[i].route_id === busRouteID) {
-
         let currentTime = new Date();
         validTime = `<h6>Valid as of ${getCurrentTime()}</h6>`;
         //console.log("data.mode.route", data.mode[0].route[i]);
         //use this to get only the most current predictions
         //recursiveIteration(data.mode[0].route[i])
-
         //use this to get all the predictions
         data.mode[0].route[i].direction[0].trip.forEach(item => {
           //console.log('itemForEach:', Math.round(item.pre_away / 60));
           minTime = Math.round(item.pre_away / 60)
           resultElement = `<h3>${minTime}</h3><h6>min<h6>`;
-
           $('.next-bus-predictions').append(resultElement);
         });
 
@@ -337,18 +327,9 @@ let generateDarkSkyData = (data) => {
 };
 
 let generateGeocodingData = (data) => {
-  // if (geoState !== "MA" || isOutOfState) {
-  //   isOutOfState = true;
-  //   console.log('geoState:', geoState);
-  //   console.log('msg:', "it looks like you are outside of MA, but don't worry here is an example for harvard");
-  //   MBTAQuery.lat = '62.373716';
-  //   MBTAQuery.lon = '-71.100371';
-  // }
-
   geoCity = '';
 
   data.results[0].address_components.forEach(item => {
-
     if (item.types.hasOwnProperty('0')) {
       if (item.types[0] === 'locality') {
         geoCity = item.long_name;
@@ -356,29 +337,37 @@ let generateGeocodingData = (data) => {
         // return geoCity;
       };
       if (item.types[0] === 'administrative_area_level_1') {
-
         geoState = item.short_name;
         console.log('geoState:', geoState);
         if (geoState !== 'MA') {
           // alert('!');
-          console.log('msg:', "it looks like you are outside of MA, but don't worry here is an example for harvard");
+          BootstrapDialog.show({
+            title: 'Out of the State?',
+            message: "Hi, it looks like you are outside of MA, but don't worry here is an example for a nearby location in Cambridge.",
+            type: BootstrapDialog.TYPE_WARNING,
+            buttons: [{
+              label: 'Close',
+              action: function(dialogRef) {
+                dialogRef.close();
+              }
+            }]
+          });
+          //console.log('msg:', "it looks like you are outside of MA, but don't worry here is an example for harvard");
           MBTAQuery.lat = '42.373716';
           MBTAQuery.lon = '-71.100371';
           // return false;
-
         }
         getGeoLocation();
       }
-      // return geoState;
-
     }
   });
-  // getGeoLocation();
 };
 
 let generateStopByLocationData = (data) => {
   let imgMarkerStr = '';
+  let imgMarkerPath = '';
   resultElement = '';
+
   data.stop.forEach(item => {
     resultElement += `
     <li class='list-group-item'
@@ -389,22 +378,19 @@ let generateStopByLocationData = (data) => {
     data-distance='${item.distance}'
     ><a href='#'>${item.stop_name}</a></li>
     `;
-    imgMarkerStr += `&markers=${item.stop_lat},${item.stop_lon}`;
+    imgMarkerStr += `&markers=size:mid%7Ccolor:0xff0000|${item.stop_lat},${item.stop_lon}`;
+    imgMarkerPath += `|${item.stop_lat},${item.stop_lon}`;
   });
   $('.bus-stop-list').html(resultElement);
-  console.log('imgMarkerStr:', imgMarkerStr);
-  let centerStop = imgMarkerStr.split('&markers=');
-  console.log('centerStop:', centerStop);
+
+  let centerStop = imgMarkerPath.split('|');
   centerStop = centerStop[Math.round(centerStop.length / 2)].split(',');
-  //console.log('centerStop[0]+', '+centerStop[1]', centerStop[0] + ',' + centerStop[1]);
-  getMapsData(centerStop[0], centerStop[1], imgMarkerStr);
+  getMapsData(centerStop[0], centerStop[1], imgMarkerStr, imgMarkerPath);
 };
 
 let generateRoutesByStopData = (data) => {
   busRouteID = [];
   data.mode[0].route.forEach(item => {
-    //console.log('item.route_id:', item.route_id);
-    //busRouteID += item.route_id;
     busRouteID.push(`${item.route_id}`);
   });
   console.log('busRouteID:', busRouteID);
@@ -469,10 +455,8 @@ let recursiveIteration = (object) => {
           console.log('math.min(object[property]) :', object[property]);
           //to display only the next bus
           minTime = (minTime === 0) ? object[property] : Math.min(object[property], minTime);
-
           //to display all the trips for that specific stop
           //minTime = object[property];
-
           resultElement = `<h3>${Math.round(minTime / 60)}</h3><h6>min<h6>`;
           $('.next-bus-predictions').html(resultElement);
         }
@@ -487,18 +471,17 @@ let getBusStopID = event => {
   strLon = event.currentTarget.getAttribute('data-lon');
   strStopID = event.currentTarget.getAttribute('data-stopid');
   busStopName = event.currentTarget.getAttribute('data-busname');
-  //console.log('busStopName:', busStopName);
   MBTAQuery.stop = event.currentTarget.getAttribute('data-stopid');
-
   getDKDataFromApi(endPoints.DarkSky, strLat, strLon, 'DarkSkyData');
+
   if (toggleMode === 'routes') {
     MBTAQuery.direction = busDirection;
   } else {
     getDataFromApi(endPoints.MBTARoutesByStop, MBTAQuery, 'RoutesByStop');
   };
+
   geoQuery.latlng = `${strLat}, ${strLon}`;
   getDataFromApi(endPoints.gglMapsGeocode, geoQuery, 'GeocodingData');
-
   getDataFromApi(endPoints.MBTAPredictionsByStop, MBTAQuery, 'PreditionsByStopData');
   getMapsData(strLat, strLon);
 };
@@ -514,19 +497,15 @@ let getSkyIcons = (event) => {
 };
 
 let getBusDirection = event => {
-  // console.log('getBusDirection:', $('select').val());
   if ($('select').val() === "") {
-
     $('.error-catch-message').html('<br><br><p>Please select a valid route.</p>');
   } else {
     // getClearMSG('all');
     MBTAQuery.route = $('select').val();
     busRouteID = $('select').val();
     busDirection = $('input:checked').val();
-
     getDataFromApi(endPoints.MBTABusStop, MBTAQuery, 'BusStopData');
   }
-
 };
 
 let getClearMSG = (options) => {
@@ -554,19 +533,9 @@ let showPosition = (position) => {
   // MBTAQuery.lat = position.coords.latitude;
   // MBTAQuery.lon = position.coords.longitude;
 
-  //harvard lat and lon
-  // strLat = '42.373716';
-  // strLon = '-71.100371';
-  // MBTAQuery.lat = '42.373716';
-  // MBTAQuery.lon = '-71.100371';
-
-  //Honolulu, HI, USA
-  //lat = 21.315603
-  //lon = -157.858093
-
-  //SFO lat and lon
-  //lat = 	37.773972
-  //lon =  -122.431297
+  //harvard lat and lon// strLat = '42.373716';// strLon = '-71.100371';// MBTAQuery.lat = '42.373716';// MBTAQuery.lon = '-71.100371';
+  //Honolulu, HI, USA//lat = 21.315603//lon = -157.858093
+  //SFO lat and lon//lat = 	37.773972//lon =  -122.431297
   strLat = '37.773972';
   strLon = '-122.431297';
   MBTAQuery.lat = '37.773972';
@@ -574,21 +543,11 @@ let showPosition = (position) => {
 
   geoQuery.latlng = `${strLat}, ${strLon}`;
   getDataFromApi(endPoints.gglMapsGeocode, geoQuery, 'GeocodingData');
-  console.log('geoState, isOutOfState:', geoState, isOutOfState);
-  // if (geoState !== "MA" || isOutOfState) {
-  //   isOutOfState = true;
-  //   console.log('geoState:', geoState);
-  //   console.log('msg:', "it looks like you are outside of MA, but don't worry here is an example for harvard");
-  //   MBTAQuery.lat = '62.373716';
-  //   MBTAQuery.lon = '-71.100371';
-  // }
-  //   getGeoLocation();
 };
 
 let getGeoLocation = () => {
   getDataFromApi(endPoints.MBTAStopsByLocation, MBTAQuery, 'StopByLocation');
   hideShow(['.loading-bar'], ['.cd-container']);
-
   $('.find-bus-by-route').css('pointer-events', 'auto');
   MBTAQuery = {};
 };
@@ -615,7 +574,6 @@ let appendContentData = () => {
             <div class="bus-valid-time error-msg"></div>
         </div>
       </section>
-
       </span>
     `;
 }

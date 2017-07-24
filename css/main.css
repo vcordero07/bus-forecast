@@ -366,3 +366,8 @@ h6 {
   top: 10%;
   width: 100%;
 }
+
+/*-----modal content-----*/
+.bootstrap-dialog.type-warning .modal-header {
+    background-color: #e67e22;
+}
