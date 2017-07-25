@@ -88,7 +88,7 @@ h6 {
   /*color: #FFF;*/
   color: #000;
   /*font-family: 'Concert One', cursive;*/
-  font-size: 36px;
+  font-size: 18px;
   font-weight: bold;
   margin: 0 -30px 10px;
   padding: 8px 30px;
@@ -306,6 +306,13 @@ h6 {
   margin-bottom: 15px;
   margin-to: 15px;
 }
+.map-title, .stops-title {
+  background-color: #e67e22;
+  border: 1px solid #e67e22;
+  color: #fff;
+  padding-left: 3px;
+  width: 400px;
+}
 
 /*-----loading bar------*/
 
@@ -343,28 +350,6 @@ h6 {
 .wrapper {
   min-height: 95%;
   position: relative;
-}
-
-/*-----splash content-----*/
-#splash {
-  background-color: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  display: none; /*remove this to view the splash screen*/
-  height: 100%;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  z-index: 15;
-}
-
-/*width:30%; left:50%; margin-left:-25%; //allows for centered, left-aligned, content*/
-
-.splash-content{
-  position: absolute;
-  text-align: center;
-  top: 10%;
-  width: 100%;
 }
 
 /*-----modal content-----*/

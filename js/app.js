@@ -1,8 +1,4 @@
-//07-19-2017
-//clear all values when inputs routes or nearby buttons are click
-//limit amout of predictions down to 3
-//remove subway stops from nearby location
-//create landing page
+//07-24-2017
 
 const apiKeys = {
   MBTA: '1VI-9UmYpE64qhHFmhr1ew',
@@ -340,7 +336,6 @@ let generateGeocodingData = (data) => {
         geoState = item.short_name;
         console.log('geoState:', geoState);
         if (geoState !== 'MA') {
-          // alert('!');
           BootstrapDialog.show({
             title: 'Out of the State?',
             message: "Hi, it looks like you are outside of MA, but don't worry here is an example for a nearby location in Cambridge.",
@@ -355,6 +350,8 @@ let generateGeocodingData = (data) => {
           //console.log('msg:', "it looks like you are outside of MA, but don't worry here is an example for harvard");
           MBTAQuery.lat = '42.373716';
           MBTAQuery.lon = '-71.100371';
+          strLat = '42.373716';
+          strLon = '-71.100371';
           // return false;
         }
         getGeoLocation();
@@ -644,6 +641,19 @@ const renderApp = () => {
   hideShow(['.by-location-opts', '.by-route-opts', '.cd-container', '.bus-message', '#bus-weather-info', '#map-info', '.loading-bar'], [])
   getDataFromApi(endPoints.MBTARoutes, MBTAQuery, 'RoutesData');
   createEventListeners();
+  BootstrapDialog.show({
+    title: `<img src="img/bus-forecast-Logo-64.png" alt="Bus Forecast Logo" width="64" height="64"> Bus Forecast`,
+    message: `Do you live in MA? Do you commute/use the MBTA?
+    <br>If yes, there are two things that you need to do before you leave home, check the weather and check when the next bus arrives.
+    <br>Bus Forecast achieve these two things. You have two options to search for, by Routes or by Nearby location. Routes provides a list of all the buses available and you can pick the one that you need. Nearby, gives you a list with the nearest 15 bus stops around your location. `,
+    type: BootstrapDialog.TYPE_PRIMARY,
+    buttons: [{
+      label: 'Close',
+      action: function(dialogRef) {
+        dialogRef.close();
+      }
+    }]
+  });
 };
 
 $(document).ready(renderApp);
