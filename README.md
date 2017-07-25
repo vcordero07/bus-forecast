@@ -1,4 +1,4 @@
-# ![Bus Forecast](https://github.com/vcordero07/bus-forecast/raw/master/img/favicon.ico "Bus Forecast") [Bus Forecast](https://vcordero07.github.io/bus-forecast/)
+# ![Bus Forecast](https://github.com/vcordero07/bus-forecast/raw/uat/img/bus-forecast-Logo-64.png "Bus Forecast") [Bus Forecast](https://vcordero07.github.io/bus-forecast/)
 This is a MBTA app with bus predictions by stop or location, as well as the weather for that location.
 
 ---
@@ -12,8 +12,11 @@ This is a MBTA app with bus predictions by stop or location, as well as the weat
 ## Summary
 
 Do you live in MA? Do you commute/use the MBTA?
+
 If yes, there are two things that you need to do before you leave home, check the weather and check when the next bus arrives.
-Bus Forecast achieve these two things. You have two options to search for, by Routes or by Nearby location. Routes provides a list of all the buses available and you can pick the one that you need. Nearby, gives you a list with the nearest 15 bus stops around your location. 
+
+Bus Forecast achieve these two things. You have two options to search for, by Routes or by Nearby location. Routes provides a list of all the buses available and you can pick the one that you need. Nearby, gives you a list with the nearest 15 bus stops around your location.
+
 ---
 ## Screenshots
 
