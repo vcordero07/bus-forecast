@@ -98,11 +98,9 @@ let getMapsData = (lat, lon, RoutesMap = null, RoutesPath = null) => {
 
   //console.log('lat, lon:', lat, lon);
   let mapElement;
-  let paddingLeft = parseInt($('#bus-stop-info').css('padding-left').replace('px', '')) * 2;
-  // let imgWidth = Math.round($('.bus-container').width() - paddingLeft); //- $('#bus-stop-info').css('padding-left');
-  // let imgWidth = ($(window).width() < 400) ? 320 : 400;
+  let imgWidth = ($(window).width() < 400) ? 345 : 400;
   // let imgHeight = ($(window).width() < 400) ? 320 : 600;
-  let imgWidth = ($(window).width() < 400) ? Math.max(320, $(window).width()) : 400;
+  // let imgWidth = ($(window).width() < 400) ? Math.max(320, $(window).width()) : 400;
   let imgHeight = ($(window).width() < 400) ? 320 : 600;
 
   if (RoutesMap) {
@@ -125,7 +123,7 @@ let getMapsData = (lat, lon, RoutesMap = null, RoutesPath = null) => {
     resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=size:mid%7Ccolor:0xff0000|${lat},${lon}&style=feature:poi|visibility:off&size=${imgWidth}x${imgHeight}&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
     $('.map-stop-location').html(`
     <div class="map-title"><h5>${busStopName} Map</h5></div>
-    <img id="static-map" data-padding-left="${paddingLeft}" src = "${resultElement}" alt = "Bus Stop Map ${lat}, ${lon}" height="${imgHeight}" width="${imgWidth}" >
+    <img id="static-map" src = "${resultElement}" alt = "Bus Stop Map ${lat}, ${lon}" height="${imgHeight}" width="${imgWidth}" >
     `);
   }
 }
@@ -596,6 +594,8 @@ let createEventListeners = () => {
 
   $('.find-bus-by-route').on('click', (event) => {
     MBTAQuery = {};
+    $('select').val('default');
+    $('select').selectpicker("refresh");
     getClearMSG('all');
     toggleMode = 'routes';
     hideShow(['.by-location-opts', '.cd-container'], ['.by-route-opts'])

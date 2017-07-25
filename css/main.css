@@ -70,24 +70,34 @@ h6 {
 }
 
 /*-----media queries------*/
-@ media only screen and (max-width: 400px) {
-  .bus-container {
+@ media screen and (max-width: 400px) {
+  /*.bus-container {
     width: 320px;
   }
   .by-location-opts,
   .by-route-opts {
     display: block;
-  }
-  .route-map.img {
-    width: 320px;
-    height: 320px;
-  }
+  }*/
 
+  .direction-btns {
+   display: none;
+ }
 }
 @media (min-width: 768px) {
   .route-map-container.col-sm-6 {
     float: right;
   }
+  .map-title, .stops-title {
+    background-color: #e67e22;
+    border: 1px solid #e67e22;
+    color: #fff;
+    padding-left: 3px;
+    width: 400px;
+  }
+  .direction-opt {
+    float: none;
+  }
+
 }
 
 /*-----header------*/
@@ -139,6 +149,10 @@ h6 {
 
 .by-route-opts>.direction-opt {
   vertical-align: top;
+}
+
+.direction-opt {
+    float: right;
 }
 
 .btn-direction {
@@ -315,20 +329,20 @@ h6 {
   margin-right: 10px;
 }
 
+.map-title, .stops-title {
+  background-color: #e67e22;
+  border: 1px solid #e67e22;
+  color: #fff;
+  padding-left: 3px;
+  width: 345px;
+}
+
 .route-map-container{
   margin-bottom: 15px;
 }
 
 #route-static-map, #static-map {
   margin-top: 5px;
-}
-
-.map-title, .stops-title {
-  background-color: #e67e22;
-  border: 1px solid #e67e22;
-  color: #fff;
-  padding-left: 3px;
-  width: 400px;
 }
 
 /*-----loading bar------*/
