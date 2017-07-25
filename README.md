@@ -11,6 +11,9 @@ This is a MBTA app with bus predictions by stop or location, as well as the weat
 ---
 ## Summary
 
+Do you live in MA? Do you commute/use the MBTA?
+If yes, there are two things that you need to do before you leave home, check the weather and check when the next bus arrives.
+Bus Forecast achieve these two things. You have two options to search for, by Routes or by Nearby location. Routes provides a list of all the buses available and you can pick the one that you need. Nearby, gives you a list with the nearest 15 bus stops around your location. 
 ---
 ## Screenshots
 

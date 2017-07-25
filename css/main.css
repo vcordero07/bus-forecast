@@ -30,7 +30,7 @@ footer a:active {
 }
 
 footer a:hover {
-  color: #3498DB;
+  color: #E67E22;
   font-weight: bold;
   text-decoration: none;
 }
@@ -77,6 +77,16 @@ h6 {
   .by-location-opts,
   .by-route-opts {
     display: block;
+  }
+  .route-map.img {
+    width: 320px;
+    height: 320px;
+  }
+
+}
+@media (min-width: 768px) {
+  .route-map-container.col-sm-6 {
+    float: right;
   }
 }
 
@@ -225,11 +235,15 @@ h6 {
 }
 
 /*-----main-content-----*/
+#bus-stop-info {
+  margin-top: 5px;
+}
+
 .bus-stop-list {
-  padding: 15px 0px;
+  /*padding: 15px 0px;*/
   position: relative;
   margin-bottom: 15px;
-  margin-top: 15px;
+  margin-top: 5px;
 }
 
 .bus-stop-list::before {
@@ -302,10 +316,13 @@ h6 {
 }
 
 .route-map-container{
-  padding: 15px 0px;
   margin-bottom: 15px;
-  margin-to: 15px;
 }
+
+#route-static-map, #static-map {
+  margin-top: 5px;
+}
+
 .map-title, .stops-title {
   background-color: #e67e22;
   border: 1px solid #e67e22;
@@ -355,4 +372,8 @@ h6 {
 /*-----modal content-----*/
 .bootstrap-dialog.type-warning .modal-header {
     background-color: #e67e22;
+}
+
+.bootstrap-dialog.type-primary .modal-header {
+    background-color: #3498DB;
 }

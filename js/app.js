@@ -48,12 +48,12 @@ let geoQuery = {
 let getDataFromApi = (searchTerm, query, callback) => {
   query.api_key = apiKeys.MBTA;
   query.format = 'json';
-  console.log('query:', query);
+  //console.log('query:', query);
   $.getJSON(searchTerm, query, function(data) {
       displayData(data, callback);
     })
     .fail(function(data) {
-      console.log('error data:', data);
+      //console.log('error data:', data);
       if (data.status === 404) {
         $('.error-catch-message').html(`<br><br>${data.responseText}`);
       }
@@ -69,7 +69,7 @@ let getWUDataFromApi = (searchTerm, lat, lon, callback) => {
       displayData(data, callback);
     })
     .fail(function(data) {
-      console.log('error data:', data);
+      //console.log('error data:', data);
       if (data.status === 404) {
         $('.error-catch-message').html(`<br><br>${data.responseText}`);
       }
@@ -86,7 +86,7 @@ let getDKDataFromApi = (searchTerm, lat, lon, callback) => {
       displayData(data, callback);
     })
     .fail(function(data) {
-      console.log('error data:', data);
+      //console.log('error data:', data);
       if (data.status === 404) {
         $('.error-catch-message').html(`<br><br>${data.responseText}`);
       }
@@ -96,32 +96,36 @@ let getDKDataFromApi = (searchTerm, lat, lon, callback) => {
 
 let getMapsData = (lat, lon, RoutesMap = null, RoutesPath = null) => {
 
-  console.log('lat, lon:', lat, lon);
+  //console.log('lat, lon:', lat, lon);
   let mapElement;
   let paddingLeft = parseInt($('#bus-stop-info').css('padding-left').replace('px', '')) * 2;
-  let imgWidth = Math.round($('.bus-container').width() - paddingLeft); //- $('#bus-stop-info').css('padding-left');
+  // let imgWidth = Math.round($('.bus-container').width() - paddingLeft); //- $('#bus-stop-info').css('padding-left');
+  // let imgWidth = ($(window).width() < 400) ? 320 : 400;
+  // let imgHeight = ($(window).width() < 400) ? 320 : 600;
+  let imgWidth = ($(window).width() < 400) ? Math.max(320, $(window).width()) : 400;
+  let imgHeight = ($(window).width() < 400) ? 320 : 600;
 
   if (RoutesMap) {
-    console.log('RoutesPath:', RoutesPath);
-    console.log('toggleMode:', toggleMode);
+    //console.log('RoutesPath:', RoutesPath);
+    //console.log('toggleMode:', toggleMode);
     if (toggleMode === 'nearby') {
-      resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}${RoutesMap}&style=feature:poi|visibility:off&size=400x600&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
+      resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}${RoutesMap}&style=feature:poi|visibility:off&size=${imgWidth}x${imgHeight}&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
       $('.route-map').html(`
       <div class="map-title"><h5>Nearby Map</h5></div>
-      <img id="route-static-map" src = "${resultElement}" alt = "Route Map ${lat}, ${lon}" height="600" width="400" >
+      <img id="route-static-map" src = "${resultElement}" alt = "Route Map ${lat}, ${lon}" height="${imgHeight}" width="${imgWidth}" >
       `);
     } else if (toggleMode === 'routes') {
-      resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&path=color:0xff0000ff|weight:1${RoutesPath}${RoutesMap}&style=feature:poi|visibility:off&size=400x600&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
+      resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&path=color:0xff0000ff|weight:1${RoutesPath}${RoutesMap}&style=feature:poi|visibility:off&size=${imgWidth}x${imgHeight}&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
       $('.route-map').html(`
       <div class="map-title"><h5>Route Map</h5></div>
-      <img id="route-static-map" src = "${resultElement}" alt = "Route Map ${lat}, ${lon}" height="600" width="400" >
+      <img id="route-static-map" src = "${resultElement}" alt = "Route Map ${lat}, ${lon}" height="${imgHeight}" width="${imgWidth}" >
       `);
     }
   } else {
-    resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=size:mid%7Ccolor:0xff0000|${lat},${lon}&style=feature:poi|visibility:off&size=400x600&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
+    resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=size:mid%7Ccolor:0xff0000|${lat},${lon}&style=feature:poi|visibility:off&size=${imgWidth}x${imgHeight}&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
     $('.map-stop-location').html(`
     <div class="map-title"><h5>${busStopName} Map</h5></div>
-    <img id="static-map" data-padding-left="${paddingLeft}" src = "${resultElement}" alt = "Bus Stop Map ${lat}, ${lon}" height="600" width="400" >
+    <img id="static-map" data-padding-left="${paddingLeft}" src = "${resultElement}" alt = "Bus Stop Map ${lat}, ${lon}" height="${imgHeight}" width="${imgWidth}" >
     `);
   }
 }
@@ -295,7 +299,7 @@ let generateWeatherBgSwithcer = (data) => {
     //console.log('#2C3E50', data.currently.temperature);
     $('body').css("background-color", "#2C3E50");
   } else {
-    console.log('Warning:', "Please don't go outside!");
+    //console.log('Warning:', "Please don't go outside!");
   };
 };
 
@@ -329,12 +333,12 @@ let generateGeocodingData = (data) => {
     if (item.types.hasOwnProperty('0')) {
       if (item.types[0] === 'locality') {
         geoCity = item.long_name;
-        console.log('geoCity:', geoCity);
+        //console.log('geoCity:', geoCity);
         // return geoCity;
       };
       if (item.types[0] === 'administrative_area_level_1') {
         geoState = item.short_name;
-        console.log('geoState:', geoState);
+        //console.log('geoState:', geoState);
         if (geoState !== 'MA') {
           BootstrapDialog.show({
             title: 'Out of the State?',
@@ -390,7 +394,7 @@ let generateRoutesByStopData = (data) => {
   data.mode[0].route.forEach(item => {
     busRouteID.push(`${item.route_id}`);
   });
-  console.log('busRouteID:', busRouteID);
+  //console.log('busRouteID:', busRouteID);
 };
 
 let displayData = (data, display) => {
@@ -398,42 +402,42 @@ let displayData = (data, display) => {
   switch (display) {
 
     case 'RoutesData':
-      console.log("displayRoutesData: ", data);
+      //console.log("displayRoutesData: ", data);
       generateRoutesData(data);
       break;
 
     case 'BusStopData':
-      console.log('displayBusStopData :', data);
+      //console.log('displayBusStopData :', data);
       generateBusStopData(data);
       break;
 
     case 'PreditionsByStopData':
-      console.log('displayPreditionsByStop data: ', data);
+      //console.log('displayPreditionsByStop data: ', data);
       generatePreditionsByStopData(data);
       break;
 
     case 'WUData':
-      console.log("displayWUData: ", data);
+      //console.log("displayWUData: ", data);
       generateWeatherUndergroundData(data);
       break;
 
     case 'DarkSkyData':
-      console.log('DarkSkyData: ', data);
+      //console.log('DarkSkyData: ', data);
       generateDarkSkyData(data);
       break;
 
     case 'GeocodingData':
-      console.log('GeocodingData', data);
+      //console.log('GeocodingData', data);
       generateGeocodingData(data);
       break;
 
     case 'StopByLocation':
-      console.log('StopByLocationData:', data);
+      //console.log('StopByLocationData:', data);
       generateStopByLocationData(data);
       break;
 
     case 'RoutesByStop':
-      console.log('RoutesByStopData:', data);
+      //console.log('RoutesByStopData:', data);
       generateRoutesByStopData(data);
       break;
   }
@@ -449,7 +453,7 @@ let recursiveIteration = (object) => {
       } else {
         //found a property which is not an object, check for your conditions here
         if (property === 'pre_away') {
-          console.log('math.min(object[property]) :', object[property]);
+          //console.log('math.min(object[property]) :', object[property]);
           //to display only the next bus
           minTime = (minTime === 0) ? object[property] : Math.min(object[property], minTime);
           //to display all the trips for that specific stop
@@ -543,6 +547,9 @@ let showPosition = (position) => {
 };
 
 let getGeoLocation = () => {
+  if (!MBTAQuery.lat) {
+    return false;
+  }
   getDataFromApi(endPoints.MBTAStopsByLocation, MBTAQuery, 'StopByLocation');
   hideShow(['.loading-bar'], ['.cd-container']);
   $('.find-bus-by-route').css('pointer-events', 'auto');
@@ -576,12 +583,8 @@ let appendContentData = () => {
 }
 
 let createEventListeners = () => {
-
-  $('.btn-close-splash').on('click', (event) => {
-    $('#splash').remove();
-  });
-
   $('.find-bus-by-location').on('click', (event) => {
+    MBTAQuery = {};
     geoState = null;
     isOutOfState = null;
     getClearMSG('all');
@@ -592,6 +595,7 @@ let createEventListeners = () => {
   });
 
   $('.find-bus-by-route').on('click', (event) => {
+    MBTAQuery = {};
     getClearMSG('all');
     toggleMode = 'routes';
     hideShow(['.by-location-opts', '.cd-container'], ['.by-route-opts'])
@@ -629,12 +633,6 @@ let createEventListeners = () => {
       hideShow([], ['.cd-container']);
     }
   });
-
-  $(window).resize(event => {
-    console.log('event:', event);
-    $('#static-map').attr('width', $('.bus-container').width() - $('#static-map').attr('data-padding-left'));
-  });
-
 };
 
 const renderApp = () => {
