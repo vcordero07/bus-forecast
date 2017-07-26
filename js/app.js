@@ -55,7 +55,20 @@ let getDataFromApi = (searchTerm, query, callback) => {
     .fail(function(data) {
       //console.log('error data:', data);
       if (data.status === 404) {
-        $('.error-catch-message').html(`<br><br>${data.responseText}`);
+        // $('.error-catch-message').html(`<br><br>${data.responseText}`);
+        hideShow(['.stops-title'], []);
+        BootstrapDialog.show({
+          title: 'Ohoh - 404 MBTA Error:',
+          message: `${data.responseText}<br><br>
+          It looks like that bus is not working. Please try again later.`,
+          type: BootstrapDialog.TYPE_WARNING,
+          buttons: [{
+            label: 'Close',
+            action: function(dialogRef) {
+              dialogRef.close();
+            }
+          }]
+        });
       }
     });
 };
@@ -71,7 +84,19 @@ let getWUDataFromApi = (searchTerm, lat, lon, callback) => {
     .fail(function(data) {
       //console.log('error data:', data);
       if (data.status === 404) {
-        $('.error-catch-message').html(`<br><br>${data.responseText}`);
+        //$('.error-catch-message').html(`<br><br>${data.responseText}`);
+        hideShow(['.stops-title'], []);
+        BootstrapDialog.show({
+          title: 'Ohoh - 404 WeatherUnderground Error:',
+          message: `${data.responseText}`,
+          type: BootstrapDialog.TYPE_WARNING,
+          buttons: [{
+            label: 'Close',
+            action: function(dialogRef) {
+              dialogRef.close();
+            }
+          }]
+        });
       }
     });
 };
@@ -88,7 +113,19 @@ let getDKDataFromApi = (searchTerm, lat, lon, callback) => {
     .fail(function(data) {
       //console.log('error data:', data);
       if (data.status === 404) {
-        $('.error-catch-message').html(`<br><br>${data.responseText}`);
+        //$('.error-catch-message').html(`<br><br>${data.responseText}`);
+        hideShow(['.stops-title'], []);
+        BootstrapDialog.show({
+          title: 'Ohoh - 404 DarkSky Error:',
+          message: `${data.responseText}`,
+          type: BootstrapDialog.TYPE_WARNING,
+          buttons: [{
+            label: 'Close',
+            action: function(dialogRef) {
+              dialogRef.close();
+            }
+          }]
+        });
       }
     });
 };
@@ -99,7 +136,9 @@ let getMapsData = (lat, lon, RoutesMap = null, RoutesPath = null) => {
   let mapElement;
   let imgWidth = ($(window).width() < 400) ? 345 : 400;
   let imgHeight = ($(window).width() < 400) ? 320 : 600;
-
+  // console.log('busDirection:', busDirection);
+  // console.log('(busDirection === 0):', (busDirection === '0'));
+  let routeDirection = (busDirection === '0') ? 'Outbound' : 'Inbound';
   if (RoutesMap) {
     //console.log('RoutesPath:', RoutesPath);
     //console.log('toggleMode:', toggleMode);
@@ -112,7 +151,7 @@ let getMapsData = (lat, lon, RoutesMap = null, RoutesPath = null) => {
     } else if (toggleMode === 'routes') {
       resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&path=color:0xff0000ff|weight:1${RoutesPath}${RoutesMap}&style=feature:poi|visibility:off&size=${imgWidth}x${imgHeight}&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
       $('.route-map').html(`
-      <div class="map-title"><h5>Route Map</h5></div>
+      <div class="map-title"><h5>Route ${routeDirection} Map</h5></div>
       <img id="route-static-map" src = "${resultElement}" alt = "Route Map ${lat}, ${lon}" height="${imgHeight}" width="${imgWidth}" >
       `);
     }
@@ -566,7 +605,7 @@ let getGeoLocation = () => {
     return false;
   }
   getDataFromApi(endPoints.MBTAStopsByLocation, MBTAQuery, 'StopByLocation');
-  hideShow(['.loading-bar'], ['.cd-container']);
+  hideShow(['.loading-bar'], ['.cd-container', '.route-map-container']);
   $('.find-bus-by-route').css('pointer-events', 'auto');
   MBTAQuery = {};
 };
@@ -600,6 +639,22 @@ let appendContentData = () => {
 let createEventListeners = () => {
   $('[data-toggle="tooltip"]').tooltip();
 
+  $('.img-logo').on('click', (event) => {
+    BootstrapDialog.show({
+      title: `<img src="img/bus-forecast-Logo-64.png" alt="Bus Forecast Logo" width="64" height="64"> Bus Forecast`,
+      message: `Do you live in MA? Do you commute/use the MBTA?
+      <br>If yes, there are two things that you need to do before you leave home, check the weather and check when the next bus arrives.
+      <br>Bus Forecast achieve these two things. You have two options to search for, by Routes or by Nearby location. Routes provides a list of all the buses available and you can pick the one that you need. Nearby, gives you a list with the nearest 15 bus stops around your location. `,
+      type: BootstrapDialog.TYPE_PRIMARY,
+      buttons: [{
+        label: 'Close',
+        action: function(dialogRef) {
+          dialogRef.close();
+        }
+      }]
+    });
+  });
+
   $('.find-bus-by-location').on('click', (event) => {
     MBTAQuery = {};
     geoState = null;
@@ -607,7 +662,7 @@ let createEventListeners = () => {
     getClearMSG('all');
     toggleMode = 'nearby';
     $('.find-bus-by-route').css('pointer-events', 'none');
-    hideShow(['.by-route-opts', '.cd-container'], ['.by-location-opts', '.loading-bar']);
+    hideShow(['.find-bus-by-route', '.by-route-opts', '.cd-container'], ['.options-btn', '.by-location-opts', '.loading-bar']);
     getLocation();
   });
 
@@ -617,7 +672,7 @@ let createEventListeners = () => {
     $('select').selectpicker("refresh");
     getClearMSG('all');
     toggleMode = 'routes';
-    hideShow(['.by-location-opts', '.cd-container'], ['.by-route-opts'])
+    hideShow(['.search-by-opts', '.by-location-opts', '.cd-container'], ['.options-btn', '.by-route-opts'])
   });
 
   $('.bus-stop-list').on('click', 'li', (event) => {
@@ -652,10 +707,15 @@ let createEventListeners = () => {
       hideShow([], ['.cd-container']);
     }
   });
+
+  $('.options-btn').on('click', (event) => {
+    hideShow(['.by-location-opts', '.by-route-opts', '.cd-container', '.bus-message', '#bus-weather-info', '#map-info', '.route-map-container', '.loading-bar'], ['.search-by-opts']);
+    hideShow(['.options-btn'], []);
+  });
 };
 
 const renderApp = () => {
-  hideShow(['.by-location-opts', '.by-route-opts', '.cd-container', '.bus-message', '#bus-weather-info', '#map-info', '.loading-bar'], [])
+  hideShow(['.options-btn', '.by-location-opts', '.by-route-opts', '.cd-container', '.bus-message', '#bus-weather-info', '#map-info', '.loading-bar'], [])
   getDataFromApi(endPoints.MBTARoutes, MBTAQuery, 'RoutesData');
   createEventListeners();
   BootstrapDialog.show({

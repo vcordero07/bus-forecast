@@ -74,12 +74,20 @@ h6 {
   .direction-btns {
    display: none;
  }
+  /*.nav-btns {
+    display: none;
+  }*/
+
+  .img-logo {
+    width: 34px;
+    height: 34px;
+  }
  .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
-     width: 178px;
+     width: 174px;
  }
 
 }
-@media (min-width: 768px) {
+@media (min-width: 700px) {
   .route-map-container.col-sm-6 {
     float: right;
   }
@@ -115,7 +123,8 @@ h6 {
 }
 
 .bus-selector,
-.search-by-opts {
+.search-by-opts,
+.options-btn {
   background-color: #3498DB;
   border-color: #2980D9;
   border-radius: 3px;
@@ -123,7 +132,8 @@ h6 {
 }
 
 .bus-selector,
-.search-by-opts:hover {
+.search-by-opts:hover,
+.options-btn:hover {
   background-color: #2980D9;
   border-color: #2980D9;
   color: #fff;
@@ -131,12 +141,17 @@ h6 {
 
 .bus-selector,
 .search-by-opts,
+.options-btn,
 #bus-list {
   margin-bottom: 5px;
   margin-right: 5px;
 }
 
 .by-route-opts>.direction-opt {
+  vertical-align: top;
+}
+
+.options-btn {
   vertical-align: top;
 }
 
