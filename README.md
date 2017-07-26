@@ -20,11 +20,11 @@ Bus Forecast achieve these two things. You have two options to search for, by Ro
 ---
 ## Screenshots
 
-![Screenshot-1](https://github.com/vcordero07/bus-forecast/raw/master/img/Screenshot-1.png "Screenshot-1")
-![Screenshot-2](https://github.com/vcordero07/bus-forecast/raw/master/img/Screenshot-2.png "Screenshot-2")
+![Screenshot-1](https://github.com/vcordero07/bus-forecast/raw/uat/img/Screenshot-1.png "Screenshot-1")
+![Screenshot-2](https://github.com/vcordero07/bus-forecast/raw/uat/img/Screenshot-2.png "Screenshot-2")
 
-![Screenshot-3](https://github.com/vcordero07/bus-forecast/raw/master/img/Screenshot-3.png "Screenshot-3")
-![Screenshot-4](https://github.com/vcordero07/bus-forecast/raw/master/img/Screenshot-4.png "Screenshot-4")
+![Screenshot-3](https://github.com/vcordero07/bus-forecast/raw/uat/img/Screenshot-3.png "Screenshot-3")
+![Screenshot-4](https://github.com/vcordero07/bus-forecast/raw/uat/img/Screenshot-4.png "Screenshot-4")
 
 ---
 ## Live Site
