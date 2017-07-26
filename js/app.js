@@ -583,18 +583,15 @@ let getLocation = () => {
 };
 
 let showPosition = (position) => {
-  // strLat = position.coords.latitude;
-  // strLon = position.coords.longitude;
-  // MBTAQuery.lat = position.coords.latitude;
-  // MBTAQuery.lon = position.coords.longitude;
+  strLat = position.coords.latitude;
+  strLon = position.coords.longitude;
+  MBTAQuery.lat = position.coords.latitude;
+  MBTAQuery.lon = position.coords.longitude;
 
   //harvard lat and lon// strLat = '42.373716';// strLon = '-71.100371';// MBTAQuery.lat = '42.373716';// MBTAQuery.lon = '-71.100371';
   //Honolulu, HI, USA//lat = 21.315603//lon = -157.858093
   //SFO lat and lon//lat = 	37.773972//lon =  -122.431297
-  strLat = '37.773972';
-  strLon = '-122.431297';
-  MBTAQuery.lat = '37.773972';
-  MBTAQuery.lon = '-122.431297';
+  //strLat = '37.773972';strLon = '-122.431297';MBTAQuery.lat = '37.773972'; MBTAQuery.lon = '-122.431297';
 
   geoQuery.latlng = `${strLat}, ${strLon}`;
   getDataFromApi(endPoints.gglMapsGeocode, geoQuery, 'GeocodingData');
