@@ -88,9 +88,9 @@ h6 {
 
 }
 @media (min-width: 700px) {
-  .route-map-container.col-sm-6 {
+  /*.route-map-container.col-sm-6 {
     float: right;
-  }
+  }*/
   .direction-opt {
     float: none;
   }
