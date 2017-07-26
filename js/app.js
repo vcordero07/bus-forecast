@@ -95,12 +95,9 @@ let getDKDataFromApi = (searchTerm, lat, lon, callback) => {
 
 
 let getMapsData = (lat, lon, RoutesMap = null, RoutesPath = null) => {
-
   //console.log('lat, lon:', lat, lon);
   let mapElement;
   let imgWidth = ($(window).width() < 400) ? 345 : 400;
-  // let imgHeight = ($(window).width() < 400) ? 320 : 600;
-  // let imgWidth = ($(window).width() < 400) ? Math.max(320, $(window).width()) : 400;
   let imgHeight = ($(window).width() < 400) ? 320 : 600;
 
   if (RoutesMap) {
@@ -125,6 +122,14 @@ let getMapsData = (lat, lon, RoutesMap = null, RoutesPath = null) => {
     <div class="map-title"><h5>${busStopName} Map</h5></div>
     <img id="static-map" src = "${resultElement}" alt = "Bus Stop Map ${lat}, ${lon}" height="${imgHeight}" width="${imgWidth}" >
     `);
+  }
+  // console.log(($(window).width() < 400));
+  if ($(window).width() < 400) {
+    $('.map-title').removeClass('screen-width').addClass('sm-screen-width');
+    $('.stops-title').removeClass('screen-width').addClass('sm-screen-width');
+  } else {
+    $('.map-title').removeClass('sm-screen-width').addClass('screen-width');
+    $('.stops-title').removeClass('sm-screen-width').addClass('screen-width');
   }
 }
 
@@ -497,7 +502,19 @@ let getSkyIcons = (event) => {
 
 let getBusDirection = event => {
   if ($('select').val() === "") {
-    $('.error-catch-message').html('<br><br><p>Please select a valid route.</p>');
+    hideShow(['.stops-title'], [])
+    BootstrapDialog.show({
+      title: 'Warning',
+      message: 'Please select a route.',
+      type: BootstrapDialog.TYPE_WARNING,
+      buttons: [{
+        label: 'Close',
+        action: function(dialogRef) {
+          dialogRef.close();
+        }
+      }]
+    });
+    // $('.error-catch-message').html('<br><br><p>Please select a route.</p>');
   } else {
     // getClearMSG('all');
     MBTAQuery.route = $('select').val();
@@ -581,6 +598,8 @@ let appendContentData = () => {
 }
 
 let createEventListeners = () => {
+  $('[data-toggle="tooltip"]').tooltip();
+
   $('.find-bus-by-location').on('click', (event) => {
     MBTAQuery = {};
     geoState = null;

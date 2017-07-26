@@ -26,9 +26,9 @@
     </header>
 
     <nav role="navigation">
-      <a class="btn btn-primary find-bus-by-route search-by-opts" href="#">
+      <a class="btn btn-primary find-bus-by-route search-by-opts" href="#" data-toggle="tooltip" data-placement="top" title="Routes">
       <i class="fa fa-bus"></i><span class="nav-btns"> Routes</span></a>
-      <a class="btn btn-primary find-bus-by-location search-by-opts" href="#">
+      <a class="btn btn-primary find-bus-by-location search-by-opts" href="#" data-toggle="tooltip" data-placement="top" title="Nearby">
       <i class="fa fa-map-marker"></i><span class="nav-btns"> Nearby</span></a>
 
       <div class="by-location-opts">
@@ -43,8 +43,8 @@
         </select>
 
         <div class="btn-group direction-opt" data-toggle='buttons' role="menuitemradio">
-          <label for="bus-outbound" class="btn btn-primary active btn-direction"><i class="fa fa-arrow-down" aria-hidden="true"></i><input type="radio" name="bus-direction" checked value="0"><span class="direction-btns"> Outbound</span></label>
-          <label for="bus-inbound" class="btn btn-primary btn-direction"><i class="fa fa-arrow-up" aria-hidden="true"></i><input type="radio" name="bus-direction" value="1"><span class="direction-btns"> Inbound</span></label>
+          <label for="bus-outbound" class="btn btn-primary active btn-direction" data-toggle="tooltip" data-placement="top" title="Outbound"><i class="fa fa-arrow-down" aria-hidden="true"></i><input type="radio" name="bus-direction" title="Outbound" checked value="0"><span class="direction-btns"> Outbound</span></label>
+          <label for="bus-inbound" class="btn btn-primary btn-direction" data-toggle="tooltip" data-placement="top" title="Inbound"><i class="fa fa-arrow-up" aria-hidden="true"></i><input type="radio" name="bus-direction" title="Inbound" value="1"><span class="direction-btns"> Inbound</span></label>
         </div>
       </div>
     </nav>
