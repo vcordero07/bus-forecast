@@ -1,4 +1,4 @@
-# ![Bus Forecast](https://github.com/vcordero07/bus-forecast/raw/uat/img/bus-forecast-Logo-64.png "Bus Forecast") [Bus Forecast](https://vcordero07.github.io/bus-forecast/)
+# ![Bus Forecast](https://github.com/vcordero07/bus-forecast/raw/master/img/bus-forecast-Logo-64.png "Bus Forecast") [Bus Forecast](https://vcordero07.github.io/bus-forecast/)
 This is a MBTA app with bus predictions by stop or location, as well as the weather for that location.
 
 ---
