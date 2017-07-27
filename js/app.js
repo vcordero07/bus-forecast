@@ -199,6 +199,7 @@ let generateRoutesData = (data) => {
 let generateBusStopData = (data) => {
   let imgMarkerStr = "";
   let imgMarkerPath = "";
+  hideShow([], ['.route-map-container']);
 
   resultElement = '';
   data.direction[busDirection].stop.forEach(item => {
