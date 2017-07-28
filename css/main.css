@@ -98,6 +98,16 @@ h6 {
 }
 
 /*-----header------*/
+
+.fullBgImg {
+  background: url(../img/bg.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+
 .Title {
   /*background-color: #E67E22;*/
   background-color: #ecf0f1;

@@ -752,7 +752,7 @@ let createEventListeners = () => {
 };
 
 const renderApp = () => {
-  hideShow(['.options-btn', '.by-location-opts', '.by-route-opts', '.cd-container', '.bus-message', '#bus-weather-info', '#map-info', '.loading-bar'], [])
+  hideShow(['.wrapper', 'footer', '.options-btn', '.by-location-opts', '.by-route-opts', '.cd-container', '.bus-message', '#bus-weather-info', '#map-info', '.loading-bar'], [])
   getDataFromApi(endPoints.MBTARoutes, MBTAQuery, 'RoutesData');
   createEventListeners();
   BootstrapDialog.show({
@@ -765,8 +765,11 @@ const renderApp = () => {
       label: 'Close',
       action: function(dialogRef) {
         dialogRef.close();
+        $('body').removeClass('fullBgImg');
+        hideShow([], ['.wrapper', '.footer']);
       }
     }]
+
   });
 };
 
