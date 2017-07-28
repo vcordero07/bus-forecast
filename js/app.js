@@ -761,6 +761,10 @@ const renderApp = () => {
     <br>If yes, there are two things that you need to do before you leave home, check the weather and check when the next bus arrives.
     <br>Bus Forecast achieve these two things. You have two options to search for, by Routes or by Nearby location. Routes provides a list of all the buses available and you can pick the one that you need. Nearby, gives you a list with the nearest 15 bus stops around your location. `,
     type: BootstrapDialog.TYPE_PRIMARY,
+    onhide: function(dialogRef) {
+      $('body').removeClass('fullBgImg');
+      hideShow([], ['.wrapper', '.footer']);
+    },
     buttons: [{
       label: 'Close',
       action: function(dialogRef) {
