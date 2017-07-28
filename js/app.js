@@ -129,41 +129,42 @@ let getDKDataFromApi = (searchTerm, lat, lon, callback) => {
       }
     });
 };
-
+let getScreenWidth = () => {
+  return ($(window).width() < 400) ? 345 : 400;
+};
 
 let getMapsData = (lat, lon, RoutesMap = null, RoutesPath = null) => {
   //console.log('lat, lon:', lat, lon);
   let mapElement;
-  let imgWidth = ($(window).width() < 400) ? 345 : 400;
+  let paddingLeft = getScreenWidth();
+  let imgWidth = getScreenWidth();
   let imgHeight = ($(window).width() < 400) ? 320 : 600;
   // console.log('busDirection:', busDirection);
   // console.log('(busDirection === 0):', (busDirection === '0'));
   let routeDirection = (busDirection === '0') ? 'Outbound' : 'Inbound';
   if (RoutesMap) {
-    //console.log('RoutesPath:', RoutesPath);
-    //console.log('toggleMode:', toggleMode);
     if (toggleMode === 'nearby') {
       resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}${RoutesMap}&style=feature:poi|visibility:off&size=${imgWidth}x${imgHeight}&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
       $('.route-map').html(`
       <div class="map-title"><h5>Nearby Map</h5></div>
-      <img id="route-static-map" src = "${resultElement}" alt = "Route Map ${lat}, ${lon}" height="${imgHeight}" width="${imgWidth}" >
+      <img id="nearby-static-map" data-padding-left="${paddingLeft}" src = "${resultElement}" alt = "Nearby Map ${lat}, ${lon}" height="${imgHeight}" width="${imgWidth}" >
       `);
     } else if (toggleMode === 'routes') {
       resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&path=color:0xff0000ff|weight:1${RoutesPath}${RoutesMap}&style=feature:poi|visibility:off&size=${imgWidth}x${imgHeight}&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
       $('.route-map').html(`
       <div class="map-title"><h5>Route ${routeDirection} Map</h5></div>
-      <img id="route-static-map" src = "${resultElement}" alt = "Route Map ${lat}, ${lon}" height="${imgHeight}" width="${imgWidth}" >
+      <img id="route-static-map" data-padding-left="${paddingLeft}" src = "${resultElement}" alt = "Route Map ${lat}, ${lon}" height="${imgHeight}" width="${imgWidth}" >
       `);
     }
   } else {
     resultElement = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&markers=size:mid%7Ccolor:0xff0000|${lat},${lon}&style=feature:poi|visibility:off&size=${imgWidth}x${imgHeight}&sensor=false&key=AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88`;
     $('.map-stop-location').html(`
     <div class="map-title"><h5>${busStopName} Map</h5></div>
-    <img id="static-map" src = "${resultElement}" alt = "Bus Stop Map ${lat}, ${lon}" height="${imgHeight}" width="${imgWidth}" >
+    <img id="static-map" data-padding-left="${paddingLeft}" src = "${resultElement}" alt = "Bus Stop Map ${lat}, ${lon}" height="${imgHeight}" width="${imgWidth}" >
     `);
   }
   // console.log(($(window).width() < 400));
-  if ($(window).width() < 400) {
+  if (getScreenWidth() < 400) {
     $('.map-title').removeClass('screen-width').addClass('sm-screen-width');
     $('.stops-title').removeClass('screen-width').addClass('sm-screen-width');
   } else {
@@ -199,7 +200,7 @@ let generateRoutesData = (data) => {
 let generateBusStopData = (data) => {
   let imgMarkerStr = "";
   let imgMarkerPath = "";
-  hideShow([], ['.route-map-container']);
+  // hideShow([], ['.route-map-container']);
 
   resultElement = '';
   data.direction[busDirection].stop.forEach(item => {
@@ -603,7 +604,7 @@ let getGeoLocation = () => {
     return false;
   }
   getDataFromApi(endPoints.MBTAStopsByLocation, MBTAQuery, 'StopByLocation');
-  hideShow(['.loading-bar'], ['.cd-container', '.route-map-container']);
+  hideShow(['.loading-bar'], ['.cd-container']);
   $('.find-bus-by-route').css('pointer-events', 'auto');
   MBTAQuery = {};
 };
@@ -661,6 +662,7 @@ let createEventListeners = () => {
     toggleMode = 'nearby';
     $('.find-bus-by-route').css('pointer-events', 'none');
     hideShow(['.find-bus-by-route', '.by-route-opts', '.cd-container'], ['.options-btn', '.by-location-opts', '.loading-bar']);
+    hideShow([], ['.route-map-container']);
     getLocation();
   });
 
@@ -670,7 +672,8 @@ let createEventListeners = () => {
     $('select').selectpicker("refresh");
     getClearMSG('all');
     toggleMode = 'routes';
-    hideShow(['.search-by-opts', '.by-location-opts', '.cd-container'], ['.options-btn', '.by-route-opts'])
+    hideShow(['.search-by-opts', '.by-location-opts', '.cd-container'], ['.options-btn', '.by-route-opts']);
+    hideShow([], ['.route-map-container']);
   });
 
   $('.bus-stop-list').on('click', 'li', (event) => {
@@ -710,6 +713,42 @@ let createEventListeners = () => {
     hideShow(['.by-location-opts', '.by-route-opts', '.cd-container', '.bus-message', '#bus-weather-info', '#map-info', '.route-map-container', '.loading-bar'], ['.search-by-opts']);
     hideShow(['.options-btn'], []);
   });
+
+  $(window).resize(event => {
+    //console.log('event:', event);
+    if (getScreenWidth() < 400) {
+      $('.map-title').removeClass('screen-width').addClass('sm-screen-width');
+      $('.stops-title').removeClass('screen-width').addClass('sm-screen-width');
+      $('#static-map').attr({
+        width: 345,
+        height: 320
+      });
+      $('#route-static-map').attr({
+        width: 345,
+        height: 320
+      });
+      $('#nearby-static-map').attr({
+        width: 345,
+        height: 320
+      });
+    } else {
+      $('.map-title').removeClass('sm-screen-width').addClass('screen-width');
+      $('.stops-title').removeClass('sm-screen-width').addClass('screen-width');
+      $('#static-map').attr({
+        width: 400,
+        height: 600
+      });
+      $('#route-static-map').attr({
+        width: 400,
+        height: 600
+      });
+      $('#nearby-static-map').attr({
+        width: 400,
+        height: 600
+      });
+    }
+  });
+
 };
 
 const renderApp = () => {
