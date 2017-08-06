@@ -638,9 +638,9 @@ let appendContentData = () => {
 let createEventListeners = () => {
   $('[data-toggle="tooltip"]').tooltip();
 
-  $('.img-logo').on('click', (event) => {
+  $('.info-btn').on('click', (event) => {
     BootstrapDialog.show({
-      title: `<img src="img/bus-forecast-Logo-64.png" alt="Bus Forecast Logo" width="64" height="64"> Bus Forecast`,
+      title: `<img src="img/bus-forecast-Logo-64.png" alt="Bus Forecast Logo" width="64" height="64"> <div class="logo">Bus<span class="txt-bolder">Forecast</span></div>`,
       message: `Do you live in MA? Do you commute/use the MBTA?
       <br>If yes, there are two things that you need to do before you leave home, check the weather and check when the next bus arrives.
       <br>Bus Forecast achieve these two things. You have two options to search for, by Routes or by Nearby location. Routes provides a list of all the buses available and you can pick the one that you need. Nearby, gives you a list with the nearest 15 bus stops around your location. `,
@@ -755,26 +755,26 @@ const renderApp = () => {
   hideShow(['.wrapper', 'footer', '.options-btn', '.by-location-opts', '.by-route-opts', '.cd-container', '.bus-message', '#bus-weather-info', '#map-info', '.loading-bar'], [])
   getDataFromApi(endPoints.MBTARoutes, MBTAQuery, 'RoutesData');
   createEventListeners();
-  BootstrapDialog.show({
-    title: `<img src="img/bus-forecast-Logo-64.png" alt="Bus Forecast Logo" width="64" height="64"> Bus Forecast`,
-    message: `Do you live in MA? Do you commute/use the MBTA?
-    <br>If yes, there are two things that you need to do before you leave home, check the weather and check when the next bus arrives.
-    <br>Bus Forecast achieve these two things. You have two options to search for, by Routes or by Nearby location. Routes provides a list of all the buses available and you can pick the one that you need. Nearby, gives you a list with the nearest 15 bus stops around your location. `,
-    type: BootstrapDialog.TYPE_PRIMARY,
-    onhide: function(dialogRef) {
-      $('body').removeClass('fullBgImg');
-      hideShow([], ['.wrapper', '.footer']);
-    },
-    buttons: [{
-      label: 'Close',
-      action: function(dialogRef) {
-        dialogRef.close();
-        $('body').removeClass('fullBgImg');
-        hideShow([], ['.wrapper', '.footer']);
-      }
-    }]
-
-  });
+  // BootstrapDialog.show({
+  //   title: `<img src="img/bus-forecast-Logo-64.png" alt="Bus Forecast Logo" width="64" height="64"> Bus Forecast`,
+  //   message: `Do you live in MA? Do you commute/use the MBTA?
+  //   <br>If yes, there are two things that you need to do before you leave home, check the weather and check when the next bus arrives.
+  //   <br>Bus Forecast achieve these two things. You have two options to search for, by Routes or by Nearby location. Routes provides a list of all the buses available and you can pick the one that you need. Nearby, gives you a list with the nearest 15 bus stops around your location. `,
+  //   type: BootstrapDialog.TYPE_PRIMARY,
+  //   onhide: function(dialogRef) {
+  //     $('body').removeClass('fullBgImg');
+  //     hideShow([], ['.wrapper', '.footer']);
+  //   },
+  //   buttons: [{
+  //     label: 'Close',
+  //     action: function(dialogRef) {
+  //       dialogRef.close();
+  //       $('body').removeClass('fullBgImg');
+  //       hideShow([], ['.wrapper', '.footer']);
+  //     }
+  //   }]
+  $('body').removeClass('fullBgImg');
+  hideShow([], ['.wrapper', '.footer']);
 };
 
 $(document).ready(renderApp);

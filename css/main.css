@@ -1,6 +1,8 @@
 * {
   box-sizing: border-box;
-  font-family: 'Roboto', sans-serif;
+  /*font-family: 'Roboto', sans-serif;*/
+  font-family: 'Raleway', sans-serif;
+
 }
 
 /*------generic classes-------*/
@@ -11,9 +13,12 @@ html, body {
 body {
   background-color: #ecf0f1;
   margin: 0 auto;
-  max-width: 960px;
-  min-width: 250px;
+  /*max-width: 960px;
+  min-width: 250px;*/
+  line-height: 1.45;
   padding: 5px 15px;
+  display: flex;
+  flex-wrap: wrap;
 }
 a,
 a:focus,
@@ -137,7 +142,7 @@ h6 {
 .search-by-opts,
 .options-btn {
   background-color: #3498DB;
-  border-color: #2980D9;
+  /*border-color: #2980D9;*/
   border-radius: 3px;
   color: #fff;
 }
@@ -419,3 +424,49 @@ h6 {
     width: 90%;
     margin: 10px auto;
 }*/
+
+
+.sidebar {
+  background: #3498DB;
+  flex: 1 1 20%;
+  min-width: 100%;
+  padding: 1em;
+}
+
+.nav-item {
+  color: #000;
+  text-decoration: none;
+  font-size: 1.7rem;
+  display: inline-block;
+  margin-right: 2em;
+  }
+  &.active {
+    color: #c4c4c4;
+  }
+
+.logo {
+  display: inline-block;
+  text-transform: uppercase;
+  margin-bottom: 2.5em;
+  color: #000;
+
+}
+.txt-bolder {
+  font-weight: bold;
+}
+
+.main-content {
+  flex: 1 1 80%;
+  min-height: 100vh;
+
+}
+
+@media (min-width: 1500px) {
+  .nav-item {
+    display: block;
+    margin: 7vh 0;
+  }
+  .logo{
+    margin-bottom: 5em;
+  }
+}
