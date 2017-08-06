@@ -167,9 +167,11 @@ let getMapsData = (lat, lon, RoutesMap = null, RoutesPath = null) => {
   if (getScreenWidth() < 400) {
     $('.map-title').removeClass('screen-width').addClass('sm-screen-width');
     $('.stops-title').removeClass('screen-width').addClass('sm-screen-width');
+    $('.list-group').removeClass('screen-width').addClass('sm-screen-width');
   } else {
     $('.map-title').removeClass('sm-screen-width').addClass('screen-width');
     $('.stops-title').removeClass('sm-screen-width').addClass('screen-width');
+    $('.list-group').removeClass('sm-screen-width').addClass('screen-width');
   }
 }
 
@@ -661,7 +663,7 @@ let createEventListeners = () => {
     getClearMSG('all');
     toggleMode = 'nearby';
     $('.find-bus-by-route').css('pointer-events', 'none');
-    hideShow(['.find-bus-by-route', '.by-route-opts', '.cd-container'], ['.options-btn', '.by-location-opts', '.loading-bar']);
+    hideShow(['.by-route-opts', '.cd-container'], ['.by-location-opts', '.loading-bar']);
     hideShow([], ['.route-map-container']);
     getLocation();
   });
@@ -672,7 +674,7 @@ let createEventListeners = () => {
     $('select').selectpicker("refresh");
     getClearMSG('all');
     toggleMode = 'routes';
-    hideShow(['.search-by-opts', '.by-location-opts', '.cd-container'], ['.options-btn', '.by-route-opts']);
+    hideShow(['.by-location-opts', '.cd-container'], ['.by-route-opts']);
     hideShow([], ['.route-map-container']);
   });
 
@@ -719,6 +721,7 @@ let createEventListeners = () => {
     if (getScreenWidth() < 400) {
       $('.map-title').removeClass('screen-width').addClass('sm-screen-width');
       $('.stops-title').removeClass('screen-width').addClass('sm-screen-width');
+      $('.list-group').removeClass('screen-width').addClass('sm-screen-width');
       $('#static-map').attr({
         width: 345,
         height: 320
@@ -734,6 +737,7 @@ let createEventListeners = () => {
     } else {
       $('.map-title').removeClass('sm-screen-width').addClass('screen-width');
       $('.stops-title').removeClass('sm-screen-width').addClass('screen-width');
+      $('.list-group').removeClass('sm-screen-width').addClass('screen-width');
       $('#static-map').attr({
         width: 400,
         height: 600
@@ -755,25 +759,6 @@ const renderApp = () => {
   hideShow(['.wrapper', 'footer', '.options-btn', '.by-location-opts', '.by-route-opts', '.cd-container', '.bus-message', '#bus-weather-info', '#map-info', '.loading-bar'], [])
   getDataFromApi(endPoints.MBTARoutes, MBTAQuery, 'RoutesData');
   createEventListeners();
-  // BootstrapDialog.show({
-  //   title: `<img src="img/bus-forecast-Logo-64.png" alt="Bus Forecast Logo" width="64" height="64"> Bus Forecast`,
-  //   message: `Do you live in MA? Do you commute/use the MBTA?
-  //   <br>If yes, there are two things that you need to do before you leave home, check the weather and check when the next bus arrives.
-  //   <br>Bus Forecast achieve these two things. You have two options to search for, by Routes or by Nearby location. Routes provides a list of all the buses available and you can pick the one that you need. Nearby, gives you a list with the nearest 15 bus stops around your location. `,
-  //   type: BootstrapDialog.TYPE_PRIMARY,
-  //   onhide: function(dialogRef) {
-  //     $('body').removeClass('fullBgImg');
-  //     hideShow([], ['.wrapper', '.footer']);
-  //   },
-  //   buttons: [{
-  //     label: 'Close',
-  //     action: function(dialogRef) {
-  //       dialogRef.close();
-  //       $('body').removeClass('fullBgImg');
-  //       hideShow([], ['.wrapper', '.footer']);
-  //     }
-  //   }]
-  $('body').removeClass('fullBgImg');
   hideShow([], ['.wrapper', '.footer']);
 };
 

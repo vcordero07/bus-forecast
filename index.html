@@ -19,25 +19,25 @@
 </head>
 
 
-<body class="fullBgImg">
-  <div class="wrapper">
-    <header role="banner">
-      <!-- LOGO -->
-      <!-- <h1 class="Title"><img src="img/bus-forecast-Logo-64.png" class="img-logo" alt="Bus Forecast Logo" width="64" height="64"> Bus Forecast</h1> -->
-    </header>
-    <div class="sidebar">
-      <!-- <div class="logo">Bus<span>Forecast</span></div> -->
-      <img src="img/bus-forecast-Logo-64.png" class="img-logo" alt="Bus Forecast Logo" width="64" height="64">
-      <div class="logo">Bus<span class="txt-bolder">Forecast</span></div>
-      <nav>
-        <a href="" class="nav-item" data-toggle="tooltip" data-placement="top" title="Home"><i class="fa fa-home"></i><span class="opt-btns"> Home</span></a>
-        <a href="#" class="nav-item find-bus-by-route search-by-opts" data-toggle="tooltip" data-placement="top" title="Routes"><i class="fa fa-bus"></i><span class="nav-btns"> Routes</span></a>
-        <a href="#" class="nav-item active find-bus-by-location search-by-opts" data-toggle="tooltip" data-placement="top" title="Nearby"><i class="fa fa-map-marker"></i><span class="nav-btns"> Nearby</span></a>
-        <a href="#" class="nav-item info-btn" data-toggle="tooltip" data-placement="top" title="Info"> <i class="fa fa-info-circle"></i><span class="opt-btns"> Info</span></a>
-      </nav>
-    </div>
+<body>
+  <!-- <div class="wrapper"> -->
+  <!-- <header role="banner"> -->
+  <!-- LOGO -->
+  <!-- <h1 class="Title"><img src="img/bus-forecast-Logo-64.png" class="img-logo" alt="Bus Forecast Logo" width="64" height="64"> Bus Forecast</h1> -->
+  <!-- </header> -->
+  <div class="sidebar">
+    <!-- <div class="logo">Bus<span>Forecast</span></div> -->
+    <div class="logo"><img src="img/bus-forecast-Logo-64.png" class="img-logo" alt="Bus Forecast Logo" width="64" height="64"> Bus
+      <span class="txt-bolder">Forecast</span></div>
+    <nav class="row">
+      <div class="col-xs-3 col-md-12"><a href="" class="nav-item" data-toggle="tooltip" data-placement="top" title="Home"><i class="fa fa-home"></i><span class="nav-btns"> Home</span></a></div>
+      <div class="col-xs-3 col-md-12"><a href="#" class="nav-item find-bus-by-route search-by-opts" data-toggle="tooltip" data-placement="top" title="Routes"><i class="fa fa-bus"></i><span class="nav-btns"> Routes</span></a></div>
+      <div class="col-xs-3 col-md-12"><a href="#" class="nav-item active find-bus-by-location search-by-opts" data-toggle="tooltip" data-placement="top" title="Nearby"><i class="fa fa-map-marker"></i><span class="nav-btns"> Nearby</span></a></div>
+      <div class="col-xs-3 col-md-12"><a href="#" class="nav-item info-btn" data-toggle="tooltip" data-placement="top" title="Info"> <i class="fa fa-info-circle"></i><span class="nav-btns"> Info</span></a></div>
+    </nav>
+  </div>
 
-
+  <div class="main-content">
 
     <nav role="navigation">
       <a class="btn btn-primary options-btn" href="#" data-toggle="tooltip" data-placement="top" title="Back">
@@ -67,34 +67,32 @@
       </div>
     </nav>
 
-    <div class="main-content">
 
-      <section id="bus-stop-info" class="row" role="main">
-        <div class="bus-container col-sm-6">
-          <div id="cd-timeline" class="cd-container">
-            <div class="error-catch-message"></div>
-            <div class="stops-title">
-              <h5>Stops</h5></div>
-            <ul class="list-group bus-stop-list"></ul>
-          </div>
+    <section id="bus-stop-info" class="row" role="main">
+      <div class="bus-container col-sm-6">
+        <div id="cd-timeline" class="cd-container">
+          <div class="error-catch-message"></div>
+          <div class="stops-title">
+            <h5>Stops</h5></div>
+          <ul class="list-group bus-stop-list"></ul>
         </div>
-        <div class="route-map-container col-sm-6 ">
-          <div class="route-map"></div>
-          <div class="map-stop-location"></div>
-        </div>
-      </section>
-
-    </div>
-
-    <div id="footer-content"></div>
-
-    <footer role="contentinfo">
-      &copy; Bus Forecast 2017 | Data by <a href="https://www.mbta.com/rider_tools/developers/" target="_blank">MBTA</a>,
-      <a href="https://darksky.net/dev/" target="_blank">DarkSky</a>,
-      <a href="https://developers.google.com/maps/" target="_blank">Google</a> | Skycons by <a href="https://forecast.io" target="_blank">Forecast</a> & <a href="https://adamwhitcroft.com/climacons/" target="_blank">Climacons</a>
-    </footer>
+      </div>
+      <div class="route-map-container col-sm-6 ">
+        <div class="route-map"></div>
+        <div class="map-stop-location"></div>
+      </div>
+    </section>
 
   </div>
+
+  <div id="footer-content"></div>
+
+  <footer role="contentinfo">
+    &copy; Bus Forecast 2017 | Data by <a href="https://www.mbta.com/rider_tools/developers/" target="_blank">MBTA</a>,
+    <a href="https://darksky.net/dev/" target="_blank">DarkSky</a>,
+    <a href="https://developers.google.com/maps/" target="_blank">Google</a> | Skycons by <a href="https://forecast.io" target="_blank">Forecast</a> & <a href="https://adamwhitcroft.com/climacons/" target="_blank">Climacons</a>
+  </footer>
+
 
   <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.js"></script>
