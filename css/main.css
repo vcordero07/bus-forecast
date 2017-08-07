@@ -526,10 +526,11 @@ h6 {
   min-height: 100vh;
 }
 
-@media (min-width: 1500px) {
+@media (min-width: 1514px) {
   .nav-item {
     display: block;
     margin: 7vh 0;
+    font-size: 2em;
   }
   .logo {
     margin-bottom: 5em;

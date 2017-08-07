@@ -130,7 +130,17 @@ let getDKDataFromApi = (searchTerm, lat, lon, callback) => {
     });
 };
 let getScreenWidth = () => {
-  return ($(window).width() < 400) ? 345 : 400;
+  console.log('$(window).width():', $(window).width());
+  if ($(window).width() < 400) {
+    console.log('345:', 345);
+    return 345;
+  } else if ($(window).width() > 961) {
+    console.log('600:', 600);
+    return 600;
+  } else {
+    console.log('400:', 400);
+    return 400;
+  }
 };
 
 let getMapsData = (lat, lon, RoutesMap = null, RoutesPath = null) => {
@@ -165,13 +175,17 @@ let getMapsData = (lat, lon, RoutesMap = null, RoutesPath = null) => {
   }
   // console.log(($(window).width() < 400));
   if (getScreenWidth() < 400) {
-    $('.map-title').removeClass('screen-width').addClass('sm-screen-width');
-    $('.stops-title').removeClass('screen-width').addClass('sm-screen-width');
-    $('.list-group').removeClass('screen-width').addClass('sm-screen-width');
+    $('.map-title').removeClass('screen-width lg-screen-width').addClass('sm-screen-width');
+    $('.stops-title').removeClass('screen-width lg-screen-width').addClass('sm-screen-width');
+    $('.list-group').removeClass('screen-width lg-screen-width').addClass('sm-screen-width');
+  } else if ($(window).width() >= 961) {
+    $('.map-title').removeClass('sm-screen-width screen-width').addClass('lg-screen-width');
+    $('.stops-title').removeClass('sm-screen-width screen-width').addClass('lg-screen-width');
+    $('.list-group').removeClass('sm-screen-width screen-width').addClass('lg-screen-width');
   } else {
-    $('.map-title').removeClass('sm-screen-width').addClass('screen-width');
-    $('.stops-title').removeClass('sm-screen-width').addClass('screen-width');
-    $('.list-group').removeClass('sm-screen-width').addClass('screen-width');
+    $('.map-title').removeClass('sm-screen-width lg-screen-width').addClass('screen-width');
+    $('.stops-title').removeClass('sm-screen-width lg-screen-width').addClass('screen-width');
+    $('.list-group').removeClass('sm-screen-width lg-screen-width').addClass('screen-width');
   }
 }
 
@@ -622,6 +636,7 @@ let hideShow = (toHide = [], toShow = []) => {
 
 let appendContentData = () => {
   return `
+    <br>
       <span class="appended row">
       <section id="bus-weather-info" role="contentinfo">
         <div class="col-sm-12">
@@ -693,7 +708,7 @@ let createEventListeners = () => {
     $(event.currentTarget).addClass('selected-stop ');
     $(event.currentTarget).closest('li').siblings().hide();
     hideShow(['.direction-opt, .route-map'], ['.bus-message', '#bus-weather-info', '.map-stop-location']);
-    $(event.currentTarget).append(
+    $(event.currentTarget).parent().append(
       appendContentData()
     );
 
@@ -717,11 +732,11 @@ let createEventListeners = () => {
   });
 
   $(window).resize(event => {
-    //console.log('event:', event);
+    // console.log('event:', event);
     if (getScreenWidth() < 400) {
-      $('.map-title').removeClass('screen-width').addClass('sm-screen-width');
-      $('.stops-title').removeClass('screen-width').addClass('sm-screen-width');
-      $('.list-group').removeClass('screen-width').addClass('sm-screen-width');
+      $('.map-title').removeClass('screen-width lg-screen-width').addClass('sm-screen-width');
+      $('.stops-title').removeClass('screen-width lg-screen-width').addClass('sm-screen-width');
+      $('.list-group').removeClass('screen-width lg-screen-width').addClass('sm-screen-width');
       $('#static-map').attr({
         width: 345,
         height: 320
@@ -734,10 +749,27 @@ let createEventListeners = () => {
         width: 345,
         height: 320
       });
+    } else if ($(window).width() >= 961) {
+      // console.log('getScreenWidth():', getScreenWidth());
+      $('.map-title').removeClass('sm-screen-width screen-width').addClass('lg-screen-width');
+      $('.stops-title').removeClass('sm-screen-width screen-width').addClass('lg-screen-width');
+      $('.list-group').removeClass('sm-screen-width screen-width').addClass('lg-screen-width');
+      $('#static-map').attr({
+        width: 600,
+        height: 600
+      });
+      $('#route-static-map').attr({
+        width: 600,
+        height: 600
+      });
+      $('#nearby-static-map').attr({
+        width: 600,
+        height: 600
+      });
     } else {
-      $('.map-title').removeClass('sm-screen-width').addClass('screen-width');
-      $('.stops-title').removeClass('sm-screen-width').addClass('screen-width');
-      $('.list-group').removeClass('sm-screen-width').addClass('screen-width');
+      $('.map-title').removeClass('sm-screen-width lg-screen-width').addClass('screen-width');
+      $('.stops-title').removeClass('sm-screen-width lg-screen-width').addClass('screen-width');
+      $('.list-group').removeClass('sm-screen-width lg-screen-width').addClass('screen-width');
       $('#static-map').attr({
         width: 400,
         height: 600
