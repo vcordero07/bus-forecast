@@ -264,7 +264,7 @@ let generatePreditionsByStopData = (data) => {
           //recursiveIteration(data.mode[0].route[i])
           $('.next-bus-predictions').append(`Route ${busRouteID[x]}: ` + data.mode[0].route[i].direction[0].trip.map(function(item) {
             minTime = Math.round(item.pre_away / 60);
-            resultElement = `<div class="bus-grid-time-item small">${minTime}<h6>min</h6></div>`;
+            resultElement = `<div class="bus-grid-time-item small">${minTime}</div>`;
             return resultElement;
           }) + '<br>');
 
@@ -290,7 +290,7 @@ let generatePreditionsByStopData = (data) => {
         data.mode[0].route[i].direction[0].trip.forEach(item => {
           //console.log('itemForEach:', Math.round(item.pre_away / 60));
           minTime = Math.round(item.pre_away / 60)
-          resultElement = `<div class="bus-grid-time-item small">${minTime}<h6>min</h6></div>`;
+          resultElement = `<div class="bus-grid-time-item small">${minTime}</div>`;
           $('.next-bus-predictions').append(resultElement);
         });
 
@@ -373,7 +373,7 @@ let generateDarkSkyData = (data) => {
   data-time='${data.currently.time}'
   data-temperature='${data.currently.temperature}'>
   <figure class="icons">
-    <canvas id="${data.currently.icon}" width="60" height="60">
+    <canvas id="${data.currently.icon}" width="40" height="40">
     </canvas>
   </figure>
   <span><h4>${data.currently.temperature}&#176;</h4> in ${geoCity}</span>
@@ -636,6 +636,7 @@ let hideShow = (toHide = [], toShow = []) => {
 
 let appendContentData = () => {
   return `
+    <br>
       <span class="appended row">
       <section id="bus-weather-info" role="contentinfo">
         <div class="col-sm-12">
