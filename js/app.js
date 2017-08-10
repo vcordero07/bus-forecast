@@ -5,6 +5,7 @@ const apiKeys = {
   WeatherUnderground: '682f91fd7c03e86f',
   DarkSky: '93ee5f3d7542687660862c09d91dbb09',
   gglMaps: 'AIzaSyDca9-UHxjzg6OwiRMbw6nnSLtJBD4ck88', //'AIzaSyBzwpCEKRqw8gXTUZZ1oVuB3TuMG-aCV1Q',
+  gglMapsEmbed: 'AIzaSyBGzzJie0PbkgWchsE_sKmKchexe1QMReo',
 };
 
 const endPoints = {
@@ -130,15 +131,15 @@ let getDKDataFromApi = (searchTerm, lat, lon, callback) => {
     });
 };
 let getScreenWidth = () => {
-  console.log('$(window).width():', $(window).width());
+  // console.log('$(window).width():', $(window).width());
   if ($(window).width() < 400) {
-    console.log('345:', 345);
+    // console.log('345:', 345);
     return 345;
   } else if ($(window).width() > 961) {
-    console.log('600:', 600);
+    // console.log('600:', 600);
     return 600;
   } else {
-    console.log('400:', 400);
+    // console.log('400:', 400);
     return 400;
   }
 };
@@ -262,11 +263,11 @@ let generatePreditionsByStopData = (data) => {
           //console.log("data.mode.route", data.mode[0].route[i]);
           //use this to get only the most current predictions
           //recursiveIteration(data.mode[0].route[i])
-          $('.next-bus-predictions').append(`Route ${busRouteID[x]}: ` + data.mode[0].route[i].direction[0].trip.map(function(item) {
+          $('.next-bus-predictions').append(`<div class="bus-grid-time-item smallb">Route ${busRouteID[x]}:</div>` + data.mode[0].route[i].direction[0].trip.map(function(item) {
             minTime = Math.round(item.pre_away / 60);
             resultElement = `<div class="bus-grid-time-item small">${minTime}<h6>min</h6></div>`;
             return resultElement;
-          }) + '<br>');
+          }).toString().replace(',', ' ') + '<br>');
 
           $('.bus-valid-time').html(validTime);
           break;
@@ -574,8 +575,14 @@ let getBusDirection = event => {
     // $('.error-catch-message').html('<br><br><p>Please select a route.</p>');
   } else {
     // getClearMSG('all');
+    // console.log('event:', event);
+    // console.log('$(select)', $('select'));
+    // console.log('$(select)', $('select')[0].selectedOptions[0].innerHTML);
+    busStopName = '';
     MBTAQuery.route = $('select').val();
     busRouteID = $('select').val();
+    busStopName = $('select')[0].selectedOptions[0].innerHTML;
+    $('.stops-title').html(`<h5>Route ${busStopName} Stops</h5>`)
     busDirection = $('input:checked').val();
     getDataFromApi(endPoints.MBTABusStop, MBTAQuery, 'BusStopData');
   }
@@ -679,6 +686,7 @@ let createEventListeners = () => {
     $('.find-bus-by-route').css('pointer-events', 'none');
     hideShow(['.by-route-opts', '.cd-container'], ['.by-location-opts', '.loading-bar']);
     hideShow([], ['.route-map-container']);
+    $('.stops-title').html(`<h5>Stops</h5>`)
     getLocation();
   });
 

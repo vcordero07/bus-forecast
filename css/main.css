@@ -559,7 +559,7 @@ h6 {
 
 .bus-grid-time-item {
   background: #e67e22;
-  color: #fff;
+  color: #ecf0f1;
   font-weight: 700;
   display: flex;
   justify-content: center;
@@ -574,6 +574,12 @@ h6 {
 }
 
 .small {
+  grid-row: span 1;
+  grid-column: span 1;
+}
+
+.smallb {
+  background: #3498DB;
   grid-row: span 1;
   grid-column: span 1;
 }
